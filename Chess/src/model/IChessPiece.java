@@ -1,6 +1,6 @@
 package model;
 
-/*****************************************************************
+/********************************************************************
  * CIS 350 - 01
  * Chess
  *
@@ -11,26 +11,26 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @version Jan 27, 2014
- ****************************************************************/
+ *******************************************************************/
 public interface IChessPiece {
 
-	/*************************************************************
+	/****************************************************************
 	 * Returns the player that owns this piece.
 	 * 
 	 * @return the player that owns this piece.
-	 ************************************************************/
+	 ***************************************************************/
 	Player player();
 
 
-	/*************************************************************
+	/****************************************************************
 	 * Returns the name of this piece's type as a string.
 	 * Example: "King"
 	 * 
 	 * @return the name of this piece's type.
-	 ************************************************************/
+	 ***************************************************************/
 	String type();
 
-	/*************************************************************
+	/****************************************************************
 	 * Returns whether the piece at location [move.fromRow, move.fromColumn]
 	 * is allowed to move to location [move.fromRow, move.fromColumn].
 	 *
@@ -42,6 +42,6 @@ public interface IChessPiece {
 	 * 			represent valid locations on the board.
 	 * @throws IllegalArgumentException if this object isn't the piece at
 	 *			location [move.fromRow, move.fromColumn].
-	 ************************************************************/
+	 ***************************************************************/
 	boolean isValidMove(Move move, IChessBoard board);
 }
