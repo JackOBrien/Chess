@@ -45,6 +45,7 @@ public interface IChessBoard {
     /****************************************************************
     * Make the specified move. The move must be validated 
     * (i.e., this method will not verify that the move is legal).
+    * Switches turns.
     *
     * @param move the move to be made.
     ****************************************************************/
@@ -67,4 +68,11 @@ public interface IChessBoard {
     * @param column the column
     ****************************************************************/
    public void unset(int row, int column);
+
+   /****************************************************************
+    * Returns the number of moves that have been made in the game
+    * 
+    * @return number of moves made in this game
+    ***************************************************************/
+   public int getNumMoves();
 }

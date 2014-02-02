@@ -1,42 +1,182 @@
 package model;
 
+/********************************************************************
+ * CIS 350 - 01
+ * Chess
+ *
+ * Chess board that holds all the game pieces
+ *
+ * @author John O'Brien
+ * @author Louis Marzorati
+ * @author Shane Higgins
+ * @version Feb 2, 2014
+ *******************************************************************/
 public class ChessBoard implements IChessBoard {
 
-	// add instance and/or class variables as needed
+	/** 2d array of ChessPieces to represent the board */
+	private IChessPiece[][] board;
 	
-	// add other (public or private) methods as needed
+	/** Tells who's turn it currently is (WHITE or BLACK) */
+	private Player currentPlayer;
+	
+	/** Tells how many moves have been made */
+	private int numMoves;
+	
+	/** Location of the white King */
+	private int[] whiteKing;
+	
+	/** Location of the black King */
+	private int[] blackKing;
+	
+	/****************************************************************
+	 * Constructor for ChessBoard.
+	 * Default game has 32 pieces and WHITE goes first.
+	 * 
+	 * @param boardSize the size of an edge on the square board (8 default).
+	 * @param placePieces if true, will place game pieces. 
+	 * 			If false, will create an empty game board.
+	 ***************************************************************/
+	public ChessBoard(int boardSize, boolean placePieces){
+		board = new ChessPiece[boardSize][boardSize];
+		
+		/* Creates an empty board if placePieces is false */
+		if(!placePieces)
+			for(int r = 0; r < boardSize; r++)
+				for(int c = 0; c < boardSize; c++)
+					board[r][c] = null;
+		else
+			setupBoard();
+		
+		currentPlayer = Player.WHITE;
+		numMoves = 0;
+		
+		whiteKing = new int[2];
+		blackKing = new int[2];
+		
+		/* Default locations of the two kings */
+		whiteKing[0] = 7;
+		whiteKing[1] = 4;
+		
+		blackKing[0] = 0;
+		blackKing[1] = 4;
+	}
+	
+	/****************************************************************
+	 * Places the game pieces into their default locations on the board
+	 ***************************************************************/
+	private void setupBoard(){
+		Player p = Player.WHITE;
+		
+		/* Rows for the white pieces*/
+		int rowPawns = 6; 
+		int row = 7;
+		
+		/* Places both black and white pieces */
+		for (int k = 0; k < 2; k++){				
+			board[row][0] = new Rook(p);
+			board[row][1] = new Knight(p);
+			board[row][2] = new Bishop(p);
+			board[row][3] = new Queen(p);
+			board[row][4] = new King(p);
+			board[row][5] = new Bishop(p);
+			board[row][6] = new Knight(p);
+			board[row][7] = new Rook(p);
+			
+			/* Places pawns */
+			for (int col = 0; col < 8; col++)
+				board[rowPawns][col] = new Pawn(p);
+			
+			p = p.next();
+			row = 0; 
+			rowPawns = 1;
+		}
+		
+		/* Sets the rest to null */
+		for (int r = 2; r < 6; r++)
+			for (int c = 0; c < 8; c++)
+				board[r][c] = null;
+	}
 	
 	@Override
 	public int numRows() {
-		// TODO
-		return 0;
+		return board.length;
 	}
 
 	@Override
 	public int numColumns() {
-		// TODO
-		return 0;
+		return board[0].length;
 	}
 
 	@Override
 	public IChessPiece pieceAt(int row, int column) {
-		// TODO
-		return null;
+		return board[row][column];
 	}
 
 	@Override
 	public void move(Move move) {
-		// TODO
+		
+		/* Moves piece at the from location to the to location
+		 * Sets from location to null */
+		IChessPiece movingPiece = pieceAt(move.fromRow, move.fromColumn);
+		set(null, move.fromRow, move.fromColumn);
+		set(movingPiece, move.toRow, move.toColumn);
+		
+		/* Switches turns */
+		currentPlayer = currentPlayer.next();
+		
+		/* If the piece being moved is a king, the location is recorded */
+		if (movingPiece != null && movingPiece instanceof King)
+			updateKingLocation(move.toRow, move.toColumn);
+		
+		/* Increments the number of moves that have been made */
+		numMoves++;
+	}
+	
+	/****************************************************************
+	 * Updates the arrays keeping track of each king's location.
+	 * 
+	 * @param row row coordinate of the piece
+	 * @param col column coordinate of the piece
+	 ***************************************************************/
+	private void updateKingLocation(int row, int col) {
+		
+		/* Checks which player owns the piece */
+		if(pieceAt(row, col).player() == Player.WHITE) {
+			whiteKing[0] = row;
+			whiteKing[1] = col;
+		}else {
+			blackKing[0] = row;
+			blackKing[1] = col;
+		}
 	}
 
 	@Override
 	public void set(IChessPiece piece, int row, int column) {
-		// TODO
+		board[row][column] = piece;
 	}
 
 	@Override
 	public void unset(int row, int column) {
-		// TODO
+		board[row][column] = null;
+	}
+	
+	
+	/****************************************************************
+	 * Returns the location of the requested player's king
+	 * 
+	 * @param p player who's king's location is being requested
+	 * @return the location of Player p's king
+	 ***************************************************************/
+	public int[] findKing(Player p) {
+		if (p == Player.WHITE)
+			return whiteKing;
+		else
+			return blackKing;
+	}
+	
+	@Override
+	public int getNumMoves() {
+		return numMoves;
 	}
 
 }
