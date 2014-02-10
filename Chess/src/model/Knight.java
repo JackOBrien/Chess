@@ -3,7 +3,6 @@ package model;
 /**
  * The Knight in a game of chess
  * 
- * @author YOUR NAME(S)
  */
 public class Knight extends ChessPiece {
 
