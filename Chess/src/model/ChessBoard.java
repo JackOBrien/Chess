@@ -62,6 +62,19 @@ public class ChessBoard implements IChessBoard {
 	}
 	
 	/****************************************************************
+	 * Copy constructor.
+	 * 
+	 * @param other the ChessBoard to copy.
+	 ***************************************************************/
+	public ChessBoard(IChessBoard other) {
+		board = other.getGameBoard();
+		currentPlayer = other.getCurrentPlayer();
+		numMoves = other.getNumMoves();
+		whiteKing = other.findKing(Player.WHITE);
+		blackKing = other.findKing(Player.BLACK);
+	}
+	
+	/****************************************************************
 	 * Places the game pieces into their default locations on the board
 	 ***************************************************************/
 	private void setupBoard(){
@@ -160,13 +173,7 @@ public class ChessBoard implements IChessBoard {
 		board[row][column] = null;
 	}
 	
-	
-	/****************************************************************
-	 * Returns the location of the requested player's king
-	 * 
-	 * @param p player who's king's location is being requested
-	 * @return the location of Player p's king
-	 ***************************************************************/
+	@Override
 	public int[] findKing(Player p) {
 		if (p == Player.WHITE)
 			return whiteKing;
@@ -178,5 +185,14 @@ public class ChessBoard implements IChessBoard {
 	public int getNumMoves() {
 		return numMoves;
 	}
+	
+	@Override
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
 
+	@Override
+	public IChessPiece[][] getGameBoard(){
+		return board;
+	}
 }

@@ -75,4 +75,27 @@ public interface IChessBoard {
     * @return number of moves made in this game
     ***************************************************************/
    public int getNumMoves();
+
+   /****************************************************************
+	* Returns the player who's turn it is currently
+	* 
+	* @return the player who's turn it is
+	***************************************************************/
+   public Player getCurrentPlayer();
+
+   /****************************************************************
+    * Returns the array of game pieces representing the 
+    * chess board
+    * 
+    * @return array representing the game board
+    ***************************************************************/
+   public IChessPiece[][] getGameBoard();
+
+   /****************************************************************
+    * Returns the location of the requested player's king
+    * 
+    * @param p player who's king's location is being requested
+    * @return the location of Player p's king
+    ***************************************************************/
+   public int[] findKing(Player p);
 }
