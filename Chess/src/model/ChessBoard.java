@@ -78,14 +78,13 @@ public class ChessBoard implements IChessBoard {
 	 * Places the game pieces into their default locations on the board
 	 ***************************************************************/
 	private void setupBoard(){
-		Player p = Player.WHITE;
 		
 		/* Rows for the white pieces*/
 		int rowPawns = 6; 
 		int row = 7;
 		
 		/* Places both black and white pieces */
-		for (int k = 0; k < 2; k++){				
+		for (Player p : Player.values()){				
 			board[row][0] = new Rook(p);
 			board[row][1] = new Knight(p);
 			board[row][2] = new Bishop(p);
@@ -99,7 +98,6 @@ public class ChessBoard implements IChessBoard {
 			for (int col = 0; col < 8; col++)
 				board[rowPawns][col] = new Pawn(p);
 			
-			p = p.next();
 			row = 0; 
 			rowPawns = 1;
 		}

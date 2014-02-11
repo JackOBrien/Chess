@@ -36,7 +36,82 @@ public class ChessModel implements IChessModel {
 	
 	@Override
 	public boolean isComplete() {
-		// TODO
+		
+		if (!inCheck()) return false;
+		
+		// Relative coordinates of all points around a piece
+		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
+		int[] colList = {-1, -1,  0, 1, 1,  1,  0, -1};
+		
+		for (Player p : Player.values()) {
+			
+			// King location
+			int kingRow = board.findKing(p)[0];
+			int kingCol = board.findKing(p)[1];
+			
+			for (int i = 0; i < rowList.length; i++) {
+				
+				// Creates a move from the King to 1 space away
+				// in any direction
+				Move m = new Move(kingRow, kingCol, rowList[i], colList[i]);
+				
+				if (isValidMove(m)) {
+					saveBoard();
+					move(m);
+					
+					/* Checks if the king was able to move out of check */
+					if (!inCheck()) {
+						revertBoard();
+						return false;
+					}
+				}
+			}
+			
+			/* If the check can be blocked by a friendly piece
+			 * then the game is not over */
+			if (canBlock(p)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	/****************************************************************
+	 * Helper method for isComplete() to check if the given King
+	 * can be protected by a friendly piece by moving to intercept
+	 * the check
+	 * 
+	 * @param plr Player who's King is being protected
+	 * @return true if the King can be protected, false otherwise
+	 ***************************************************************/
+	private boolean canBlock(Player plr) {
+		
+		for (int r = 0; r < SIZE; r++) {
+			for (int c = 0; c < SIZE; c++) {
+				for (int x = 0; x < SIZE; x++) {
+					for (int y = 0; y < SIZE; y++) {
+						IChessPiece piece = pieceAt(r, c);
+						
+						if (piece.player() != plr) continue;
+						if (x == r && y == c) continue;
+						
+						Move m = new Move(r, c, x, y);
+						
+						if (isValidMove(m)) {
+							saveBoard();
+							move(m);
+							
+							if (!inCheck()) {
+								revertBoard();
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		return false;
 	}
 
@@ -45,39 +120,31 @@ public class ChessModel implements IChessModel {
 		IChessPiece piece = pieceAt(move.fromRow, move.fromColumn);
 		Player plr = piece.player();
 		
+		boolean valid = false;
+		
+		// Saves the current state of the board
+		saveBoard();
+		
+		// Performs the move, regardless of the validity
+		move(move);
+		
 		if (basicallyLegal(piece, move)) {
 			
-			// Saves the current state of the board
-			saveBoard();
-			
-			// Performs the move, regardless of the validity
-			board.move(move);
-			
-			/* Checks if the game is in check before the 
-			 * move takes place */
-			if (inCheck()) {
-				/* The attempted move MUST take the game
-				 * out of check for the move to be valid */
+			/* If the game is not put into check, the move is valid */
+			if (!inCheck()) {
+				valid =  true;
 			}
-			
-			/* The game is not in check before the move
-			 * takes place */
-			else {
-				
-				// Makes sure the game still isn't in check, and
-				// returns true if that's the case.
-				if (!inCheck()) return true;
-				
-				// The game is now in check.
-				// Checks to be sure that the current player 
-				// is not in check, but that their enemy is.
-				if (plr != playerInCheck) {
-					return true;
-				}
+
+			/* Checks to be sure that the current player 
+			 * is not in check, but that their enemy is. */
+			else if (plr != playerInCheck) {
+				valid =  true;
 			}
 		}
 		
-		return false;
+		// Move is not valid, so the board is reset
+		revertBoard();
+		return valid;
 	}
 	
 	/****************************************************************
@@ -106,7 +173,49 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public boolean inCheck() {
-		// TODO
+		
+		Player p = Player.WHITE;
+		
+		// Location of the white king
+		int whiteR = board.findKing(p)[0];
+		int whiteC = board.findKing(p)[1];
+		
+		p.next();
+		
+		// Location of the black king
+		int blackR = board.findKing(p)[0];
+		int blackC = board.findKing(p)[1];
+
+		/* Loops through the entire board, and each time
+		 * it finds a piece, it tries to move that piece
+		 * to it's enemies King. The game is in check if
+		 * any piece succeeds */
+		for (int r = 0; r < SIZE; r++) {
+			for (int c = 0; c < SIZE; c++) {
+				IChessPiece piece = pieceAt(r, c);
+
+				if (piece == null) continue;
+				
+				Move m;
+				
+				if (piece.player() == Player.WHITE) {
+					m = new Move(r, c, blackR, blackC);
+					p.next();
+				}
+				
+				else {
+					m = new Move(r, c, whiteR, whiteC);
+					p.next();
+				}
+				
+				if (isValidMove(m)) {
+					playerInCheck = p;
+					return true;
+				}
+			}
+		}
+
+		playerInCheck = null;
 		return false;
 	}
 
@@ -127,5 +236,12 @@ public class ChessModel implements IChessModel {
 	private void saveBoard() {
 		savedBoard = new ChessBoard(board);
 	}
-
+	
+	/****************************************************************
+	 * Re-makes the 'real' game board using the saveBoard's copy
+	 * constructor, thus reverting the game to the 'saved' state
+	 ***************************************************************/
+	private void revertBoard() {
+		board = new ChessBoard(savedBoard);
+	}
 }
