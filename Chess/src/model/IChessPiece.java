@@ -10,6 +10,7 @@ package model;
  * @author John O'Brien
  * @author Louis Marzorati
  * @author Shane Higgins
+ * @author Caleb Woods
  * @version Jan 27, 2014
  *******************************************************************/
 public interface IChessPiece {

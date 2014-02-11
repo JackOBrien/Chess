@@ -9,6 +9,7 @@ package model;
  * @author John O'Brien
  * @author Louis Marzorati
  * @author Shane Higgins
+ * @author Caleb Woods
  * @version Feb 2, 2014
  *******************************************************************/
 public class ChessBoard implements IChessBoard {
