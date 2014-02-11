@@ -1,5 +1,6 @@
 package model;
 
+
 /**
  * A Queen in a game of chess
  * 

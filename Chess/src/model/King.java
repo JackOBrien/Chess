@@ -1,5 +1,6 @@
 package model;
 
+
 /**
  * The King in a game of chess.
  * 
