@@ -13,8 +13,6 @@ package model;
  * @version Feb 11, 2014
  *******************************************************************/
 public class Bishop extends ChessPiece {
-
-	private Player plr;
 	
 	/****************************************************************
 	 * Constructor for Bishop.
@@ -23,8 +21,6 @@ public class Bishop extends ChessPiece {
 	 ***************************************************************/
 	protected Bishop(Player player) {
 		super(player);
-		
-		plr = player;
 	}
 
 	@Override

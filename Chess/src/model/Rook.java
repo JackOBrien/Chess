@@ -20,9 +20,6 @@ public class Rook extends ChessPiece {
 	/** Tells the pieces initial position. */
 	private int initialRow, initialCol;
 	
-	/** The player who owns this piece. */
-	private Player plr;
-	
 	/****************************************************************
 	 * Constructor for Rook.
 	 * 
@@ -30,8 +27,7 @@ public class Rook extends ChessPiece {
 	 ***************************************************************/
 	public Rook(final Player player) {
 		super(player);
-		
-		plr = player;
+
 		hasMoved = false;
 		initialRow = -1;
 		initialCol = -1;
