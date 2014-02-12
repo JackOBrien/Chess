@@ -1,20 +1,39 @@
 package model;
 
-
-/**
- * The King in a game of chess.
- * 
- * @author YOUR NAME(S)
- */
+/********************************************************************
+ * CIS 350 - 01
+ * Chess
+ *
+ * A King in a game of chess. 
+ *
+ * @author John O'Brien
+ * @author Louis Marzorati
+ * @author Shane Higgins
+ * @author Caleb Woods
+ * @version Feb 11, 2014
+ *******************************************************************/
 public class King extends ChessPiece {
 
-	/**
-	 * Constructs a new King object
+	/** Tells if the piece has moved of not. */
+	private boolean hasMoved;
+	
+	/** Tells the pieces initial position. */
+	private int initialRow, initialCol;
+	
+	private Player plr;
+
+	/****************************************************************
+	 * Constructor for King.
 	 * 
-	 * @param color the player that owns this piece
-	 */
-	protected King(Player color) {
-		super(color);
+	 * @param player the Player who owns this piece.
+	 ***************************************************************/
+	protected King(Player player) {
+		super(player);
+		
+		plr = player;
+		hasMoved = false;
+		initialRow = -1;
+		initialCol = -1;
 	}
 
 	@Override
@@ -24,15 +43,108 @@ public class King extends ChessPiece {
 
 	@Override
 	public boolean isValidMove(Move move, IChessBoard board) {
+		
 		if (!super.isValidMove(move, board)) {
 			return false;
 		}
-			
-		// King can only move one square at a time but he can move
-		// forward, backward, left, right, and diagonally.
 		
-		// TODO
+		int fR = move.fromRow, fC = move.fromColumn;
+		int tR = move.toRow, tC = move.toColumn;
+		
+		checkifMoved(fR, fC);
+
+		if (mayCastle(move, board)) { return true; }
+		
+		// Relative coordinates of all points around the King
+		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
+		int[] colList = {-1, -1,  0, 1, 1,  1,  0, -1};
+		
+		for (int i = 0; i < rowList.length; i++) {
+			int row = rowList[i];
+			int col = colList[i];
+			
+			/* If the destination matches a relative location from
+			 * the arrays, then the move is valid */
+			if (tR == fR + row && tC == fC + col) { return true; }
+		}
+
 		return false;
 	}
 
+	
+	/****************************************************************
+	 * Checks if the King has moved on the board before. 
+	 * 
+	 * @param fR the row location of the King.
+	 * @param fC the column location of the King.
+	 ***************************************************************/
+	private void checkifMoved(final int fR, final int fC) {
+		
+		/* Once the piece has moved, hasMoved will always be true */
+		if (!hasMoved) {
+		
+			/* Checks if the initial location is still -1, as set 
+			 * by the constructor. */
+			if (initialRow == -1 && initialCol == -1) {
+				initialRow = fR;
+				initialCol = fC;
+				hasMoved = false;
+				
+			/* Checks if the initial location is the same as it was 
+			 * when this piece last checked for a valid move*/	
+			} else if (initialRow == fR && initialCol == fC) {
+				hasMoved = false;
+			} else {
+				hasMoved = true;
+			}
+		}
+	}
+	
+	private boolean mayCastle(Move m, IChessBoard b) {
+		int fR = m.fromRow, fC = m.fromColumn;
+		int tR = m.toRow, tC = m.toColumn;		
+		
+		/* The can't castle if it has moved before */
+		if (hasMoved) { return false; }
+		
+		IChessPiece toPiece = b.pieceAt(tR, tC);
+		
+		/* King needs to move to an empty square to castle */
+		if (toPiece != null) { return false; }
+		
+		/* Only horizontal movement is valid */
+		if (fR != tR) { return false; }
+		
+		IChessPiece rook = null;
+		
+		/* Castling on the King's side */
+		if (tC == fC + 2) {
+			
+			/* Ensure the side is clear */
+			if (b.pieceAt(fR, fC + 1) != null) { return false; }
+			
+			rook = b.pieceAt(tR, tC + 1);
+		
+		/* Castling on the Queen's side */
+		} else if (tC == fC - 2) {
+			
+			/* Ensure the side is clear */
+			if (b.pieceAt(fR, fC - 1) != null || 
+					b.pieceAt(fR, fC - 3) != null) { 
+				return false; 
+			}
+			
+			rook = b.pieceAt(tR, tC - 2);
+			
+		} else { return false; }
+		
+		/* Looks to see if there is a friendly Rook in the proper
+		 * position that has never moved */
+		if (rook.type().equals("Rook") && rook.player() == plr &&
+				!((Rook) rook).hasMoved()) {
+			return true;
+		}
+		
+		return false;
+	}
 }
