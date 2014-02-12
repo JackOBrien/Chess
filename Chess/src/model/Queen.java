@@ -28,10 +28,13 @@ public class Queen extends ChessPiece {
 			return false;
 		}
 			
-		// Queen can move vertically, horizontally, and diagonally
-		// as many spaces desired without jumping over other chess pieces
+		/* Checks if the Queen is either moving like a Rook, or if
+		 * it is moving like a Bishop.  */
+		if (Rook.movingDiagonally(move, board) ||
+				Bishop.movingPerpendicular(move, board)) {
+			return true;
+		}
 		
-		// TODO
 		return false;
 	}
 
