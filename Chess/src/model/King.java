@@ -100,6 +100,13 @@ public class King extends ChessPiece {
 		}
 	}
 	
+	/****************************************************************
+	 * Tells if the King may castle.
+	 * 
+	 * @param m the Move being attempted.
+	 * @param b the board the Move is being attempted on.
+	 * @return true if the King may castle, false otherwise.
+	 ***************************************************************/
 	private boolean mayCastle(Move m, IChessBoard b) {
 		int fR = m.fromRow, fC = m.fromColumn;
 		int tR = m.toRow, tC = m.toColumn;		
