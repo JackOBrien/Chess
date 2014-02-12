@@ -30,8 +30,8 @@ public class Queen extends ChessPiece {
 			
 		/* Checks if the Queen is either moving like a Rook, or if
 		 * it is moving like a Bishop.  */
-		if (Rook.movingDiagonally(move, board) ||
-				Bishop.movingPerpendicular(move, board)) {
+		if (Rook.movingPerpendicular(move, board) ||
+				Bishop.movingDiagonally(move, board)) {
 			return true;
 		}
 		

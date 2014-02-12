@@ -49,7 +49,7 @@ public class Rook extends ChessPiece {
 		
 		/* Ensures the piece is moving diagonally and isn't jumping 
 		 * over any pieces */
-		if (!movingDiagonally(move, board)) { return false; }
+		if (!movingPerpendicular(move, board)) { return false; }
 		
 		return true;
 	}
@@ -96,9 +96,9 @@ public class Rook extends ChessPiece {
 	 * 
 	 * @param m the proposed move.
 	 * @param board the board the move is being attempted on.
-	 * @return true if the piece is moving diagonally, false otherwise.
+	 * @return true if the piece is moving perpendicular, false otherwise.
 	 ***************************************************************/
-	protected static boolean movingDiagonally(Move m, IChessBoard board) {
+	protected static boolean movingPerpendicular(Move m, IChessBoard board) {
 		int fR = m.fromRow, fC = m.fromColumn;
 		int tR = m.toRow, tC = m.toColumn;
 		

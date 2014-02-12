@@ -37,19 +37,19 @@ public class Bishop extends ChessPiece {
 		
 		/* Ensures the piece is moving perpendicular and isn't jumping 
 		 * over any pieces */
-		if (!movingPerpendicular(move, board)) { return false; }
+		if (!movingDiagonally(move, board)) { return false; }
 		
 		return true;
 	}
 	
 	/****************************************************************
-	 * Tells if the piece is moving either horizontally or vertically.
+	 * Tells if the piece is moving diagonally.
 	 * 
 	 * @param m the proposed move.
 	 * @param board the board the move is being attempted on.
-	 * @return true if the piece is moving perpendicular, false otherwise.
+	 * @return true if the piece is moving diagonally, false otherwise.
 	 ***************************************************************/
-	protected static boolean movingPerpendicular(Move m, IChessBoard board) {
+	protected static boolean movingDiagonally(Move m, IChessBoard board) {
 		
 		int fR = m.fromRow, fC = m.fromColumn;
 		
