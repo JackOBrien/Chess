@@ -48,59 +48,12 @@ public class Rook extends ChessPiece {
 		if (!super.isValidMove(move, board)) {
 			return false;
 		}
-			
-		int fR = move.fromRow, fC = move.fromColumn;
-		int tR = move.toRow, tC = move.toColumn;		
 		
-		checkifMoved(fR, fC);
+		checkifMoved(move.fromRow, move.fromColumn);
 		
-		/* Ensures that only the row OR the column is changing */
-		if (fR != tR && fC != tC) { return false; }
-		
-		// Decides if the Rook is attempting to move vertically
-		boolean vertical = fR != tR ? true : false;
-		
-		// Initializes variables as if the rook is moving horizontally
-		int x = tR; // Row location to search for pieces
-		int y = fC; // Column location to search for pieces
-		int dif = tC - fC; // How far the piece moved
-		
-		/* Assigns appropriate variables depending on whether the 
-		 * piece is moving vertically or horizontally  */
-		if (vertical) {
-			x = fR;
-			y = tC;
-			dif = tR - fR;
-		}
-		
-		// Negative: Up/Left, Positive: Down/Right
-		int direction = (dif > 0) ? 1 : -1;
-		
-		// Parameters for pieceAt() in the loop bellow
-		int row = x, col = y;
-		
-		/* Scans the area between the to and from location looking for
-		 * any pieces. If it finds a piece, the move is not valid */
-		for (int i = 1; i < dif * direction; i++) {
-			if (vertical) {
-				row = x + i * direction;
-			} else {
-				col = y + i * direction;
-			}
-			
-			// Checks if the rook "jumped" over another piece
-			if (board.pieceAt(row, col) != null) {
-				return false;
-			}
-		}
-		
-		IChessPiece piece = board.pieceAt(tR, tC);
-		
-		/* If the Rook is attempting to move onto another piece 
-		 * and if it is, checks if that piece is friendly*/
-		if (piece != null && piece.player() == plr) {
-			return false;
-		}
+		/* Ensures the piece is moving diagonally and isn't jumping 
+		 * over any pieces */
+		if (!movingDiagonally(move, board)) { return false; }
 		
 		return true;
 	}
@@ -140,5 +93,59 @@ public class Rook extends ChessPiece {
 	 *******************************************************/
 	public final boolean hasMoved() {
 		return hasMoved;
+	}
+	
+	/****************************************************************
+	 * Tells if the piece is moving either horizontally or vertically.
+	 * 
+	 * @param m the proposed move.
+	 * @param board the board the move is being attempted on.
+	 * @return true if the piece is moving diagonally, false otherwise.
+	 ***************************************************************/
+	protected static boolean movingDiagonally(Move m, IChessBoard board) {
+		int fR = m.fromRow, fC = m.fromColumn;
+		int tR = m.toRow, tC = m.toColumn;
+		
+		/* Ensures that only the row OR the column is changing */
+		if (fR != tR && fC != tC) { return false; }
+		
+		// Decides if the piece is attempting to move vertically
+		boolean vertical = fR != tR ? true : false;
+		
+		// Initializes variables as if the piece is moving horizontally
+		int x = tR; // Row location to search for pieces
+		int y = fC; // Column location to search for pieces
+		int dif = tC - fC; // How far the piece moved
+		
+		/* Assigns appropriate variables depending on whether the 
+		 * piece is moving vertically or horizontally  */
+		if (vertical) {
+			x = fR;
+			y = tC;
+			dif = tR - fR;
+		}
+		
+		// Negative: Up/Left, Positive: Down/Right
+		int direction = (dif > 0) ? 1 : -1;
+		
+		// Parameters for pieceAt() in the loop bellow
+		int row = x, col = y;
+		
+		/* Scans the area between the to and from location looking for
+		 * any pieces. If it finds a piece, the move is not valid */
+		for (int i = 1; i < dif * direction; i++) {
+			if (vertical) {
+				row = x + i * direction;
+			} else {
+				col = y + i * direction;
+			}
+			
+			// Checks if the piece "jumped" over another piece
+			if (board.pieceAt(row, col) != null) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }
