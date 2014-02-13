@@ -1,20 +1,44 @@
 package model;
 
-/**
- * Packages the four components of a move into a single object.
- * (Instance variables are public because this object is a simple container.)
+/********************************************************************
+ * CIS 350 - 01
+ * Chess
  *
+ * Packages the four components of a move into a single object.
+ *
+ * @author John O'Brien
+ * @author Louis Marzorati
+ * @author Shane Higgins
+ * @author Caleb Woods
  * @author Zachary Kurmas
- */
-
+ * @version Feb 12, 2014
+ *******************************************************************/
 public class Move {
 
-   public int fromRow, fromColumn, toRow, toColumn;
+	/** The row coordinate of the pieces current location */
+	public int fromRow;
 
-   public Move(int fromRow, int fromColumn, int toRow, int toColumn) {
-      this.fromRow = fromRow;
-      this.fromColumn = fromColumn;
-      this.toRow = toRow;
-      this.toColumn = toColumn;
-   }
+	/** The column coordinate of the pieces current location */
+	public int fromColumn;
+
+	/** The row coordinate of the pieces destination */
+	public int toRow;
+
+	/** The column coordinate of the pieces destination */
+	public int toColumn;
+
+	/****************************************************************
+	 * Constructor for the Move object.
+	 * 
+	 * @param fromRow current row location.
+	 * @param fromColumn current column location.
+	 * @param toRow destination row location.
+	 * @param toColumn destination column location.
+	 ***************************************************************/
+	public Move(int fromRow, int fromColumn, int toRow, int toColumn) {
+		this.fromRow = fromRow;
+		this.fromColumn = fromColumn;
+		this.toRow = toRow;
+		this.toColumn = toColumn;
+	}
 }
