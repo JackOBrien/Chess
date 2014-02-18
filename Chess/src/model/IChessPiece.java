@@ -45,4 +45,13 @@ public interface IChessPiece {
 	 *			location [move.fromRow, move.fromColumn].
 	 ***************************************************************/
 	boolean isValidMove(Move move, IChessBoard board);
+
+
+	/****************************************************************
+	 * Used to check what type of piece this is.
+	 * 
+	 * @param type the type of the piece being compared.
+	 * @return true if this piece matches the parameter.
+	 ***************************************************************/
+	boolean is(String type);
 }

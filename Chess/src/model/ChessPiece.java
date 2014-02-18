@@ -41,13 +41,17 @@ public abstract class ChessPiece implements IChessPiece {
 			to = board.pieceAt(tR, tC);
 		} catch (IllegalArgumentException e) {
 			return false;
+		} catch (IndexOutOfBoundsException ex) {
+			return false;
 		}
 
 		/* Ensures the piece is actually moving */
 		if (fR == tR && fC == tC) { return false; }
 		
 		/* Ensures the piece at the from location is this piece */
-		if (from != this) { return false; }
+		if (from != this) { 
+			throw new IllegalArgumentException();
+		}
 		
 		/* Checks that the piece is not trying to move onto one
 		 * of its own pieces */
@@ -56,5 +60,10 @@ public abstract class ChessPiece implements IChessPiece {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public boolean is(String type) {
+		return type.equals(type());
 	}
 }

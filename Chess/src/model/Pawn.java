@@ -116,7 +116,7 @@ public class Pawn extends ChessPiece {
 		Pawn victim = null;
 		
 		/* Checks for a pawn in the proper position */
-		if (attacked.type().equals(type())) {
+		if (attacked != null && attacked.is(type())) {
 			victim = (Pawn) attacked;
 		} else { return false; }
 		

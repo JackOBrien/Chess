@@ -17,10 +17,6 @@ public class ChessModel implements IChessModel {
 	/** The 'real' board with the game pieces */
 	private IChessBoard board;
 
-	/** A duplicate of board, used to save the state of the
-	 * 'real' game board so the state of the game can be reverted*/
-	private IChessBoard savedBoard;
-
 	/** Stand chess board is 8 by 8 */
 	private final int SIZE = 8;
 
@@ -32,7 +28,6 @@ public class ChessModel implements IChessModel {
 	 ***************************************************************/
 	public ChessModel() {
 		board = new ChessBoard(SIZE, true);
-		saveBoard();
 	}
 
 	@Override
@@ -58,12 +53,12 @@ public class ChessModel implements IChessModel {
 						kingRow + rowList[i], kingCol + colList[i]);
 
 				if (isValidMove(m)) {
-					saveBoard();
+					IChessBoard current = saveBoard();
 					move(m);
 
 					/* Checks if the king was able to move out of check */
 					if (!inCheck()) {
-						revertBoard();
+						revertBoard(current);
 						return false;
 					}
 				}
@@ -125,19 +120,22 @@ public class ChessModel implements IChessModel {
 				Move m = new Move(r, c, x, y);
 
 				if (isValidMove(m)) {
-					saveBoard();
+					IChessBoard current = saveBoard();
 					move(m);
 
 					if (!inCheck()) {
-						revertBoard();
+						revertBoard(current);
 						return true;
 					}else {
-						if (playerInCheck != plr)
+						if (playerInCheck != plr) {
+							revertBoard(current);
 							return true;
+						}
 					}
 				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -155,7 +153,7 @@ public class ChessModel implements IChessModel {
 		boolean valid = false;
 
 		// Saves the current state of the board
-		saveBoard();
+		IChessBoard current = saveBoard();
 
 		// Performs the move, regardless of the validity
 		move(move);
@@ -171,7 +169,7 @@ public class ChessModel implements IChessModel {
 		}
 
 		// The board is reset
-		revertBoard();
+		revertBoard(current);
 		return valid;
 	}
 
@@ -265,15 +263,17 @@ public class ChessModel implements IChessModel {
 	 * Re-makes the save board using the chess boards copy constructor
 	 * thus making it into a copy of the 'real' game board
 	 ***************************************************************/
-	private void saveBoard() {
-		savedBoard = new ChessBoard(board);
+	private IChessBoard saveBoard() {
+		return new ChessBoard((ChessBoard) board);
 	}
 
+	// TODO fix these two headers
+	
 	/****************************************************************
 	 * Re-makes the 'real' game board using the saveBoard's copy
 	 * constructor, thus reverting the game to the 'saved' state
 	 ***************************************************************/
-	private void revertBoard() {
-		board = new ChessBoard(savedBoard);
+	private void revertBoard(IChessBoard b) {
+		board = new ChessBoard((ChessBoard) b);
 	}
 }

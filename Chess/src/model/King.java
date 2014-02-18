@@ -27,7 +27,7 @@ public class King extends ChessPiece {
 	 * 
 	 * @param player the Player who owns this piece.
 	 ***************************************************************/
-	protected King(Player player) {
+	public King(Player player) {
 		super(player);
 		
 		plr = player;
@@ -144,9 +144,12 @@ public class King extends ChessPiece {
 			
 		} else { return false; }
 		
+		/* Null check for the rook */
+		if (rook == null) { return false; }
+		
 		/* Looks to see if there is a friendly Rook in the proper
 		 * position that has never moved */
-		if (rook.type().equals("Rook") && rook.player() == plr &&
+		if (rook.is("Rook") && rook.player() == plr &&
 				!((Rook) rook).hasMoved()) {
 			return true;
 		}

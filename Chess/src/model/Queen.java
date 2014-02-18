@@ -13,7 +13,7 @@ public class Queen extends ChessPiece {
 	 * 
 	 * @param color the player that owns this piece
 	 */
-	protected Queen(Player color) {
+	public Queen(Player color) {
 		super(color);
 	}
 

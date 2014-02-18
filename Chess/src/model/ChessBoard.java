@@ -1,11 +1,10 @@
 package model;
 
-
 /********************************************************************
  * CIS 350 - 01
  * Chess
  *
- * Chess board that holds all the game pieces
+ * Chess board that holds all the game pieces.
  *
  * @author John O'Brien
  * @author Louis Marzorati
@@ -68,12 +67,13 @@ public class ChessBoard implements IChessBoard {
 	 * 
 	 * @param other the ChessBoard to copy.
 	 ***************************************************************/
-	public ChessBoard(IChessBoard other) {
-		board = other.getGameBoard();
-		currentPlayer = other.getCurrentPlayer();
-		numMoves = other.getNumMoves();
-		whiteKing = other.findKing(Player.WHITE);
-		blackKing = other.findKing(Player.BLACK);
+	public ChessBoard(ChessBoard other) {
+		board = other.clone();
+		
+		currentPlayer = other.currentPlayer;
+		numMoves = other.numMoves;
+		whiteKing = other.whiteKing;
+		blackKing = other.blackKing;
 	}
 	
 	/****************************************************************
@@ -81,9 +81,9 @@ public class ChessBoard implements IChessBoard {
 	 ***************************************************************/
 	private void setupBoard(){
 		
-		/* Rows for the white pieces*/
-		int rowPawns = 6; 
-		int row = 7;
+		/* Rows for the black pieces*/
+		int rowPawns = 1; 
+		int row = 0;
 		
 		/* Places both black and white pieces */
 		for (Player p : Player.values()){				
@@ -100,8 +100,8 @@ public class ChessBoard implements IChessBoard {
 			for (int col = 0; col < 8; col++)
 				board[rowPawns][col] = new Pawn(p);
 			
-			row = 0; 
-			rowPawns = 1;
+			row = 7; 
+			rowPawns = 6;
 		}
 		
 		/* Sets the rest to null */
@@ -175,10 +175,11 @@ public class ChessBoard implements IChessBoard {
 	
 	@Override
 	public int[] findKing(Player p) {
-		if (p == Player.WHITE)
+		if (p == Player.WHITE) {
 			return whiteKing;
-		else
+		} else {
 			return blackKing;
+		}
 	}
 	
 	@Override
@@ -194,5 +195,38 @@ public class ChessBoard implements IChessBoard {
 	@Override
 	public IChessPiece[][] getGameBoard(){
 		return board;
+	}
+	
+	@Override
+	public IChessPiece[][] clone() {
+		IChessPiece[][] b = new ChessPiece[numRows()][numColumns()];
+		
+		for (int r = 0; r < numRows(); r++) {
+			for (int c = 0; c < numColumns(); c++) {
+				IChessPiece p = pieceAt(r, c);
+				
+				if (p == null) { continue; }
+				
+				Player plr = p.player();
+
+				switch (p.type()) {
+				case "Pawn": b[r][c] = new Pawn(plr);
+					break;
+				case "Rook": b[r][c] = new Rook(plr);
+					break;
+				case "Bishop": b[r][c] = new Bishop(plr);
+					break;
+				case "Knight": b[r][c] = new Knight(plr);
+					break;
+				case "Queen": b[r][c] = new Queen(plr);
+					break;
+				case "King": b[r][c] = new King(plr);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		return b;
 	}
 }
