@@ -50,7 +50,6 @@ public class Bishop extends ChessPiece {
 	 * @return true if the piece is moving diagonally, false otherwise.
 	 ***************************************************************/
 	protected static boolean movingDiagonally(Move m, IChessBoard board) {
-		
 		int fR = m.fromRow, fC = m.fromColumn;
 		
 		// The difference in the to row and the from row

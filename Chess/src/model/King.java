@@ -71,7 +71,6 @@ public class King extends ChessPiece {
 		return false;
 	}
 
-	
 	/****************************************************************
 	 * Checks if the King has moved on the board before. 
 	 * 
