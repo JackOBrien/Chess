@@ -95,6 +95,8 @@ public class ChessModel implements IChessModel {
 			for (int c = 0; c < SIZE; c++) {
 				IChessPiece piece = pieceAt(r, c);
 
+				if (piece == null) { continue; }
+				
 				/* If the piece found belongs to the other player */
 				if (piece.player() != plr) continue;
 
@@ -142,6 +144,12 @@ public class ChessModel implements IChessModel {
 	@Override
 	public boolean isValidMove(Move move) {
 		IChessPiece piece = pieceAt(move.fromRow, move.fromColumn);
+		
+		if (piece == null) { return false; }
+		
+		/* Checks if the piece thinks the move is legal */
+		if (!basicallyLegal(piece, move)) { return false; }
+		
 		Player plr = piece.player();
 
 		boolean valid = false;
@@ -152,21 +160,17 @@ public class ChessModel implements IChessModel {
 		// Performs the move, regardless of the validity
 		move(move);
 
-		if (basicallyLegal(piece, move)) {
+		/* If the game is not put into check, the move is valid */
+		if (!inCheck()) {
+			valid =  true;
 
-			/* If the game is not put into check, the move is valid */
-			if (!inCheck()) {
-				valid =  true;
-			}
-
-			/* Checks to be sure that the current player 
-			 * is not in check, but that their enemy is. */
-			else if (plr != playerInCheck) {
-				valid =  true;
-			}
+		/* Checks to be sure that the current player 
+		 * is not in check, but that their enemy is. */
+		} else if (plr != playerInCheck) {
+			valid =  true;
 		}
 
-		// Move is not valid, so the board is reset
+		// The board is reset
 		revertBoard();
 		return valid;
 	}
@@ -182,13 +186,15 @@ public class ChessModel implements IChessModel {
 	 * @param m the move being attempted.
 	 * @return true if the move is "basically legal", false otherwise.
 	 ***************************************************************/
-	private boolean basicallyLegal(IChessPiece piece, Move m) {
+	private boolean basicallyLegal(IChessPiece piece, Move m) {		
 		Player plr = piece.player();
 
-		if (plr.equals(currentPlayer()) && piece.isValidMove(m, board)) {
-			return true;
-		}
-
+		try {
+			if (plr.equals(currentPlayer()) && piece.isValidMove(m, board)) {
+				return true;
+			}
+		} catch (IllegalArgumentException e) { }
+		
 		return false;
 	}
 
@@ -206,7 +212,7 @@ public class ChessModel implements IChessModel {
 		int whiteR = board.findKing(p)[0];
 		int whiteC = board.findKing(p)[1];
 
-		p.next();
+		p = p.next();
 
 		// Location of the black king
 		int blackR = board.findKing(p)[0];
@@ -226,15 +232,15 @@ public class ChessModel implements IChessModel {
 
 				if (piece.player() == Player.WHITE) {
 					m = new Move(r, c, blackR, blackC);
-					p.next();
+					p = p.next();
 				}
 
 				else {
 					m = new Move(r, c, whiteR, whiteC);
-					p.next();
+					p = p.next();
 				}
-
-				if (isValidMove(m)) {
+				
+				if (piece.isValidMove(m, board)) {
 					playerInCheck = p;
 					return true;
 				}
