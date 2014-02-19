@@ -99,4 +99,9 @@ public interface IChessBoard {
     * @return the location of Player p's king
     ***************************************************************/
    public int[] findKing(Player p);
+
+/****************************************************************
+ * TODO
+ ***************************************************************/
+void printBoard();
 }

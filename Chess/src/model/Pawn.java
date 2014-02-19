@@ -18,7 +18,7 @@ public class Pawn extends ChessPiece {
 
 	private int direction;
 	
-	private int startingRow;
+	public int startingRow;
 	
 	private int gamePosition;
 	

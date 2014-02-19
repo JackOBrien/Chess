@@ -88,7 +88,8 @@ public class ChessModelTest {
 		model.move(new Move(0, 4, 3, 0));
 		model.move(new Move(7, 3, 3, 1));
 		model.move(new Move(7, 4, 4, 2));		
-		assertTrue(model.inCheck() && model.isComplete());
+		assertTrue(model.inCheck());
+		assertTrue(model.isComplete());
 	}
 	
 	@Test
@@ -96,7 +97,8 @@ public class ChessModelTest {
 		model.move(new Move(7, 4, 3, 7));
 		model.move(new Move(0, 3, 3, 6));
 		model.move(new Move(1, 0, 2, 5));		
-		assertTrue(model.inCheck() && model.isComplete());
+		assertTrue(model.inCheck());
+		assertTrue(model.isComplete());
 	}
 	
 	@Test
@@ -105,7 +107,8 @@ public class ChessModelTest {
 		model.move(new Move(0, 3, 3, 6));
 		model.move(new Move(1, 0, 2, 5));	
 		model.move(new Move(7, 7, 5, 6));
-		assertFalse(model.inCheck() && model.isComplete());
+		assertTrue(model.inCheck());
+		assertFalse(model.isComplete());
 	}
 	
 	@Test
@@ -164,7 +167,6 @@ public class ChessModelTest {
 		model.move(new Move(7, 3, 2, 4));
 		model.move(new Move(0, 4, 1, 4));
 		assertFalse(model.isValidMove(new Move(1, 4, 0, 4)));
-		System.out.println(model.pieceAt(0, 4));
 		assertTrue(model.isValidMove(new Move(1, 4, 2, 4)));
 	}
 	
@@ -175,5 +177,26 @@ public class ChessModelTest {
 		model.move(new Move(0, 4, 1, 4));
 		assertFalse(model.isValidMove(new Move(1, 3, 2, 3)));
 		assertTrue(model.isValidMove(new Move(1, 3, 2, 4)));
+	}
+	
+	@Test
+	public void kingsCanPutGameInCheck() throws Exception {
+		model.move(new Move(7, 3, 3, 0));
+		model.move(new Move(0, 4, 3, 6));
+		model.move(new Move(7, 4, 3, 1));
+		model.move(new Move(7, 7, 7, 7)); //change turns
+		assertFalse(model.inCheck());
+		assertTrue(model.isValidMove(new Move(3, 1, 4, 1)));
+		model.move(new Move(3, 1, 4, 1));
+		assertTrue(model.inCheck());
+	}
+	
+	@Test
+	public void kingsCantAttackEachother() throws Exception {
+		model.move(new Move(7, 4, 3, 1));
+		model.move(new Move(0, 4, 3, 3));
+		assertFalse(model.isValidMove(new Move(3, 1, 3, 2)));
+		assertTrue(model.isValidMove(new Move(3, 1, 4, 1)));
+
 	}
 }

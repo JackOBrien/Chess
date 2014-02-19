@@ -182,6 +182,14 @@ public class ChessBoard implements IChessBoard {
 		}
 	}
 	
+	private void setKing(Player p, int[] location) {
+		if (p == Player.WHITE) {
+			whiteKing = location;
+		} else {
+			blackKing = location;
+		}
+	}
+	
 	@Override
 	public int getNumMoves() {
 		return numMoves;
@@ -221,6 +229,8 @@ public class ChessBoard implements IChessBoard {
 				case "Queen": b[r][c] = new Queen(plr);
 					break;
 				case "King": b[r][c] = new King(plr);
+					int [] location = {r, c};
+					setKing(plr, location);
 					break;
 				default:
 					break;
@@ -228,5 +238,43 @@ public class ChessBoard implements IChessBoard {
 			}
 		}
 		return b;
+	}
+	
+	@Override
+	public void printBoard() {
+		String out = "--------\n";
+		
+		for (int r = 0; r < numRows(); r++) {
+			for (int c = 0; c < numColumns(); c++) {
+				IChessPiece p = pieceAt(r, c);
+				
+				if (p == null) { 
+					out += "'";
+					continue; 
+				}
+				
+				Player plr = p.player();
+
+				switch (p.type()) {
+				case "Pawn": out += "p";
+					break;
+				case "Rook": out += "R";
+					break;
+				case "Bishop": out += "B";
+					break;
+				case "Knight": out += "k";
+					break;
+				case "Queen": out += "Q";
+					break;
+				case "King": out += "K";
+					break;
+				default: out += "-";
+					break;
+				}
+			}
+			out += "\n";
+		}
+		
+		System.out.println(out+ "--------");
 	}
 }

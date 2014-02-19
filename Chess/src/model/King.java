@@ -111,7 +111,7 @@ public class King extends ChessPiece {
 		int tR = m.toRow, tC = m.toColumn;		
 		
 		/* The can't castle if it has moved before */
-		if (hasMoved) { return false; }
+		if (hasMoved || fC != 4) { return false; }
 		
 		IChessPiece toPiece = b.pieceAt(tR, tC);
 		

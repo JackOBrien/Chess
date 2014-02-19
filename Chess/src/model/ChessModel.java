@@ -32,7 +32,7 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public boolean isComplete() {
-
+		
 		if (!inCheck()) return false;
 
 		// Relative coordinates of all points around a piece
@@ -47,12 +47,20 @@ public class ChessModel implements IChessModel {
 
 			for (int i = 0; i < rowList.length; i++) {
 
+				int toRow = kingRow + rowList[i];
+				int toCol = kingCol + colList[i]; 
+				
+				/* Ensures location is in bounds */
+				if (toRow < 0 || toRow > SIZE || toCol < 0 || toCol > SIZE) {
+					continue;
+				}
+				
 				// Creates a move from the King to 1 space away
 				// in any direction
 				Move m = new Move(kingRow, kingCol, 
-						kingRow + rowList[i], kingCol + colList[i]);
+						toRow, toCol);
 
-				if (isValidMove(m)) {
+				if (pieceAt(kingRow, kingCol).isValidMove(m, board)) {
 					IChessBoard current = saveBoard();
 					move(m);
 
@@ -61,17 +69,14 @@ public class ChessModel implements IChessModel {
 						revertBoard(current);
 						return false;
 					}
+					revertBoard(current);
 				}
 			}
-
-			/* If the check can be blocked by a friendly piece
-			 * then the game is not over */
-			if (canBlock(p)) {
-				return false;
-			}
 		}
-
-		return true;
+		
+		// If the check can be blocked by a friendly piece
+		// then the game is not over 
+		return !canBlock(playerInCheck);
 	}
 
 	/****************************************************************
@@ -83,7 +88,7 @@ public class ChessModel implements IChessModel {
 	 * @return true if the King can be protected, false otherwise
 	 ***************************************************************/
 	private boolean canBlock(Player plr) {
-
+		
 		/* Loops through board checking if each piece is
 		 * capable of blocking the check */
 		for (int r = 0; r < SIZE; r++) {
@@ -95,10 +100,10 @@ public class ChessModel implements IChessModel {
 				/* If the piece found belongs to the other player */
 				if (piece.player() != plr) continue;
 
-				canStopCheck(r, c, plr);
+				/* Checks if the piece can stop the check */
+				if (canStopCheck(r, c, plr)) { return true; }
 			}
 		}
-
 		return false;
 	}
 
@@ -111,27 +116,27 @@ public class ChessModel implements IChessModel {
 	 * @param plr Player that the piece belongs to
 	 * @return true if the piece can stop the check, false otherwise
 	 ***************************************************************/
-	private boolean canStopCheck(int r, int c, Player plr) {
+	private boolean canStopCheck(int r, int c, Player plr) {		
 		for (int x = 0; x < SIZE; x++) {
 			for (int y = 0; y < SIZE; y++) {
 
 				if (x == r && y == c) continue;
 
 				Move m = new Move(r, c, x, y);
-
+				
 				if (isValidMove(m)) {
 					IChessBoard current = saveBoard();
 					move(m);
-
+					
 					if (!inCheck()) {
 						revertBoard(current);
 						return true;
-					}else {
-						if (playerInCheck != plr) {
-							revertBoard(current);
-							return true;
-						}
+					}else if (playerInCheck != plr) {
+						revertBoard(current);
+						return true;
 					}
+					
+					revertBoard(current);
 				}
 			}
 		}
@@ -162,9 +167,16 @@ public class ChessModel implements IChessModel {
 		if (!inCheck()) {
 			valid =  true;
 
+		/* Kings can't put each other in check */
+		} else if(piece.is("King")) { 
+			valid = !scanAround(board.findKing(plr.next()), move);
+			
+			/* Kings can't move and remain in check */
+			if (plr == playerInCheck) { valid = false; }
+			
 		/* Checks to be sure that the current player 
 		 * is not in check, but that their enemy is. */
-		} else if (plr != playerInCheck) {
+		}else if (plr != playerInCheck) {
 			valid =  true;
 		}
 
@@ -192,6 +204,38 @@ public class ChessModel implements IChessModel {
 				return true;
 			}
 		} catch (IllegalArgumentException e) { }
+		
+		return false;
+	}
+	
+	/****************************************************************
+	 * Scans around a piece and tells if the to location of the given 
+	 * moves attempts to move into it's immediate vicinity.
+	 * 
+	 * @param location the coordinates of the piece to scan around.
+	 * @param m the move being attempted.
+	 * @return true if move attempts to move into the piece being 
+	 * scanned's vicinity, false otherwise.
+	 ***************************************************************/
+	private boolean scanAround(int[] location, Move m) {
+		// Location of the enemy king
+		int rowE = location[0];
+		int colE = location[1];
+		
+		// Location of the current king
+		int tR = m.toRow, tC = m.toColumn;
+		
+		// Relative coordinates of all points around a piece
+		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
+		int[] colList = {-1, -1,  0, 1, 1,  1,  0, -1};
+		
+		for (int i = 0; i < rowList.length; i++) {
+			int row = rowE + rowList[i];
+			int col = colE + colList[i];
+			
+			if (tR == row && tC == col) { return true; }
+
+		}
 		
 		return false;
 	}
@@ -230,12 +274,12 @@ public class ChessModel implements IChessModel {
 
 				if (piece.player() == Player.WHITE) {
 					m = new Move(r, c, blackR, blackC);
-					p = p.next();
+					p = Player.BLACK;
 				}
 
 				else {
 					m = new Move(r, c, whiteR, whiteC);
-					p = p.next();
+					p = Player.WHITE;
 				}
 				
 				if (piece.isValidMove(m, board)) {

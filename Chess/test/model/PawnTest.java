@@ -1,8 +1,6 @@
 package model;
 
 import static org.junit.Assert.*;
-import model.*;
-
 import model.Pawn;
 
 import org.junit.Test;
@@ -41,8 +39,10 @@ public abstract class PawnTest extends ChessPieceTest {
 	
 	@Test
 	public void canMoveTwice() throws Exception {
-		board.set(piece, 4, 4);
-		assertTrue(piece.isValidMove(new Move(4, 4, 4 + (direction() *2)
+		int row = ((Pawn) piece).startingRow;
+		
+		board.set(piece, row, 4);
+		assertTrue(piece.isValidMove(new Move(row, 4, row + (direction() *2)
 				, 4), board));
 	}
 	
