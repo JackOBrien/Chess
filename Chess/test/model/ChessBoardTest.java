@@ -28,46 +28,6 @@ public class ChessBoardTest {
 		assertEquals(8, empty.numColumns());
 	}
 	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_NegitiveRow() {
-		empty.pieceAt(-1, 0);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_NegitiveColumn() {
-		empty.pieceAt(0, -1);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_NegitiveBoth() {
-		empty.pieceAt(-1, -1);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_TooHighRow() {
-		empty.pieceAt(8, 0);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_TooHighColumn() {
-		empty.pieceAt(0, 8);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_TooHighBoth() {
-		empty.pieceAt(8, 8);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_WayTooLow() {
-		empty.pieceAt(3, -3000);
-	}
-	
-	@Test (expected = IndexOutOfBoundsException.class)
-	public void pieceAtThrowsException_WayTooHigh() {
-		empty.pieceAt(32135, 2);
-	}
-	
 	@Test
 	public void setPlacesWhitePiece_1() throws Exception {
 		empty.set(new Pawn(Player.WHITE), 2, 3);
@@ -98,7 +58,7 @@ public class ChessBoardTest {
 		assertTrue(empty.pieceAt(5,  0) instanceof Rook);
 		
 		empty.set(null, 5, 0);
-		assertTrue(empty.pieceAt(5,  5) == null);
+		assertNull(empty.pieceAt(5,  5));
 	}
 	
 	@Test
@@ -144,6 +104,13 @@ public class ChessBoardTest {
 		full.move(new Move(0, 4, 5, 5));
 		assertEquals(5, full.findKing(Player.BLACK)[0]);
 		assertEquals(5, full.findKing(Player.BLACK)[1]);
+	}
+	
+	@Test
+	public void canUnSet() throws Exception {
+		empty.set(new Pawn(Player.WHITE), 4, 4);
+		empty.unset(4, 4);
+		assertNull(empty.pieceAt(4, 4));
 	}
 
 }

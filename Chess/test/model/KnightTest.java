@@ -21,11 +21,6 @@ public class KnightTest extends ChessPieceTest {
 		int newRow = row + 2;
 		int newCol = col + 1;
 		
-		if (newRow > 7 || newCol > 7){
-			newRow = row -2;
-			newCol = col -1;
-		}
-		
 		return new Move(row, col, newRow, newCol);
 	}
 	

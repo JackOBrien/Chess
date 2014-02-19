@@ -1,8 +1,8 @@
 package model;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import model.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class ChessModelTest {
 	public void moveWorks() throws Exception {
 		assertTrue(model.pieceAt(6, 0).type().equals("Pawn"));
 		model.move(new Move(6, 0, 4, 0));
-		assertTrue(model.pieceAt(6, 0) == null);
+		assertNull(model.pieceAt(6, 0));
 		assertTrue(model.pieceAt(4, 0).type().equals("Pawn"));
 	}
 	
@@ -65,7 +65,7 @@ public class ChessModelTest {
 		model.move(new Move(0, 4, 4, 2));
 		model.move(new Move(7, 3, 3, 3));
 		assertTrue(model.inCheck());
-		assertFalse(model.inCheck() && model.isComplete());
+		assertFalse(model.isComplete());
 	}
 	
 	@Test
@@ -74,13 +74,15 @@ public class ChessModelTest {
 		model.move(new Move(0, 6, 2, 5));
 		model.move(new Move(7, 4, 6, 4));
 		model.move(new Move(2, 5, 4, 4));
-		assertFalse(model.inCheck() && model.isComplete());
+		assertFalse(model.inCheck());
+		assertFalse(model.isComplete());
 	}
 	
 	
 	@Test
 	public void isNotCompleteAtStart() throws Exception {
-		assertFalse(model.inCheck() && model.isComplete());
+		assertFalse(model.inCheck());
+		assertFalse(model.isComplete());
 	}
 	
 	@Test
@@ -118,7 +120,8 @@ public class ChessModelTest {
 		model.move(new Move(7, 3, 3, 6)); //w
 		model.move(new Move(0, 0, 5, 6)); //b
 		model.move(new Move(6, 2, 2, 5)); //w
-		assertFalse(model.inCheck() && model.isComplete());
+		assertTrue(model.inCheck());
+		assertFalse(model.isComplete());
 	}
 	
 	@Test

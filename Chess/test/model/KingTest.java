@@ -19,9 +19,7 @@ public class KingTest extends ChessPieceTest{
 	   @Override
 	   protected Move getValidMove(int row, int col) {
 	      int newRow = row + 1;
-	      if (newRow >= board.numRows()) {
-	         newRow = row - 1;
-	      }
+
 	      return new Move(row, col, newRow, col);
 	   }
 

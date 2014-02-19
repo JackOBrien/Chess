@@ -23,10 +23,8 @@ public abstract class PawnTest extends ChessPieceTest {
 
 	@Override
 	protected Move getValidMove(int row, int col) {
-		int newRow = row +1;
-		if (newRow >= board.numRows()) {
-			newRow = row;
-		}
+		int newRow = row +direction();
+		
 		return new Move(row, col, newRow, col);
 	}
 	

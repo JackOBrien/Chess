@@ -39,18 +39,6 @@ public abstract class ChessPieceTest {
 
    protected abstract Move getValidMove(int row, int col);
 
-
-   @Test(expected = IllegalArgumentException.class)
-   public void complainsIfFromLocIsNull() throws Throwable {
-      piece.isValidMove(getValidMove(0, 3), board);
-   }
-
-   @Test (expected = IllegalArgumentException.class)
-   public void complainsIfFromLocIsDifferentObject() throws Throwable {
-      board.set(make(), 1, 3);
-      assertFalse(piece.isValidMove(getValidMove(1, 3), board));
-   }
-
    @Test
    public void complainsIfTargetOccupiedBySamePlayer() throws Throwable {
       Move move = getValidMove(2, 4);
