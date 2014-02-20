@@ -72,6 +72,21 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
+	   public void canNotCastleQueenSideBlocked_2() throws Exception {
+		   board.set(piece, 0, 4);
+		   board.set(new Rook(plr), 0, 0);
+		   board.set(new Pawn(plr.next()), 0, 3);
+		   assertFalse(piece.isValidMove(new Move(0, 4, 0, 2), board));
+	   }
+	   
+	   @Test
+	   public void canNotCastleQueenSideWrongTeam() throws Exception {
+		   board.set(piece, 0, 4);
+		   board.set(new Rook(plr.next()), 0, 0);
+		   assertFalse(piece.isValidMove(new Move(0, 4, 0, 2), board));
+	   }
+	   
+	   @Test
 	   public void canNotCastleKingSideKingMoved() throws Exception {
 		   board.set(piece, 7, 4);
 		   board.set(new Rook(plr), 7, 7);

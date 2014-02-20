@@ -129,8 +129,7 @@ public class King extends ChessPiece {
 		
 		/* Looks to see if there is a friendly Rook in the proper
 		 * position that has never moved */
-		if (rook.is("Rook") && rook.player() == plr &&
-				!((Rook) rook).hasMoved()) {
+		if (rook.player() == plr && !(rook.hasMoved())) {
 			return true;
 		}
 		
