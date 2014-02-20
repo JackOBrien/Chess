@@ -69,33 +69,11 @@ public class Pawn extends ChessPiece {
 		if ((tR - fR) * direction < 0) return false;
 		
 		/* Check if the piece is not attacking */
-		if (fC == tC) {
+		if (fC == tC) {	
+			return isMovingForward(move, board);
+		}
 
-			/* Ensures the pawn does not attack forward */
-			if (board.pieceAt(tR, tC) != null) { return false; }
-			
-			/* Move is valid if the pawn only moves forward one */
-			if (tR == fR + direction) { 
-				lastMove = move;
-				return true; 
-			}
-			
-			/* Ensures the spot in front of the pawn is clear */
-			if (board.pieceAt(fR + direction, fC) != null) { return false; }
-
-			
-			/* Checks if the piece is still in its starting location */
-			if (fR == startingRow) {
-				
-				/* Checks if the piece is trying to move forward twice */
-				if (tR == fR + direction * 2) {
-					gamePosition = board.getNumMoves();
-					movedTwice = true;
-					return true;
-				}
-			}		
-		} 
-
+		/* Checks if the piece is attacking */
 		if (board.pieceAt(move.toRow, move.toColumn) != null) {
 			if (isAttacking(move, board)) {
 				lastMove = move;
@@ -120,6 +98,43 @@ public class Pawn extends ChessPiece {
 
 			// Piece must move up one row and over one column
 			return (rowDist == direction && colDist == 1);
+	}
+	
+	/****************************************************************
+	 * Tells if the piece is making a legal, non-attacking move.
+	 * 
+	 * @param m move being checked.
+	 * @param b board the move is being attempted on.
+	 * @return true if the piece makes a legal forward move.
+	 ***************************************************************/
+	private boolean isMovingForward(Move m, IChessBoard board) {
+		int fR = m.fromRow, fC = m.fromColumn;
+		int tR = m.toRow, tC = m.toColumn;
+
+		/* Ensures the pawn does not attack forward */
+		if (board.pieceAt(tR, tC) != null) { return false; }
+
+		/* Move is valid if the pawn only moves forward one */
+		if (tR == fR + direction) { 
+			lastMove = m;
+			return true; 
+		}
+
+		/* Ensures the spot in front of the pawn is clear */
+		if (board.pieceAt(fR + direction, fC) != null) { return false; }
+
+		/* Checks if the piece is still in its starting location */
+		if (fR == startingRow) {
+
+			/* Checks if the piece is trying to move forward twice */
+			if (tR == fR + direction * 2) {
+				gamePosition = board.getNumMoves();
+				movedTwice = true;
+				return true;
+			}
+		}		
+
+		return false;
 	}
 	
 	/****************************************************************
