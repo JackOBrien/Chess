@@ -206,32 +206,53 @@ public class ChessBoard implements IChessBoard {
 		
 		for (int r = 0; r < numRows(); r++) {
 			for (int c = 0; c < numColumns(); c++) {
-				IChessPiece p = pieceAt(r, c);
 				
-				if (p == null) { continue; }
-				
-				Player plr = p.player();
-
-				switch (p.type()) {
-				case "Pawn": b[r][c] = new Pawn(plr);
-					break;
-				case "Rook": b[r][c] = new Rook(plr);
-					break;
-				case "Bishop": b[r][c] = new Bishop(plr);
-					break;
-				case "Knight": b[r][c] = new Knight(plr);
-					break;
-				case "Queen": b[r][c] = new Queen(plr);
-					break;
-				case "King": b[r][c] = new King(plr);
-					int [] location = {r, c};
-					setKing(plr, location);
-					break;
-				default:
-					break;
-				}
+				assignProperPiece(b, r, c);
 			}
 		}
 		return b;
+	}
+	
+	/****************************************************************
+	 * Places whatever piece was found on this board at the given 
+	 * location on a given board.
+	 * 
+	 * This helper is used to replace the switch statement that was
+	 * originally used in the clone method. The reason being, EclEmma
+	 * doesn't properly cover switch statements. 
+	 * 
+	 * @param b the given board to have pieces placed on.
+	 * @param r the row location of the piece.
+	 * @param c the column location of the piece.
+	 ***************************************************************/
+	private void assignProperPiece(IChessPiece[][] b, int r, int c) {
+		IChessPiece p = pieceAt(r, c);
+		
+		if (p == null) { return; }
+		
+		Player plr = p.player();
+		String type = p.type();
+		
+		if (type.equals("Pawn"))
+			b[r][c] = new Pawn(plr);
+
+		if (type.equals("Rook"))
+			b[r][c] = new Rook(plr);
+
+		if (type.equals("Bishop"))
+			b[r][c] = new Bishop(plr);
+
+		if (type.equals("Knight"))
+			b[r][c] = new Knight(plr);
+
+		if (type.equals("Queen"))
+			b[r][c] = new Queen(plr);
+
+		/* The king also records the location of the kings */
+		if (type.equals("King")){
+			b[r][c] = new King(plr);
+			int [] location = {r, c};
+			setKing(plr, location);
+		}
 	}
 }
