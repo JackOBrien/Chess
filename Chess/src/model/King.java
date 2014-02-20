@@ -121,28 +121,8 @@ public class King extends ChessPiece {
 		/* Only horizontal movement is valid */
 		if (fR != tR) { return false; }
 		
-		IChessPiece rook = null;
-		
-		/* Castling on the King's side */
-		if (tC == fC + 2) {
-			
-			/* Ensure the side is clear */
-			if (b.pieceAt(fR, fC + 1) != null) { return false; }
-			
-			rook = b.pieceAt(tR, tC + 1);
-		
-		/* Castling on the Queen's side */
-		} else if (tC == fC - 2) {
-			
-			/* Ensure the side is clear */
-			if (b.pieceAt(fR, fC - 1) != null || 
-					b.pieceAt(fR, fC - 3) != null) { 
-				return false; 
-			}
-			
-			rook = b.pieceAt(tR, tC - 2);
-			
-		} else { return false; }
+		/* Checks which Rook is participating in the Castle */
+		Rook rook = whichSide(m, b);
 		
 		/* Null check for the rook */
 		if (rook == null) { return false; }
@@ -155,5 +135,39 @@ public class King extends ChessPiece {
 		}
 		
 		return false;
+	}
+	
+	/****************************************************************
+	 * Returns the Rook that is on the side that the kind is
+	 * castling towards
+	 * 
+	 * @param m the attempted move
+	 * @param b the board the move is being attempted on
+	 * @return the Rook participating in the castle
+	 ***************************************************************/
+	private Rook whichSide(Move m, IChessBoard b) {
+		int fR = m.fromRow, fC = m.fromColumn;
+		int tR = m.toRow, tC = m.toColumn;		
+		
+		/* Castling on the King's side */
+		if (tC == fC + 2) {
+			
+			/* Ensure the side is clear */
+			if (b.pieceAt(fR, fC + 1) != null) { return null; }
+			
+			return (Rook) b.pieceAt(tR, tC + 1);
+		
+		/* Castling on the Queen's side */
+		} else if (tC == fC - 2) {
+			
+			/* Ensure the side is clear */
+			if (b.pieceAt(fR, fC - 1) != null || 
+					b.pieceAt(fR, fC - 3) != null) { 
+				return null; 
+			}
+			
+			return (Rook) b.pieceAt(tR, tC - 2);
+			
+		} else { return null; }
 	}
 }
