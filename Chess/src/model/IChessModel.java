@@ -71,4 +71,12 @@ public interface IChessModel {
     ****************************************************************/
    IChessPiece pieceAt(int row, int column);
 
+   /****************************************************************
+    * Returns the board used by the model.
+    * Used for testing
+    * 
+    * @return game board used by the model.
+    ***************************************************************/
+   IChessBoard getBoard();
+
 }

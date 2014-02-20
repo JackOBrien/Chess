@@ -29,15 +29,6 @@ public class ChessModel implements IChessModel {
 	public ChessModel() {
 		board = new ChessBoard(SIZE, true);
 	}
-	
-	/****************************************************************
-	 * Secondary constructor that allows a black board
-	 *
-	 * @param placePieces tells whether or not to place pieces
-	 ***************************************************************/
-	public ChessModel(boolean placePieces) {
-		board = new ChessBoard(SIZE, placePieces);
-	}
 
 	@Override
 	public boolean isComplete() {
@@ -346,5 +337,10 @@ public class ChessModel implements IChessModel {
 	 ***************************************************************/
 	private void revertBoard(IChessBoard b) {
 		board = new ChessBoard((ChessBoard) b);
+	}
+	
+	@Override
+	public IChessBoard getBoard() {
+		return board;
 	}
 }

@@ -1,8 +1,7 @@
 package model;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -269,6 +268,10 @@ public class ChessModelTest {
 		model.move(new Move(0, 3, 3, 3));
 		model.move(new Move(0, 5, 3, 5));
 		model.move(new Move(0, 6, 3, 6));
-
+	}
+	
+	@Test
+	public void checkSize() throws Exception {
+		assertEquals(model.getBoard().numRows(), 8);
 	}
 }
