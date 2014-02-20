@@ -112,5 +112,23 @@ public class ChessBoardTest {
 		empty.unset(4, 4);
 		assertNull(empty.pieceAt(4, 4));
 	}
+	
+	@Test
+	public void testCoptConstructor() throws Exception {
+		IChessBoard newBoard = new ChessBoard((ChessBoard) full);
+		for (int r = 0; r < newBoard.numRows(); r++) {
+			for (int c = 0; c < newBoard.numColumns(); c++) {
+				if (full.pieceAt(r, c) == null) {
+					assertNull(newBoard.pieceAt(r, c));
+					continue;
+				}
+				
+				assertTrue(newBoard.pieceAt(r, c).is(full.pieceAt(r, c).type()));
+			}
+		}
+		
+		newBoard.set(new Rook(Player.BLACK), 4, 4);
+		assertNull(full.pieceAt(4, 4));
+	}
 
 }

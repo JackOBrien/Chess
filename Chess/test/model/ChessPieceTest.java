@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test the {@code ChessPiece} class
+ * Test the {@code ChessPiece} class.
  *
  * @author Zachary Kurmas
  */
@@ -54,6 +54,16 @@ public abstract class ChessPieceTest {
       board.set(piece, move.fromRow, move.fromColumn);
       assertTrue("ChessPiece Test 4", piece.isValidMove(move, board));
    }
+   
+   @Test
+   public void hasATypeString() throws Throwable {
+	   assertNotNull(piece.type());
+   }
 
+   @Test (expected = IllegalArgumentException.class)
+   public void complainsIfImproperFromLocation() throws Throwable {
+	   Move m = new Move(4, 4, 4, 5);
+	   piece.isValidMove(m, board);
+   }
 
 }

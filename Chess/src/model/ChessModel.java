@@ -29,6 +29,15 @@ public class ChessModel implements IChessModel {
 	public ChessModel() {
 		board = new ChessBoard(SIZE, true);
 	}
+	
+	/****************************************************************
+	 * Secondary constructor that allows a black board
+	 *
+	 * @param placePieces tells whether or not to place pieces
+	 ***************************************************************/
+	public ChessModel(boolean placePieces) {
+		board = new ChessBoard(SIZE, placePieces);
+	}
 
 	@Override
 	public boolean isComplete() {
@@ -49,11 +58,6 @@ public class ChessModel implements IChessModel {
 
 				int toRow = kingRow + rowList[i];
 				int toCol = kingCol + colList[i]; 
-				
-				/* Ensures location is in bounds */
-				if (toRow < 0 || toRow > SIZE || toCol < 0 || toCol > SIZE) {
-					continue;
-				}
 				
 				// Creates a move from the King to 1 space away
 				// in any direction
@@ -131,12 +135,10 @@ public class ChessModel implements IChessModel {
 					if (!inCheck()) {
 						revertBoard(current);
 						return true;
-					}else if (playerInCheck != plr) {
+					}else {
 						revertBoard(current);
 						return true;
 					}
-					
-					revertBoard(current);
 				}
 			}
 		}
@@ -152,6 +154,9 @@ public class ChessModel implements IChessModel {
 		
 		/* Checks if the piece thinks the move is legal */
 		if (!basicallyLegal(piece, move)) { return false; }
+		
+		/* Kings cant castle in check */
+		if (tryingToCastelInCheck(move)) { return false; }
 		
 		Player plr = piece.player();
 
@@ -190,8 +195,6 @@ public class ChessModel implements IChessModel {
 	 * "basically legal", meaning that the piece itself thinks the 
 	 * move is valid, and the piece belongs to the current player.
 	 * 
-	 * TODO handle exception
-	 * 
 	 * @param piece the piece attempting the move.
 	 * @param m the move being attempted.
 	 * @return true if the move is "basically legal", false otherwise.
@@ -199,11 +202,10 @@ public class ChessModel implements IChessModel {
 	private boolean basicallyLegal(IChessPiece piece, Move m) {		
 		Player plr = piece.player();
 
-		try {
-			if (plr.equals(currentPlayer()) && piece.isValidMove(m, board)) {
-				return true;
-			}
-		} catch (IllegalArgumentException e) { }
+		
+		if (plr.equals(currentPlayer()) && piece.isValidMove(m, board)) {
+			return true;
+		}
 		
 		return false;
 	}
@@ -240,6 +242,31 @@ public class ChessModel implements IChessModel {
 		return false;
 	}
 
+	/****************************************************************
+	 * Tells if a king tries to castle while in check.
+	 * 
+	 * @param m the proposed move.
+	 * @return true if a king tries to castle while in check.
+	 ***************************************************************/
+	private boolean tryingToCastelInCheck(Move m) {
+		IChessPiece piece = pieceAt(m.fromRow, m.fromColumn);
+		
+		/* Only Kings can Castle */
+		/* If the game isn't in check, the king is ok to castle */
+		if (!piece.is("King") || !inCheck()) { return false; }
+		
+		/* If this king isn't in check then it's free to go! */
+		if (piece.player() != playerInCheck) { return false; }
+		
+		int distance = Math.abs(m.toColumn - m.fromColumn);
+		
+		/* Ensures the king is in the proper position and is
+		 * trying to castle. If so, the move is invalid */
+		if (distance == 2) { return true; }
+		
+		return false;
+	}
+	
 	@Override
 	public void move(Move move) {
 		board.move(move);

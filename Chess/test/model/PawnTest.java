@@ -49,12 +49,25 @@ public abstract class PawnTest extends ChessPieceTest {
 		board.set(piece, 4, 4);
 		assertTrue(piece.isValidMove(new Move(4, 4, 4 +direction(), 
 				4), board));
-		board.set(null, 4, 4);
+		board.unset(4, 4);
 		board.set(piece, 4 + direction(), 4);
 		assertFalse(piece.isValidMove(new Move(4 + direction(), 4
 				, 4 + (direction() *3), 4), board));
 		assertTrue(piece.isValidMove(new Move(4 + direction(), 4, 
 				4 + (direction() *2), 4), board));
+	}
+	
+	@Test
+	public void canNotMoveTwice_2() throws Exception {
+		Pawn p = (Pawn) piece;
+		int row = ((Pawn) piece).startingRow;
+ 
+		board.set(piece, row, 2);
+		Move m = new Move(row, 2, row + direction(), 2);
+		assertTrue(p.isValidMove(m, board));
+		board.move(m);
+		m = new Move(row + direction(), 2, row + direction() * 3, 2);
+		assertFalse(p.isValidMove(m, board));
 	}
 	
 	@Override 
@@ -78,34 +91,56 @@ public abstract class PawnTest extends ChessPieceTest {
 							board));
 			}
 		}
-		
 	}
 	
-//	@Test
-//	public void cantPromoteFromStart() throws Throwable {
-//		Pawn piece = (Pawn) this.piece;
-//		
-//		if (plr == Player.WHITE)	
-//			board.set(piece, 6, 1);
-//		else
-//			board.set(piece, 1, 1);
-//		assertFalse(piece.mayPromote());
-//	}
+	@Test
+	public void cantPromoteFromStart() throws Throwable {
+		Pawn p = (Pawn) piece;
+		
+		board.set(p, p.startingRow, 4);
+		assertFalse(p.mayPromote());
+	}
 	
-//	@Test 
-//	public void canPromote() throws Throwable {
-//		Pawn piece = (Pawn) this.piece;
-//		if (plr == Player.WHITE){
-//			board.set(piece, 1, 0);
-//			board.move(new Move(1, 0, 0, 0));
-//			piece.setLastMove(new Move(1, 0, 0, 0));
-//		}else{
-//			board.set(piece, 6, 0);
-//			board.move(new Move(6, 0, 7, 0));
-//			piece.setLastMove(new Move(6, 0, 7, 0));
-//		}
-//		assertTrue(piece.mayPromote());
-//	}
+	@Test
+	public void cantPromoteMiddle() throws Throwable {
+		Pawn p = (Pawn) piece;
+		
+		board.set(p, 4, 4);
+		assertTrue(p.isValidMove(new Move(4, 4, 4 + direction(), 4), board));
+		assertFalse(p.mayPromote());
+	}
+	
+	@Test 
+	public void canPromote() throws Throwable {
+		Pawn p = (Pawn) piece;
+		if (plr == Player.WHITE){
+			board.set(piece, 1, 0);
+			assertTrue(p.isValidMove(new Move(1, 0, 0, 0), board));
+			board.move(new Move(1, 0, 0, 0));
+		}else{
+			board.set(p, 6, 0);
+			assertTrue(p.isValidMove(new Move(6, 0, 7, 0), board));
+			board.move(new Move(6, 0, 7, 0));
+		}
+		assertTrue(p.mayPromote());
+	}
+	
+	@Test 
+	public void canPromoteAttack() throws Throwable {
+		Pawn p = (Pawn) piece;
+		if (plr == Player.WHITE){
+			board.set(piece, 1, 0);
+			board.set(new Knight(Player.BLACK), 0, 1);
+			assertTrue(p.isValidMove(new Move(1, 0, 0, 1), board));
+			board.move(new Move(1, 0, 0, 1));
+		}else{
+			board.set(p, 6, 0);
+			board.set(new Bishop(Player.WHITE), 7, 1);
+			assertTrue(p.isValidMove(new Move(6, 0, 7, 1), board));
+			board.move(new Move(6, 0, 7, 1));
+		}
+		assertTrue(p.mayPromote());
+	}
 	
 	@Test
 	public void canEnPassant() throws Throwable {
@@ -171,5 +206,14 @@ public abstract class PawnTest extends ChessPieceTest {
 				assertFalse(piece.isValidMove(new Move(4, 3, 5, 2), board));
 			}
 	}
+		
+		@Test
+		public void cantJump() throws Exception {
+			int row = ((Pawn) piece).startingRow;
+			board.set(piece, row, 4);
+			board.set(new Rook(plr.next()), row + direction(), 4);
+			assertFalse(piece.isValidMove(new Move(row, 4, row + 
+					direction() * 2, 4), board));
+		}
 
 }

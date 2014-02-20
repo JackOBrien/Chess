@@ -202,4 +202,73 @@ public class ChessModelTest {
 		assertTrue(model.isValidMove(new Move(3, 1, 4, 1)));
 
 	}
+	
+	@Test
+	public void stopCheckwithCheck() throws Exception {
+		model.move(new Move(0, 4, 3, 0));
+		model.move(new Move(7, 3, 3, 2));
+		model.move(new Move(7, 4, 5, 2));
+		model.move(new Move(0, 0, 2, 2));
+		model.move(new Move(1, 0, 2, 0));
+		model.move(new Move(6, 0, 4, 0));
+		assertTrue(model.inCheck());
+		assertFalse(model.isComplete());
+	}
+	
+	@Test
+	public void nullPieceCantMove() throws Exception {
+		assertFalse(model.isValidMove(new Move(4, 4, 4, 5)));
+	}
+	
+	@Test
+	public void cantCastleInCheck_Queen_1() throws Exception {
+		makeWayForCastle();
+		
+		assertTrue(model.isValidMove(new Move(0, 4, 0, 2)));
+		model.move(new Move(7, 3, 5, 4));
+		model.move(new Move(1, 4, 2, 3));
+		assertFalse(model.isValidMove(new Move(0, 4, 0, 2)));
+	}
+	
+	@Test
+	public void cantCastleInCheck_Queen_2() throws Exception {
+		makeWayForCastle();
+		
+		assertTrue(model.isValidMove(new Move(0, 4, 0, 2)));
+		model.move(new Move(7, 4, 5, 4));
+		model.move(new Move(6, 7, 5, 7));
+		assertTrue(model.inCheck());
+		assertTrue(model.isValidMove(new Move(0, 4, 0, 2)));
+	}
+	
+	@Test
+	public void cantCastleInCheck_Queen_3() throws Exception {
+		makeWayForCastle();
+		
+		assertTrue(model.isValidMove(new Move(0, 4, 0, 2)));
+		model.move(new Move(7, 4, 5, 4));
+		model.move(new Move(6, 7, 5, 7));
+		assertTrue(model.inCheck());
+		assertTrue(model.isValidMove(new Move(0, 4, 0, 3)));
+	}
+	
+	@Test
+	public void cantCastleInCheck_Queen_4() throws Exception {
+		makeWayForCastle();
+		
+		assertTrue(model.isValidMove(new Move(0, 4, 0, 2)));
+		model.move(new Move(7, 4, 5, 4));
+		model.move(new Move(0, 4, 0, 3));
+		assertTrue(model.inCheck());
+		assertFalse(model.isValidMove(new Move(0, 3, 0, 1)));
+	}
+	
+	private void makeWayForCastle() {
+		model.move(new Move(0, 1, 3, 1));
+		model.move(new Move(0, 2, 3, 2));
+		model.move(new Move(0, 3, 3, 3));
+		model.move(new Move(0, 5, 3, 5));
+		model.move(new Move(0, 6, 3, 6));
+
+	}
 }

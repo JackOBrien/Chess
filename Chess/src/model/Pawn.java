@@ -1,6 +1,7 @@
 package model;
 
 import java.lang.Math;
+import java.security.acl.Owner;
 
 /********************************************************************
  * CIS 350 - 01
@@ -16,13 +17,21 @@ import java.lang.Math;
  *******************************************************************/
 public class Pawn extends ChessPiece {
 
+	/** The direction this pawn is moving (-1 up, 1 down) */
 	private int direction;
 	
+	/** The row this pawn starts on */
 	public int startingRow;
 	
+	/** The number of moves that have taken place the last time this
+	 * pawn moved on the board */
 	private int gamePosition;
 	
+	/** Tells if this pawn moved twice in one turn */
 	private boolean movedTwice;
+	
+	/** Keeps track of what this pawn's last turn was */
+	private Move lastMove;
 
 	/****************************************************************
 	 * Constructor for Pawn.
@@ -35,6 +44,7 @@ public class Pawn extends ChessPiece {
 		startingRow = (player() == Player.WHITE ? 6 : 1);
 		gamePosition = 0;
 		movedTwice = false;
+		lastMove = null;
 	}
 
 	@Override
@@ -65,7 +75,10 @@ public class Pawn extends ChessPiece {
 			if (board.pieceAt(tR, tC) != null) { return false; }
 			
 			/* Move is valid if the pawn only moves forward one */
-			if (tR == fR + direction) { return true; }
+			if (tR == fR + direction) { 
+				lastMove = move;
+				return true; 
+			}
 			
 			/* Ensures the spot in front of the pawn is clear */
 			if (board.pieceAt(fR + direction, fC) != null) { return false; }
@@ -84,7 +97,10 @@ public class Pawn extends ChessPiece {
 		} 
 
 		if (board.pieceAt(move.toRow, move.toColumn) != null) {
-			return isAttacking(move, board);
+			if (isAttacking(move, board)) {
+				lastMove = move;
+				return true;
+			}
 		}
 		
 		return false;
@@ -106,6 +122,13 @@ public class Pawn extends ChessPiece {
 			return (rowDist == direction && colDist == 1);
 	}
 	
+	/****************************************************************
+	 * Tells if the piece can perform the special move en Passant
+	 * 
+	 * @param m the move being attempted
+	 * @param b the board the move is being attempted on
+	 * @return true if the piece may en Passant, false otehrwise
+	 ***************************************************************/
 	private boolean canEnPassant(Move m, IChessBoard b) {
 		int fR = m.fromRow, tC = m.toColumn;
 		
@@ -136,5 +159,22 @@ public class Pawn extends ChessPiece {
 	 ***************************************************************/
 	public int getNumMoves() {
 		return gamePosition;
+	}
+	
+	/****************************************************************
+	 * Tells if the pawn may promote
+	 * 
+	 * @param row the row location of the pawn
+	 * @return true if the pawn may promote, false otherwise.
+	 ***************************************************************/
+	public boolean mayPromote() {
+		
+		if (lastMove == null) { return false; }
+		
+		if (player() == Player.WHITE) {
+			return lastMove.toRow == 0;
+		} else {
+			return lastMove.toRow == 7;
+		}
 	}
 }

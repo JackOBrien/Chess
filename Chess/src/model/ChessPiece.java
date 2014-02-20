@@ -39,8 +39,6 @@ public abstract class ChessPiece implements IChessPiece {
 		try {
 			from = board.pieceAt(fR, fC);
 			to = board.pieceAt(tR, tC);
-		} catch (IllegalArgumentException e) {
-			return false;
 		} catch (IndexOutOfBoundsException ex) {
 			return false;
 		}

@@ -138,7 +138,7 @@ public class ChessBoard implements IChessBoard {
 		currentPlayer = currentPlayer.next();
 		
 		/* If the piece being moved is a king, the location is recorded */
-		if (movingPiece != null && movingPiece instanceof King)
+		if (movingPiece != null && movingPiece.is("King"))
 			updateKingLocation(move.toRow, move.toColumn);
 		
 		/* Increments the number of moves that have been made */
@@ -199,11 +199,6 @@ public class ChessBoard implements IChessBoard {
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
-
-	@Override
-	public IChessPiece[][] getGameBoard(){
-		return board;
-	}
 	
 	@Override
 	public IChessPiece[][] clone() {
@@ -238,43 +233,5 @@ public class ChessBoard implements IChessBoard {
 			}
 		}
 		return b;
-	}
-	
-	@Override
-	public void printBoard() {
-		String out = "--------\n";
-		
-		for (int r = 0; r < numRows(); r++) {
-			for (int c = 0; c < numColumns(); c++) {
-				IChessPiece p = pieceAt(r, c);
-				
-				if (p == null) { 
-					out += "'";
-					continue; 
-				}
-				
-				Player plr = p.player();
-
-				switch (p.type()) {
-				case "Pawn": out += "p";
-					break;
-				case "Rook": out += "R";
-					break;
-				case "Bishop": out += "B";
-					break;
-				case "Knight": out += "k";
-					break;
-				case "Queen": out += "Q";
-					break;
-				case "King": out += "K";
-					break;
-				default: out += "-";
-					break;
-				}
-			}
-			out += "\n";
-		}
-		
-		System.out.println(out+ "--------");
 	}
 }

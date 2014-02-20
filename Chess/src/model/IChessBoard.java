@@ -85,23 +85,17 @@ public interface IChessBoard {
    public Player getCurrentPlayer();
 
    /****************************************************************
-    * Returns the array of game pieces representing the 
-    * chess board
-    * 
-    * @return array representing the game board
-    ***************************************************************/
-   public IChessPiece[][] getGameBoard();
-
-   /****************************************************************
     * Returns the location of the requested player's king
     * 
     * @param p player who's king's location is being requested
     * @return the location of Player p's king
     ***************************************************************/
    public int[] findKing(Player p);
-
-/****************************************************************
- * TODO
- ***************************************************************/
-void printBoard();
+   
+   /****************************************************************
+    * Returns a deep copy of this boards 2D array of pieces
+    * 
+    * @return the cloned board
+    ***************************************************************/
+   public IChessPiece[][] clone();
 }

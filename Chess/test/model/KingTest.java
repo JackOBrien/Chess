@@ -130,6 +130,12 @@ public class KingTest extends ChessPieceTest{
 					
 				}
 		   }
-		   
+	   }
+	   
+	   @Test
+	   public void cantCastleInCheck_Queen() throws Exception{		   
+		   board.set(piece, 0, 4);
+		   board.set(new Rook(plr), 0, 0);
+		   assertTrue(piece.isValidMove(new Move(0, 4, 0, 2), board));
 	   }
 }
