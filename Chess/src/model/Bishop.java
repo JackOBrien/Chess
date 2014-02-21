@@ -4,7 +4,7 @@ package model;
  * CIS 350 - 01
  * Chess
  *
- * A Bishop in a game of chess. 
+ * A Bishop in a game of chess.
  *
  * @author John O'Brien
  * @author Louis Marzorati
@@ -13,23 +13,23 @@ package model;
  * @version Feb 20, 2014
  *******************************************************************/
 public class Bishop extends ChessPiece {
-	
+
 	/****************************************************************
 	 * Constructor for Bishop.
 	 * 
 	 * @param player the Player who owns this piece.
 	 ***************************************************************/
-	public Bishop(Player player) {
+	public Bishop(final Player player) {
 		super(player);
 	}
 
 	@Override
-	public String type() {
+	public final String type() {
 		return "Bishop";
 	}
 
 	@Override
-	public boolean isValidMove(Move move, IChessBoard board) {
+	public final boolean isValidMove(final Move move, final IChessBoard board) {
 		
 		if (!super.isValidMove(move, board)) {
 			return false;
@@ -49,7 +49,8 @@ public class Bishop extends ChessPiece {
 	 * @param board the board the move is being attempted on.
 	 * @return true if the piece is moving diagonally, false otherwise.
 	 ***************************************************************/
-	protected static boolean movingDiagonally(Move m, IChessBoard board) {
+	protected static boolean movingDiagonally(final Move m,
+			final IChessBoard board) {
 		int fR = m.fromRow, fC = m.fromColumn;
 		
 		// The difference in the to row and the from row
