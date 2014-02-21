@@ -37,7 +37,7 @@ public class ChessBoard implements IChessBoard {
 	 * @param placePieces if true, will place game pieces. 
 	 * 			If false, will create an empty game board.
 	 ***************************************************************/
-	public ChessBoard(final int boardSize, final boolean placePieces){
+	public ChessBoard(final int boardSize, final boolean placePieces) {
 		board = new ChessPiece[boardSize][boardSize];
 		
 		/* Creates an empty board if placePieces is false */
@@ -56,13 +56,6 @@ public class ChessBoard implements IChessBoard {
 		
 		whiteKing = new int[2];
 		blackKing = new int[2];
-		
-		/* Default locations of the two kings */
-		whiteKing[0] = 7;
-		whiteKing[1] = 4;
-		
-		blackKing[0] = 0;
-		blackKing[1] = 4;
 	}
 	
 	/****************************************************************
@@ -82,7 +75,7 @@ public class ChessBoard implements IChessBoard {
 	/****************************************************************
 	 * Places the game pieces into their default locations on the board.
 	 ***************************************************************/
-	private void setupBoard(){
+	private void setupBoard() {
 		
 		/* Rows for the black pieces*/
 		int rowPawns = 1; 
@@ -100,9 +93,13 @@ public class ChessBoard implements IChessBoard {
 			board[row][7] = new Rook(p);
 			
 			/* Places pawns */
-			for (int col = 0; col < 8; col++) {
+			for (int col = 0; col < numColumns(); col++) {
 				board[rowPawns][col] = new Pawn(p);
 			}
+			
+			// Records Kings location
+			int[] loc = {row, 4};
+			setKing(p, loc);
 			
 			row = 7; 
 			rowPawns = 6;
@@ -215,7 +212,11 @@ public class ChessBoard implements IChessBoard {
 		}
 	}
 	
-	private void setKing(Player p, int[] location) {
+	/****************************************************************
+	 * @param p TODO
+	 * @param location TODO
+	 ***************************************************************/
+	private void setKing(final Player p, final int[] location) {
 		if (p == Player.WHITE) {
 			whiteKing = location;
 		} else {
