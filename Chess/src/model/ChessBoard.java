@@ -14,19 +14,19 @@ package model;
  *******************************************************************/
 public class ChessBoard implements IChessBoard {
 
-	/** 2d array of ChessPieces to represent the board */
+	/** 2d array of ChessPieces to represent the board. */
 	private IChessPiece[][] board;
 	
-	/** Tells who's turn it currently is (WHITE or BLACK) */
+	/** Tells who's turn it currently is (WHITE or BLACK). */
 	private Player currentPlayer;
 	
-	/** Tells how many moves have been made */
+	/** Tells how many moves have been made. */
 	private int numMoves;
 	
-	/** Location of the white King */
+	/** Location of the white King. */
 	private int[] whiteKing;
 	
-	/** Location of the black King */
+	/** Location of the black King. */
 	private int[] blackKing;
 	
 	/****************************************************************
@@ -37,16 +37,19 @@ public class ChessBoard implements IChessBoard {
 	 * @param placePieces if true, will place game pieces. 
 	 * 			If false, will create an empty game board.
 	 ***************************************************************/
-	public ChessBoard(int boardSize, boolean placePieces){
+	public ChessBoard(final int boardSize, final boolean placePieces){
 		board = new ChessPiece[boardSize][boardSize];
 		
 		/* Creates an empty board if placePieces is false */
-		if(!placePieces)
-			for(int r = 0; r < boardSize; r++)
-				for(int c = 0; c < boardSize; c++)
+		if (!placePieces) {
+			for (int r = 0; r < boardSize; r++) {
+				for (int c = 0; c < boardSize; c++) {
 					board[r][c] = null;
-		else
+				}
+			}
+		} else {
 			setupBoard();
+		}
 		
 		currentPlayer = Player.WHITE;
 		numMoves = 0;
@@ -67,7 +70,7 @@ public class ChessBoard implements IChessBoard {
 	 * 
 	 * @param other the ChessBoard to copy.
 	 ***************************************************************/
-	public ChessBoard(ChessBoard other) {
+	public ChessBoard(final ChessBoard other) {
 		board = other.clone();
 		
 		currentPlayer = other.currentPlayer;
@@ -77,7 +80,7 @@ public class ChessBoard implements IChessBoard {
 	}
 	
 	/****************************************************************
-	 * Places the game pieces into their default locations on the board
+	 * Places the game pieces into their default locations on the board.
 	 ***************************************************************/
 	private void setupBoard(){
 		
@@ -86,7 +89,7 @@ public class ChessBoard implements IChessBoard {
 		int row = 0;
 		
 		/* Places both black and white pieces */
-		for (Player p : Player.values()){				
+		for (Player p : Player.values()) {				
 			board[row][0] = new Rook(p);
 			board[row][1] = new Knight(p);
 			board[row][2] = new Bishop(p);
@@ -97,36 +100,41 @@ public class ChessBoard implements IChessBoard {
 			board[row][7] = new Rook(p);
 			
 			/* Places pawns */
-			for (int col = 0; col < 8; col++)
+			for (int col = 0; col < 8; col++) {
 				board[rowPawns][col] = new Pawn(p);
+			}
 			
 			row = 7; 
 			rowPawns = 6;
 		}
 		
 		/* Sets the rest to null */
-		for (int r = 2; r < 6; r++)
-			for (int c = 0; c < 8; c++)
-				board[r][c] = null;
+		for (int r = 2; r < 6; r++) {
+			{
+				for (int c = 0; c < 8; c++) {
+					board[r][c] = null;
+				}
+			}
+		}
 	}
 	
 	@Override
-	public int numRows() {
+	public final int numRows() {
 		return board.length;
 	}
 
 	@Override
-	public int numColumns() {
+	public final int numColumns() {
 		return board[0].length;
 	}
 
 	@Override
-	public IChessPiece pieceAt(int row, int column) {
+	public final IChessPiece pieceAt(final int row, final int column) {
 		return board[row][column];
 	}
 
 	@Override
-	public void move(Move move) {
+	public final void move(final Move move) {
 		
 		/* Moves piece at the from location to the to location
 		 * Sets from location to null. */
@@ -140,8 +148,9 @@ public class ChessBoard implements IChessBoard {
 		currentPlayer = currentPlayer.next();
 		
 		/* If the piece being moved is a king, the location is recorded */
-		if (movingPiece != null && movingPiece.is("King"))
+		if (movingPiece != null && movingPiece.is("King")) {
 			updateKingLocation(move.toRow, move.toColumn);
+		}
 		
 		/* Increments the number of moves that have been made */
 		numMoves++;
@@ -149,9 +158,10 @@ public class ChessBoard implements IChessBoard {
 	
 	/****************************************************************
 	 * @param movingPiece TODO
-	 * @param move
+	 * @param move the move being attempted 
 	 ***************************************************************/
-	private void handleEnPassant(IChessPiece movingPiece, Move move) {
+	private void handleEnPassant(final IChessPiece movingPiece,
+			final Move move) {
 		
 		if (movingPiece == null) { return; }
 		
@@ -160,7 +170,8 @@ public class ChessBoard implements IChessBoard {
 		Pawn p = (Pawn) movingPiece;
 		
 		/* Removes attacked pawn from the board */
-		if (pieceAt(move.toRow, move.toColumn) == null && 
+		if (pieceAt(move.toRow, move.toColumn) == null 
+				&& 
 				p.isAttacking(move, this)) { 
 			unset(move.toRow, move.fromColumn);
 		}
@@ -172,30 +183,31 @@ public class ChessBoard implements IChessBoard {
 	 * @param row row coordinate of the piece
 	 * @param col column coordinate of the piece
 	 ***************************************************************/
-	private void updateKingLocation(int row, int col) {
+	private void updateKingLocation(final int row, final int col) {
 		
 		/* Checks which player owns the piece */
-		if(pieceAt(row, col).player() == Player.WHITE) {
+		if (pieceAt(row, col).player() == Player.WHITE) {
 			whiteKing[0] = row;
 			whiteKing[1] = col;
-		}else {
+		} else {
 			blackKing[0] = row;
 			blackKing[1] = col;
 		}
 	}
 
 	@Override
-	public void set(IChessPiece piece, int row, int column) {
+	public final void set(final IChessPiece piece, final int row,
+			final int column) {
 		board[row][column] = piece;
 	}
 
 	@Override
-	public void unset(int row, int column) {
+	public final void unset(final int row, final int column) {
 		board[row][column] = null;
 	}
 	
 	@Override
-	public int[] findKing(Player p) {
+	public final int[] findKing(final Player p) {
 		if (p == Player.WHITE) {
 			return whiteKing;
 		} else {
@@ -212,17 +224,17 @@ public class ChessBoard implements IChessBoard {
 	}
 	
 	@Override
-	public int getNumMoves() {
+	public final int getNumMoves() {
 		return numMoves;
 	}
 	
 	@Override
-	public Player getCurrentPlayer() {
+	public final Player getCurrentPlayer() {
 		return currentPlayer;
 	}
 	
 	@Override
-	public IChessPiece[][] clone() {
+	public final IChessPiece[][] clone() {
 		IChessPiece[][] b = new ChessPiece[numRows()][numColumns()];
 		
 		for (int r = 0; r < numRows(); r++) {
@@ -246,7 +258,8 @@ public class ChessBoard implements IChessBoard {
 	 * @param r the row location of the piece.
 	 * @param c the column location of the piece.
 	 ***************************************************************/
-	private void assignProperPiece(IChessPiece[][] b, int r, int c) {
+	private void assignProperPiece(final IChessPiece[][] b, final int r,
+			final int c) {
 		IChessPiece p = pieceAt(r, c);
 		
 		if (p == null) { return; }
@@ -254,23 +267,28 @@ public class ChessBoard implements IChessBoard {
 		Player plr = p.player();
 		String type = p.type();
 		
-		if (type.equals("Pawn"))
+		if (type.equals("Pawn")) {
 			b[r][c] = new Pawn(plr);
+		}
 
-		if (type.equals("Rook"))
+		if (type.equals("Rook")) {
 			b[r][c] = new Rook(plr);
+		}
 
-		if (type.equals("Bishop"))
+		if (type.equals("Bishop")) {
 			b[r][c] = new Bishop(plr);
+		}
 
-		if (type.equals("Knight"))
+		if (type.equals("Knight")) {
 			b[r][c] = new Knight(plr);
+		}
 
-		if (type.equals("Queen"))
+		if (type.equals("Queen")) {
 			b[r][c] = new Queen(plr);
+		}
 
 		/* The king also records the location of the kings */
-		if (type.equals("King")){
+		if (type.equals("King")) {
 			b[r][c] = new King(plr);
 			int [] location = {r, c};
 			setKing(plr, location);
