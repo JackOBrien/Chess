@@ -14,7 +14,7 @@ package model;
  *******************************************************************/
 public class ChessModel implements IChessModel {
 
-	/** The 'real' board with the game pieces */
+	/** The chess board with the game pieces */
 	private IChessBoard board;
 
 	/** Stand chess board is 8 by 8 */
@@ -322,18 +322,20 @@ public class ChessModel implements IChessModel {
 	}
 
 	/****************************************************************
-	 * Re-makes the save board using the chess boards copy constructor
-	 * thus making it into a copy of the 'real' game board
+	 * Returns a deep copy of the current game board to be saved
+	 * so that the game can later be reverted.
+	 * 
+	 * @return a deep copy of the current game board.
 	 ***************************************************************/
 	private IChessBoard saveBoard() {
 		return new ChessBoard((ChessBoard) board);
 	}
-
-	// TODO fix these two headers
 	
 	/****************************************************************
-	 * Re-makes the 'real' game board using the saveBoard's copy
-	 * constructor, thus reverting the game to the 'saved' state
+	 * Reverts the current game board to the version that is passed
+	 * as a parameter.
+	 * 
+	 * @param b older version of the chess board to be reverted to.
 	 ***************************************************************/
 	private void revertBoard(IChessBoard b) {
 		board = new ChessBoard((ChessBoard) b);

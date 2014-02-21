@@ -148,15 +148,21 @@ public abstract class PawnTest extends ChessPieceTest {
 		if (plr == Player.WHITE){
 			board.set(piece, 3, 3);
 			board.set(pawn, 1, 2);
-			pawn.isValidMove(new Move (1, 2, 3, 2), board);
+			assertTrue(pawn.isValidMove(new Move (1, 2, 3, 2), board));
 			board.move(new Move(1, 2, 3, 2));
 			assertTrue(piece.isValidMove(new Move(3, 3, 2, 2), board));
+			assertNotNull(board.pieceAt(3, 3));
+			board.move(new Move(3, 3, 2, 2));
+			assertNull(board.pieceAt(3, 3));
 		}else{
 			board.set(piece, 4, 3);
 			board.set(pawn, 6, 2);
 			pawn.isValidMove(new Move(6, 2, 4, 2), board);
 			board.move(new Move(6, 2, 4, 2));
 			assertTrue(piece.isValidMove(new Move(4, 3, 5, 2), board));
+			assertNotNull(board.pieceAt(4, 3));
+			board.move(new Move(4, 3, 5, 2));
+			assertNull(board.pieceAt(4, 3));
 		}
 	}
 	

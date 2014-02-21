@@ -61,7 +61,7 @@ public class Pawn extends ChessPiece {
 		
 		/* Checks for for en Passant move */
 		if (canEnPassant(move, board)) { return true; }
-		
+				
 		int fR = move.fromRow, fC = move.fromColumn;
 		int tR = move.toRow, tC = move.toColumn;
 		
@@ -92,7 +92,7 @@ public class Pawn extends ChessPiece {
 	 * @param b the board the move takes place on
 	 * @return true if the piece is attacking, false otehrwise
 	 ***************************************************************/
-	private boolean isAttacking(Move m, IChessBoard b) {
+	public boolean isAttacking(Move m, IChessBoard b) {
 			int rowDist = m.toRow - m.fromRow;
 			int colDist = Math.abs(m.fromColumn - m.toColumn);
 

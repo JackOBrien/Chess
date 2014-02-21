@@ -129,12 +129,14 @@ public class ChessBoard implements IChessBoard {
 	public void move(Move move) {
 		
 		/* Moves piece at the from location to the to location
-		 * Sets from location to null */
+		 * Sets from location to null. */
 		IChessPiece movingPiece = pieceAt(move.fromRow, move.fromColumn);
-		set(null, move.fromRow, move.fromColumn);
+		// Checks and handles an en Passant move
+		handleEnPassant(movingPiece, move);
+		unset(move.fromRow, move.fromColumn);
 		set(movingPiece, move.toRow, move.toColumn);
 		
-		/* Switches turns */
+		// Switches turns
 		currentPlayer = currentPlayer.next();
 		
 		/* If the piece being moved is a king, the location is recorded */
@@ -145,6 +147,25 @@ public class ChessBoard implements IChessBoard {
 		numMoves++;
 	}
 	
+	/****************************************************************
+	 * @param movingPiece TODO
+	 * @param move
+	 ***************************************************************/
+	private void handleEnPassant(IChessPiece movingPiece, Move move) {
+		
+		if (movingPiece == null) { return; }
+		
+		if (!movingPiece.is("Pawn")) { return; }
+		
+		Pawn p = (Pawn) movingPiece;
+		
+		/* Removes attacked pawn from the board */
+		if (pieceAt(move.toRow, move.toColumn) == null && 
+				p.isAttacking(move, this)) { 
+			unset(move.toRow, move.fromColumn);
+		}
+	}
+
 	/****************************************************************
 	 * Updates the arrays keeping track of each king's location.
 	 * 
