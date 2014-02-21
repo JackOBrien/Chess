@@ -152,7 +152,7 @@ public class ChessModel implements IChessModel {
 		/* Checks if the piece thinks the move is legal */
 		if (!basicallyLegal(piece, move)) { return false; }
 		
-		/* Kings cant castle in check */
+		/* Kings can't castle in check */
 		if (tryingToCastelInCheck(move)) { return false; }
 		
 		Player plr = piece.player();

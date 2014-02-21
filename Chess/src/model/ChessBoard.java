@@ -84,7 +84,6 @@ public class ChessBoard implements IChessBoard {
 		// Column of the board where the pieces start
 		// (only the pieces to the right of the left-most Bishop)
 		final int queenCol = 3;
-		final int kingCol = 4;
 		final int bishopCol = 5;
 		final int knightCol = 6;
 		final int rookCol = 7;
@@ -96,7 +95,7 @@ public class ChessBoard implements IChessBoard {
 			board[row][1] = new Knight(p);
 			board[row][2] = new Bishop(p);
 			board[row][queenCol] = new Queen(p);
-			board[row][kingCol] = new King(p);
+			board[row][King.KING_STARTING_COL] = new King(p);
 			board[row][bishopCol] = new Bishop(p);
 			board[row][knightCol] = new Knight(p);
 			board[row][rookCol] = new Rook(p);
@@ -107,7 +106,7 @@ public class ChessBoard implements IChessBoard {
 			}
 			
 			// Records Kings location
-			int[] loc = {row, kingCol};
+			int[] loc = {row, King.KING_STARTING_COL};
 			setKing(p, loc);
 			
 			row = numRows() - 1; 

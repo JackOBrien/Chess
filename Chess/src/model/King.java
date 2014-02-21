@@ -19,6 +19,9 @@ public class King extends ChessPiece {
 	
 	/** Tells the pieces initial position. */
 	private int initialRow, initialCol;
+	
+	/** The column where the king begins. */
+	public static final int KING_STARTING_COL = 4;
 
 	/****************************************************************
 	 * Constructor for King.
@@ -108,7 +111,7 @@ public class King extends ChessPiece {
 		int tR = m.getToRow(), tC = m.getToColumn();	
 		
 		/* The can't castle if it has moved before */
-		if (hasMoved || fC != 4) { return false; }
+		if (hasMoved || fC != KING_STARTING_COL) { return false; }
 		
 		IChessPiece toPiece = b.pieceAt(tR, tC);
 		
