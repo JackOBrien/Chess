@@ -19,8 +19,6 @@ public class King extends ChessPiece {
 	
 	/** Tells the pieces initial position. */
 	private int initialRow, initialCol;
-	
-	private Player plr;
 
 	/****************************************************************
 	 * Constructor for King.
@@ -30,7 +28,6 @@ public class King extends ChessPiece {
 	public King(final Player player) {
 		super(player);
 		
-		plr = player;
 		hasMoved = false;
 		initialRow = -1;
 		initialCol = -1;
@@ -48,8 +45,8 @@ public class King extends ChessPiece {
 			return false;
 		}
 		
-		int fR = move.fromRow, fC = move.fromColumn;
-		int tR = move.toRow, tC = move.toColumn;
+		int fR = move.getFromRow(), fC = move.getFromColumn();
+		int tR = move.getToRow(), tC = move.getToColumn();
 		
 		checkifMoved(fR, fC);
 
@@ -107,8 +104,8 @@ public class King extends ChessPiece {
 	 * @return true if the King may castle, false otherwise.
 	 ***************************************************************/
 	private boolean mayCastle(final Move m, final IChessBoard b) {
-		int fR = m.fromRow, fC = m.fromColumn;
-		int tR = m.toRow, tC = m.toColumn;		
+		int fR = m.getFromRow(), fC = m.getFromColumn();
+		int tR = m.getToRow(), tC = m.getToColumn();	
 		
 		/* The can't castle if it has moved before */
 		if (hasMoved || fC != 4) { return false; }
@@ -129,7 +126,7 @@ public class King extends ChessPiece {
 		
 		/* Looks to see if there is a friendly Rook in the proper
 		 * position that has never moved */
-		if (rook.player() == plr && !(rook.hasMoved())) {
+		if (rook.player() == player() && !(rook.hasMoved())) {
 			return true;
 		}
 		
@@ -145,8 +142,8 @@ public class King extends ChessPiece {
 	 * @return the Rook participating in the castle
 	 ***************************************************************/
 	private Rook whichSide(final Move m, final IChessBoard b) {
-		int fR = m.fromRow, fC = m.fromColumn;
-		int tR = m.toRow, tC = m.toColumn;		
+		int fR = m.getFromRow(), fC = m.getFromColumn();
+		int tR = m.getToRow(), tC = m.getToColumn();	
 		
 		/* Castling on the King's side */
 		if (tC == fC + 2) {

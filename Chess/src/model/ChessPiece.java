@@ -45,8 +45,8 @@ public abstract class ChessPiece implements IChessPiece {
 
 	@Override
 	public boolean isValidMove(final Move move, final IChessBoard board) {
-		int fR = move.fromRow, fC = move.fromColumn;
-		int tR = move.toRow, tC = move.toColumn;
+		int fR = move.getFromRow(), fC = move.getFromColumn();
+		int tR = move.getToRow(), tC = move.getToColumn();
 		
 		IChessPiece from;
 		IChessPiece to;

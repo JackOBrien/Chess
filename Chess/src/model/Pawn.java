@@ -61,8 +61,8 @@ public class Pawn extends ChessPiece {
 		/* Checks for for en Passant move */
 		if (canEnPassant(move, board)) { return true; }
 				
-		int fR = move.fromRow, fC = move.fromColumn;
-		int tR = move.toRow, tC = move.toColumn;
+		int fR = move.getFromRow(), fC = move.getFromColumn();
+		int tR = move.getToRow(), tC = move.getToColumn();
 		
 		/* Ensures the pawn doesn't move backwards */
 		if ((tR - fR) * direction < 0) return false;
@@ -73,7 +73,7 @@ public class Pawn extends ChessPiece {
 		}
 
 		/* Checks if the piece is attacking */
-		if (board.pieceAt(move.toRow, move.toColumn) != null) {
+		if (board.pieceAt(move.getToRow(), move.getToColumn()) != null) {
 			if (isAttacking(move, board)) {
 				lastMove = move;
 				return true;
@@ -92,8 +92,8 @@ public class Pawn extends ChessPiece {
 	 * @return true if the piece is attacking, false otehrwise
 	 ***************************************************************/
 	public boolean isAttacking(Move m, IChessBoard b) {
-			int rowDist = m.toRow - m.fromRow;
-			int colDist = Math.abs(m.fromColumn - m.toColumn);
+			int rowDist = m.getToRow() - m.getFromRow();
+			int colDist = Math.abs(m.getFromColumn() - m.getToColumn());
 
 			// Piece must move up one row and over one column
 			return (rowDist == direction && colDist == 1);
@@ -107,8 +107,8 @@ public class Pawn extends ChessPiece {
 	 * @return true if the piece makes a legal forward move.
 	 ***************************************************************/
 	private boolean isMovingForward(Move m, IChessBoard board) {
-		int fR = m.fromRow, fC = m.fromColumn;
-		int tR = m.toRow, tC = m.toColumn;
+		int fR = m.getFromRow(), fC = m.getFromColumn();
+		int tR = m.getToRow(), tC = m.getToColumn();
 
 		/* Ensures the pawn does not attack forward */
 		if (board.pieceAt(tR, tC) != null) { return false; }
@@ -144,7 +144,7 @@ public class Pawn extends ChessPiece {
 	 * @return true if the piece may en Passant, false otehrwise
 	 ***************************************************************/
 	private boolean canEnPassant(Move m, IChessBoard b) {
-		int fR = m.fromRow, tC = m.toColumn;
+		int fR = m.getFromRow(), tC = m.getToColumn();
 		
 		/* Ensures the piece is attacking */
 		if (!isAttacking(m, b)) { return false; }
@@ -186,9 +186,9 @@ public class Pawn extends ChessPiece {
 		if (lastMove == null) { return false; }
 		
 		if (player() == Player.WHITE) {
-			return lastMove.toRow == 0;
+			return lastMove.getToRow() == 0;
 		} else {
-			return lastMove.toRow == 7;
+			return lastMove.getToRow() == 7;
 		}
 	}
 }
