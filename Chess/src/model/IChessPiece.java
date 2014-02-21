@@ -38,11 +38,6 @@ public interface IChessPiece {
 	 * @param move a Move object describing the move to be made.
 	 * @param board the chess board in which this piece resides.
 	 * @return true if the proposed move is valid, false otherwise.
-	 * @throws IndexOutOfBoundsException if either [move.fromRow, 
-	 * 			move.fromColumn] or [move.toRow,move.toColumn] don't 
-	 * 			represent valid locations on the board.
-	 * @throws IllegalArgumentException if this object isn't the piece at
-	 *			location [move.fromRow, move.fromColumn].
 	 ***************************************************************/
 	boolean isValidMove(Move move, IChessBoard board);
 
