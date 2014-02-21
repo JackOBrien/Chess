@@ -11,7 +11,7 @@ package model;
  * @author Shane Higgins
  * @author Caleb Woods
  * @author Zachary Kurmas
- * @version Feb 12, 2014
+ * @version Feb 20, 2014
  *******************************************************************/
 public class Move {
 

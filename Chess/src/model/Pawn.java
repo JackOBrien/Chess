@@ -13,7 +13,7 @@ import java.security.acl.Owner;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 16, 2014
+ * @version Feb 20, 2014
  *******************************************************************/
 public class Pawn extends ChessPiece {
 

@@ -10,7 +10,7 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 11, 2014
+ * @version Feb 20, 2014
  *******************************************************************/
 public class King extends ChessPiece {
 
