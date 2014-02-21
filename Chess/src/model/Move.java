@@ -15,16 +15,16 @@ package model;
  *******************************************************************/
 public class Move {
 
-	/** The row coordinate of the pieces current location */
+	/** The row coordinate of the pieces current location. */
 	public int fromRow;
 
-	/** The column coordinate of the pieces current location */
+	/** The column coordinate of the pieces current location. */
 	public int fromColumn;
 
-	/** The row coordinate of the pieces destination */
+	/** The row coordinate of the pieces destination. */
 	public int toRow;
 
-	/** The column coordinate of the pieces destination */
+	/** The column coordinate of the pieces destination. */
 	public int toColumn;
 
 	/****************************************************************
@@ -35,7 +35,8 @@ public class Move {
 	 * @param toRow destination row location.
 	 * @param toColumn destination column location.
 	 ***************************************************************/
-	public Move(int fromRow, int fromColumn, int toRow, int toColumn) {
+	public Move(final int fromRow, final int fromColumn, final int toRow,
+			final int toColumn) {
 		this.fromRow = fromRow;
 		this.fromColumn = fromColumn;
 		this.toRow = toRow;
