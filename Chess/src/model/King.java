@@ -27,7 +27,7 @@ public class King extends ChessPiece {
 	 * 
 	 * @param player the Player who owns this piece.
 	 ***************************************************************/
-	public King(Player player) {
+	public King(final Player player) {
 		super(player);
 		
 		plr = player;
@@ -37,12 +37,12 @@ public class King extends ChessPiece {
 	}
 
 	@Override
-	public String type() {
+	public final String type() {
 		return "King";
 	}
 
 	@Override
-	public boolean isValidMove(Move move, IChessBoard board) {
+	public final boolean isValidMove(final Move move, final IChessBoard board) {
 		
 		if (!super.isValidMove(move, board)) {
 			return false;
@@ -106,7 +106,7 @@ public class King extends ChessPiece {
 	 * @param b the board the Move is being attempted on.
 	 * @return true if the King may castle, false otherwise.
 	 ***************************************************************/
-	private boolean mayCastle(Move m, IChessBoard b) {
+	private boolean mayCastle(final Move m, final IChessBoard b) {
 		int fR = m.fromRow, fC = m.fromColumn;
 		int tR = m.toRow, tC = m.toColumn;		
 		
@@ -138,13 +138,13 @@ public class King extends ChessPiece {
 	
 	/****************************************************************
 	 * Returns the Rook that is on the side that the kind is
-	 * castling towards
+	 * castling towards.
 	 * 
 	 * @param m the attempted move
 	 * @param b the board the move is being attempted on
 	 * @return the Rook participating in the castle
 	 ***************************************************************/
-	private Rook whichSide(Move m, IChessBoard b) {
+	private Rook whichSide(final Move m, final IChessBoard b) {
 		int fR = m.fromRow, fC = m.fromColumn;
 		int tR = m.toRow, tC = m.toColumn;		
 		
@@ -160,8 +160,8 @@ public class King extends ChessPiece {
 		} else if (tC == fC - 2) {
 			
 			/* Ensure the side is clear */
-			if (b.pieceAt(fR, fC - 1) != null || 
-					b.pieceAt(fR, fC - 3) != null) { 
+			if (b.pieceAt(fR, fC - 1) != null 
+					|| b.pieceAt(fR, fC - 3) != null) { 
 				return null; 
 			}
 			
