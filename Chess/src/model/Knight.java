@@ -17,28 +17,29 @@ public class Knight extends ChessPiece {
 
 
 	/****************************************************************
-	 * Constructor for night
+	 * Constructor for night.
 	 * 
 	 * @param plr owner of the Knight
 	 ***************************************************************/
-	public Knight(Player plr) {
+	public Knight(final Player plr) {
 		super(plr);
 	}
 
 	@Override
-	public String type() {
+	public final String type() {
 		return "Knight";
 	}
 
 	@Override
-	public boolean isValidMove(Move move, IChessBoard board) {
+	public final boolean isValidMove(final Move move, final IChessBoard board) {
 		
-		if (!super.isValidMove(move, board))
+		if (!super.isValidMove(move, board)) {
 			return false;
+		}
 		
 		// Relative valid positions
 		int[] validRow = {1, 2, 2, 1, -1, -2, -2, -1};
-		int[] ValidCol = {-2, -1, 1, 2, 2, 1, -1, -2};
+		int[] validCol = {-2, -1, 1, 2, 2, 1, -1, -2};
 			
 		int fR = move.fromRow, fC = move.fromColumn;
 		int tR = move.toRow, tC = move.toColumn;
@@ -46,7 +47,7 @@ public class Knight extends ChessPiece {
 		/* Loops through array of relative valid positions 
 		 * and returns true if it finds a match*/
 		for (int i = 0; i < validRow.length; i++) {
-			if (tR == fR + validRow[i] && tC == fC + ValidCol[i]) {
+			if (tR == fR + validRow[i] && tC == fC + validCol[i]) {
 				return true;
 			}
 		}
