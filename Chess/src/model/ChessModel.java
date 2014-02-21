@@ -1,7 +1,7 @@
 package model;
 
 /********************************************************************
- * CIS 350 - 01
+ * CIS 350 - 01.
  * Chess
  *
  * ChessModel to handle game logic
@@ -14,26 +14,28 @@ package model;
  *******************************************************************/
 public class ChessModel implements IChessModel {
 
-	/** The chess board with the game pieces */
+	/** The chess board with the game pieces. */
 	private IChessBoard board;
 
-	/** Stand chess board is 8 by 8 */
-	private final int SIZE = 8;
+	/** Stand chess board is 8 by 8. */
+	private final int size = 8;
 
-	/** Tells which player is in check */
+	/** Tells which player is in check. */
 	private Player playerInCheck;
 
 	/****************************************************************
-	 * Constructor sets up both the 'real' and test game board
+	 * Constructor sets up both the 'real' and test game board.
 	 ***************************************************************/
 	public ChessModel() {
-		board = new ChessBoard(SIZE, true);
+		board = new ChessBoard(size, true);
 	}
 
 	@Override
-	public boolean isComplete() {
+	public final boolean isComplete() {
 		
-		if (!inCheck()) return false;
+		if (!inCheck()) {
+			return false;
+		}
 
 		// Relative coordinates of all points around a piece
 		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
@@ -77,23 +79,25 @@ public class ChessModel implements IChessModel {
 	/****************************************************************
 	 * Helper method for isComplete() to check if the given King
 	 * can be protected by a friendly piece by moving to intercept
-	 * the check
+	 * the check.
 	 * 
 	 * @param plr Player who's King is being protected
 	 * @return true if the King can be protected, false otherwise
 	 ***************************************************************/
-	private boolean canBlock(Player plr) {
+	private boolean canBlock(final Player plr) {
 		
 		/* Loops through board checking if each piece is
 		 * capable of blocking the check */
-		for (int r = 0; r < SIZE; r++) {
-			for (int c = 0; c < SIZE; c++) {
+		for (int r = 0; r < size; r++) {
+			for (int c = 0; c < size; c++) {
 				IChessPiece piece = pieceAt(r, c);
 
 				if (piece == null) { continue; }
 				
 				/* If the piece found belongs to the other player */
-				if (piece.player() != plr) continue;
+				if (piece.player() != plr) {
+					continue;
+				}
 
 				/* Checks if the piece can stop the check */
 				if (canStopCheck(r, c, plr)) { return true; }
@@ -104,18 +108,20 @@ public class ChessModel implements IChessModel {
 
 	/****************************************************************
 	 * Helper method to check if a particular piece is able
-	 * to move anywhere that can take its team out of check
+	 * to move anywhere that can take its team out of check.
 	 * 
 	 * @param r row location of the piece
 	 * @param c column location of the piece
 	 * @param plr Player that the piece belongs to
 	 * @return true if the piece can stop the check, false otherwise
 	 ***************************************************************/
-	private boolean canStopCheck(int r, int c, Player plr) {		
-		for (int x = 0; x < SIZE; x++) {
-			for (int y = 0; y < SIZE; y++) {
+	private boolean canStopCheck(final int r, final int c, final Player plr) {
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
 
-				if (x == r && y == c) continue;
+				if (x == r && y == c) {
+					continue;
+				}
 
 				Move m = new Move(r, c, x, y);
 				
@@ -126,7 +132,7 @@ public class ChessModel implements IChessModel {
 					if (!inCheck()) {
 						revertBoard(current);
 						return true;
-					}else {
+					} else {
 						revertBoard(current);
 						return true;
 					}
@@ -138,7 +144,7 @@ public class ChessModel implements IChessModel {
 	}
 
 	@Override
-	public boolean isValidMove(Move move) {
+	public final boolean isValidMove(final Move move) {
 		IChessPiece piece = pieceAt(move.fromRow, move.fromColumn);
 		
 		if (piece == null) { return false; }
@@ -164,7 +170,7 @@ public class ChessModel implements IChessModel {
 			valid =  true;
 
 		/* Kings can't put each other in check */
-		} else if(piece.is("King")) { 
+		} else if (piece.is("King")) { 
 			valid = !scanAround(board.findKing(plr.next()), move);
 			
 			/* Kings can't move and remain in check */
@@ -172,7 +178,7 @@ public class ChessModel implements IChessModel {
 			
 		/* Checks to be sure that the current player 
 		 * is not in check, but that their enemy is. */
-		}else if (plr != playerInCheck) {
+		} else if (plr != playerInCheck) {
 			valid =  true;
 		}
 
@@ -190,7 +196,7 @@ public class ChessModel implements IChessModel {
 	 * @param m the move being attempted.
 	 * @return true if the move is "basically legal", false otherwise.
 	 ***************************************************************/
-	private boolean basicallyLegal(IChessPiece piece, Move m) {		
+	private boolean basicallyLegal(final IChessPiece piece, final Move m) {		
 		Player plr = piece.player();
 
 		
@@ -210,7 +216,7 @@ public class ChessModel implements IChessModel {
 	 * @return true if move attempts to move into the piece being 
 	 * scanned's vicinity, false otherwise.
 	 ***************************************************************/
-	private boolean scanAround(int[] location, Move m) {
+	private boolean scanAround(final int[] location, final Move m) {
 		// Location of the enemy king
 		int rowE = location[0];
 		int colE = location[1];
@@ -239,7 +245,7 @@ public class ChessModel implements IChessModel {
 	 * @param m the proposed move.
 	 * @return true if a king tries to castle while in check.
 	 ***************************************************************/
-	private boolean tryingToCastelInCheck(Move m) {
+	private boolean tryingToCastelInCheck(final Move m) {
 		IChessPiece piece = pieceAt(m.fromRow, m.fromColumn);
 		
 		/* Only Kings can Castle */
@@ -259,12 +265,12 @@ public class ChessModel implements IChessModel {
 	}
 	
 	@Override
-	public void move(Move move) {
+	public final void move(final Move move) {
 		board.move(move);
 	}
 
 	@Override
-	public boolean inCheck() {
+	public final boolean inCheck() {
 
 		Player p = Player.WHITE;
 
@@ -282,20 +288,20 @@ public class ChessModel implements IChessModel {
 		 * it finds a piece, it tries to move that piece
 		 * to it's enemies King. The game is in check if
 		 * any piece succeeds */
-		for (int r = 0; r < SIZE; r++) {
-			for (int c = 0; c < SIZE; c++) {
+		for (int r = 0; r < size; r++) {
+			for (int c = 0; c < size; c++) {
 				IChessPiece piece = pieceAt(r, c);
 
-				if (piece == null) continue;
+				if (piece == null) {
+					continue;
+				}
 
 				Move m;
 
 				if (piece.player() == Player.WHITE) {
 					m = new Move(r, c, blackR, blackC);
 					p = Player.BLACK;
-				}
-
-				else {
+				} else {
 					m = new Move(r, c, whiteR, whiteC);
 					p = Player.WHITE;
 				}
@@ -312,12 +318,12 @@ public class ChessModel implements IChessModel {
 	}
 
 	@Override
-	public Player currentPlayer() {
+	public final Player currentPlayer() {
 		return board.getCurrentPlayer();
 	}
 
 	@Override
-	public IChessPiece pieceAt(int row, int column) {
+	public final IChessPiece pieceAt(final int row, final int column) {
 		return board.pieceAt(row, column);
 	}
 
@@ -337,12 +343,12 @@ public class ChessModel implements IChessModel {
 	 * 
 	 * @param b older version of the chess board to be reverted to.
 	 ***************************************************************/
-	private void revertBoard(IChessBoard b) {
+	private void revertBoard(final IChessBoard b) {
 		board = new ChessBoard((ChessBoard) b);
 	}
 	
 	@Override
-	public IChessBoard getBoard() {
+	public final IChessBoard getBoard() {
 		return board;
 	}
 }
