@@ -14,7 +14,12 @@ package model;
  * @version Feb 20, 2014
  *******************************************************************/
 public enum Player {
-   BLACK, WHITE;
+
+	/** The player who's pieces are black. */
+	BLACK, 
+
+	/** The player who's pieces are white. */
+	WHITE;
 
 /****************************************************************
  * Return the Player whose turn is next.

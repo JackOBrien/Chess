@@ -161,7 +161,7 @@ public class King extends ChessPiece {
 			
 			/* Ensure the side is clear */
 			if (b.pieceAt(fR, fC - 1) != null 
-					|| b.pieceAt(fR, fC - 3) != null) { 
+					|| b.pieceAt(fR, tC - 1) != null) { 
 				return null; 
 			}
 			

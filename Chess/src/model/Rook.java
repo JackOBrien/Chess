@@ -98,7 +98,8 @@ public class Rook extends ChessPiece {
 	 * @param board the board the move is being attempted on.
 	 * @return true if the piece is moving perpendicular, false otherwise.
 	 ***************************************************************/
-	protected static boolean movingPerpendicular(Move m, IChessBoard board) {
+	protected static boolean movingPerpendicular(final Move m, 
+			final IChessBoard board) {
 		int fR = m.getFromRow(), fC = m.getFromColumn();
 		int tR = m.getToRow(), tC = m.getToColumn();
 		
