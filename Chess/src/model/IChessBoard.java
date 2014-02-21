@@ -38,8 +38,6 @@ public interface IChessBoard {
     * @param row the row coordinate
     * @param column the column coordinate
     * @return the {@code ChessPiece} object at location {@code [row, column]}.
-    * @throws IndexOutOfBoundsException if {@code [row, column]} 
-    * 			is not a valid location on the board.
     ****************************************************************/
    IChessPiece pieceAt(int row, int column);
    
@@ -50,7 +48,7 @@ public interface IChessBoard {
     *
     * @param move the move to be made.
     ****************************************************************/
-   public void move(Move move);
+   void move(Move move);
 
    /*****************************************************************
     * Place piece at [row, column].
@@ -59,7 +57,7 @@ public interface IChessBoard {
     * @param row    the row
     * @param column the column
     ****************************************************************/
-   public void set(IChessPiece piece, int row, int column);
+   void set(IChessPiece piece, int row, int column);
 
 
    /*****************************************************************
@@ -68,34 +66,34 @@ public interface IChessBoard {
     * @param row    the row
     * @param column the column
     ****************************************************************/
-   public void unset(int row, int column);
+   void unset(int row, int column);
 
    /****************************************************************
-    * Returns the number of moves that have been made in the game
+    * Returns the number of moves that have been made in the game.
     * 
     * @return number of moves made in this game
     ***************************************************************/
-   public int getNumMoves();
+   int getNumMoves();
 
    /****************************************************************
-	* Returns the player who's turn it is currently
+	* Returns the player who's turn it is currently.
 	* 
 	* @return the player who's turn it is
 	***************************************************************/
-   public Player getCurrentPlayer();
+   Player getCurrentPlayer();
 
    /****************************************************************
-    * Returns the location of the requested player's king
+    * Returns the location of the requested player's king.
     * 
     * @param p player who's king's location is being requested
     * @return the location of Player p's king
     ***************************************************************/
-   public int[] findKing(Player p);
+   int[] findKing(Player p);
    
    /****************************************************************
-    * Returns a deep copy of this boards 2D array of pieces
+    * Returns a deep copy of this boards 2D array of pieces.
     * 
     * @return the cloned board
     ***************************************************************/
-   public IChessPiece[][] clone();
+   IChessPiece[][] clone();
 }
