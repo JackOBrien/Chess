@@ -1,14 +1,12 @@
 package model;
 
-import model.Player;
-
 public class BlackPawnTest extends PawnTest {
 
-	public BlackPawnTest(){
+	public BlackPawnTest() {
 		super(Player.BLACK);
 	}
 	
-	protected int direction() {
+	protected final int direction() {
 		return 1;
 	}
 
