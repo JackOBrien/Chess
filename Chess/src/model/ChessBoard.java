@@ -81,16 +81,25 @@ public class ChessBoard implements IChessBoard {
 		int rowPawns = 1; 
 		int row = 0;
 		
+		// Column of the board where the pieces start
+		// (only the pieces to the right of the left-most Bishop)
+		final int queenCol = 3;
+		final int kingCol = 4;
+		final int bishopCol = 5;
+		final int knightCol = 6;
+		final int rookCol = 7;
+
+		
 		/* Places both black and white pieces */
 		for (Player p : Player.values()) {				
 			board[row][0] = new Rook(p);
 			board[row][1] = new Knight(p);
 			board[row][2] = new Bishop(p);
-			board[row][3] = new Queen(p);
-			board[row][4] = new King(p);
-			board[row][5] = new Bishop(p);
-			board[row][6] = new Knight(p);
-			board[row][7] = new Rook(p);
+			board[row][queenCol] = new Queen(p);
+			board[row][kingCol] = new King(p);
+			board[row][bishopCol] = new Bishop(p);
+			board[row][knightCol] = new Knight(p);
+			board[row][rookCol] = new Rook(p);
 			
 			/* Places pawns */
 			for (int col = 0; col < numColumns(); col++) {
@@ -98,19 +107,18 @@ public class ChessBoard implements IChessBoard {
 			}
 			
 			// Records Kings location
-			int[] loc = {row, 4};
+			int[] loc = {row, kingCol};
 			setKing(p, loc);
 			
-			row = 7; 
-			rowPawns = 6;
+			row = numRows() - 1; 
+			rowPawns = row - 1;
 		}
-		
+
 		/* Sets the rest to null */
-		for (int r = 2; r < 6; r++) {
-			{
-				for (int c = 0; c < 8; c++) {
-					board[r][c] = null;
-				}
+		for (int r = 2; r < numRows() - 2; r++) {
+
+			for (int c = 0; c < numColumns(); c++) {
+				board[r][c] = null;
 			}
 		}
 	}
