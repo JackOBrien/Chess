@@ -29,9 +29,6 @@ public interface IChessModel {
     *
     * @param move a Move object describing the move to be made.
     * @return true if the proposed move is valid, false otherwise.
-    * @throws IndexOutOfBoundsException if either [move.fromRow, 
-    * 			move.fromColumn] or [move.toRow,move.toColumn] don't 
-    * 			represent valid locations on the board.
     ****************************************************************/
    boolean isValidMove(Move move);
 
@@ -40,9 +37,6 @@ public interface IChessModel {
     * location [move.fromRow,move.fromColumn].
     *
     * @param move a Move object describing the move to be made.
-    * @throws IndexOutOfBoundsException if either [move.fromRow, 
-    * 			move.fromColumn] or [move.toRow,move.toColumn] don't
-    * 			represent valid locations on the board.
     ****************************************************************/
    void move(Move move);
 
@@ -66,8 +60,6 @@ public interface IChessModel {
     * @param row the row coordinate
     * @param column the column coordinate
     * @return the {@code ChessPiece} object at location {@code [row, column]}.
-    * @throws IndexOutOfBoundsException if {@code [row, column]} 
-    * 			is not a valid location on the board.
     ****************************************************************/
    IChessPiece pieceAt(int row, int column);
 
