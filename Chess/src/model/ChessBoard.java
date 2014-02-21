@@ -40,6 +40,9 @@ public class ChessBoard implements IChessBoard {
 	public ChessBoard(final int boardSize, final boolean placePieces) {
 		board = new ChessPiece[boardSize][boardSize];
 		
+		whiteKing = new int[2];
+		blackKing = new int[2];
+		
 		/* Creates an empty board if placePieces is false */
 		if (!placePieces) {
 			for (int r = 0; r < boardSize; r++) {
@@ -53,9 +56,6 @@ public class ChessBoard implements IChessBoard {
 		
 		currentPlayer = Player.WHITE;
 		numMoves = 0;
-		
-		whiteKing = new int[2];
-		blackKing = new int[2];
 	}
 	
 	/****************************************************************
@@ -143,18 +143,19 @@ public class ChessBoard implements IChessBoard {
 		
 		/* Moves piece at the from location to the to location
 		 * Sets from location to null. */
-		IChessPiece movingPiece = pieceAt(move.fromRow, move.fromColumn);
+		IChessPiece movingPiece = pieceAt(move.getFromRow(), 
+				move.getFromColumn());
 		// Checks and handles an en Passant move
 		handleEnPassant(movingPiece, move);
-		unset(move.fromRow, move.fromColumn);
-		set(movingPiece, move.toRow, move.toColumn);
+		unset(move.getFromRow(), move.getFromColumn());
+		set(movingPiece, move.getToRow(), move.getToColumn());
 		
 		// Switches turns
 		currentPlayer = currentPlayer.next();
 		
 		/* If the piece being moved is a king, the location is recorded */
 		if (movingPiece != null && movingPiece.is("King")) {
-			updateKingLocation(move.toRow, move.toColumn);
+			updateKingLocation(move.getToRow(), move.getToColumn());
 		}
 		
 		/* Increments the number of moves that have been made */
@@ -162,7 +163,10 @@ public class ChessBoard implements IChessBoard {
 	}
 	
 	/****************************************************************
-	 * @param movingPiece TODO
+	 * If a piece performs enPassant, it will remove the piece
+	 * that was attacked from the board.
+	 * 
+	 * @param movingPiece the Piece that is moving
 	 * @param move the move being attempted 
 	 ***************************************************************/
 	private void handleEnPassant(final IChessPiece movingPiece,
@@ -175,10 +179,10 @@ public class ChessBoard implements IChessBoard {
 		Pawn p = (Pawn) movingPiece;
 		
 		/* Removes attacked pawn from the board */
-		if (pieceAt(move.toRow, move.toColumn) == null 
+		if (pieceAt(move.getToRow(), move.getToColumn()) == null 
 				&& 
 				p.isAttacking(move, this)) { 
-			unset(move.toRow, move.fromColumn);
+			unset(move.getToRow(), move.getFromColumn());
 		}
 	}
 
@@ -221,8 +225,10 @@ public class ChessBoard implements IChessBoard {
 	}
 	
 	/****************************************************************
-	 * @param p TODO
-	 * @param location TODO
+	 * Sets the location of the given king.
+	 * 
+	 * @param p the player who owns the King.
+	 * @param location the location of the given king.
 	 ***************************************************************/
 	private void setKing(final Player p, final int[] location) {
 		if (p == Player.WHITE) {

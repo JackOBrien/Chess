@@ -1,10 +1,6 @@
 package model;
 
 import static org.junit.Assert.*;
-import model.ChessBoard;
-import model.IChessPiece;
-import model.Move;
-import model.Player;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,17 +38,17 @@ public abstract class ChessPieceTest {
    @Test
    public void complainsIfTargetOccupiedBySamePlayer() throws Throwable {
       Move move = getValidMove(2, 4);
-      board.set(make(), move.toRow, move.toColumn);
-      board.set(piece, move.fromRow, move.fromColumn);
+      board.set(make(), move.getToRow(), move.getToColumn());
+      board.set(piece, move.getFromRow(), move.getFromColumn());
       assertFalse("ChessPiece Test 3", piece.isValidMove(move, board));
    }
 
    @Test
    public void canCaputre() throws Throwable {
-      Move move = getValidMove(2, 4);
-      board.set(make(piece.player().next()), move.toRow, move.toColumn);
-      board.set(piece, move.fromRow, move.fromColumn);
-      assertTrue("ChessPiece Test 4", piece.isValidMove(move, board));
+      Move m = getValidMove(2, 4);
+      board.set(make(piece.player().next()), m.getToRow(), m.getToColumn());
+      board.set(piece, m.getFromRow(), m.getFromColumn());
+      assertTrue("ChessPiece Test 4", piece.isValidMove(m, board));
    }
    
    @Test
