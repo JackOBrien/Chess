@@ -27,7 +27,7 @@ public abstract class ChessPiece implements IChessPiece {
 	public abstract String type();
 
 	@Override
-	public boolean isValidMove(Move move, IChessBoard board) {
+	public final boolean isValidMove(final Move move, final IChessBoard board) {
 		int fR = move.fromRow, fC = move.fromColumn;
 		int tR = move.toRow, tC = move.toColumn;
 		
@@ -61,7 +61,7 @@ public abstract class ChessPiece implements IChessPiece {
 	}
 	
 	@Override
-	public boolean is(String type) {
+	public final boolean is(final String type) {
 		return type.equals(type());
 	}
 }
