@@ -19,11 +19,12 @@ public class Pawn extends ChessPiece {
 	private int direction;
 	
 	/** The row this pawn starts on. */
-	public int startingRow;
+	private int startingRow;
 	
 	/** The number of moves that have taken place the last time this
-	 * pawn moved on the board. */
+	    pawn moved on the board. */
 	private int gamePosition;	
+	
 	/** Tells if this pawn moved twice in one turn. */
 	private boolean movedTwice;
 	
@@ -84,45 +85,85 @@ public class Pawn extends ChessPiece {
 	}
 	
 	
-
-	public int getDirection() {
+	/****************************************************************
+	 * Getter for direction.
+	 * 
+	 * @return direction
+	 ***************************************************************/
+	public final int getDirection() {
 		return direction;
 	}
-
-	public void setDirection(int direction) {
-		this.direction = direction;
+	/****************************************************************
+	 * Setter for direction.
+	 * 
+	 * @param pDirection the direction the pawn is moving
+	 ***************************************************************/
+	public final void setDirection(final int pDirection) {
+		this.direction = pDirection;
 	}
-
-	public int getStartingRow() {
+	/****************************************************************
+	 * Getter for starting row.
+	 * 
+	 * @return startingRow the row the pawn starts in
+	 ***************************************************************/
+	public final int getStartingRow() {
 		return startingRow;
 	}
-
-	public void setStartingRow(int startingRow) {
-		this.startingRow = startingRow;
+	/****************************************************************
+	 * Setter for starting Row.
+	 * 
+	 * @param pStartingRow the row in which pawns start
+	 ***************************************************************/
+	public final void setStartingRow(final int pStartingRow) {
+		this.startingRow = pStartingRow;
 	}
-
-	public int getGamePosition() {
+	/****************************************************************
+	 * Getter for GamePosition.
+	 * 
+	 * @return gamePosition the number of moves the pawn has made
+	 ***************************************************************/
+	public final int getGamePosition() {
 		return gamePosition;
 	}
-
-	public void setGamePosition(int gamePosition) {
-		this.gamePosition = gamePosition;
+	/****************************************************************
+	 * Setter for GamePosition.
+	 * 
+	 * @param pGamePosition the new game position.
+	 ***************************************************************/
+	public final void setGamePosition(final int pGamePosition) {
+		this.gamePosition = pGamePosition;
 	}
-
-	public boolean isMovedTwice() {
+	/****************************************************************
+	 * Getter for isMovedTwice.
+	 * 
+	 * @return boolean true if moved twice false otherwise
+	 ***************************************************************/
+	public final boolean isMovedTwice() {
 		return movedTwice;
 	}
-
-	public void setMovedTwice(boolean movedTwice) {
-		this.movedTwice = movedTwice;
+	/****************************************************************
+	 * Setter for movedTwice.
+	 * 
+	 * @param pMovedTwice whether or not the pawn has moved twice.
+	 ***************************************************************/
+	public final void setMovedTwice(final boolean pMovedTwice) {
+		this.movedTwice = pMovedTwice;
 	}
-
-	public Move getLastMove() {
+	/****************************************************************
+	 * Getter for lastMove.
+	 * 
+	 * @return lastMove the pawn's last move
+	 ****************************************************************/
+	public final Move getLastMove() {
 		return lastMove;
 	}
-
-	public void setLastMove(Move lastMove) {
-		this.lastMove = lastMove;
+	/****************************************************************
+	 * Setter for lastMove.
+	 * 
+	 * @param pLastMove the last move used by the pawn.
+	 ***************************************************************/
+	public final void setLastMove(final Move pLastMove) {
+		this.lastMove = pLastMove;
 	}
 
 	/****************************************************************

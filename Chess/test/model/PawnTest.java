@@ -1,8 +1,9 @@
 package model;
 
-import static org.junit.Assert.*;
-import model.Pawn;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 
@@ -10,8 +11,8 @@ public abstract class PawnTest extends ChessPieceTest {
 
 	private Player plr;
 	
-	public PawnTest(final Player plr) {
-		this.plr = plr;
+	public PawnTest(final Player pPlayer) {
+		this.plr = pPlayer;
 	}
 
 	protected abstract int direction();
@@ -37,7 +38,7 @@ public abstract class PawnTest extends ChessPieceTest {
 	
 	@Test
 	public final void canMoveTwice() throws Exception {
-		int row = ((Pawn) piece).startingRow;
+		int row = ((Pawn) piece).getStartingRow();
 		
 		board.set(piece, row, 4);
 		assertTrue(piece.isValidMove(new Move(row, 4, row + (direction() * 2)
@@ -60,7 +61,7 @@ public abstract class PawnTest extends ChessPieceTest {
 	@Test
 	public final void canNotMoveTwice2() throws Exception {
 		Pawn p = (Pawn) piece;
-		int row = ((Pawn) piece).startingRow;
+		int row = ((Pawn) piece).getStartingRow();
  
 		board.set(piece, row, 2);
 		Move m = new Move(row, 2, row + direction(), 2);
@@ -99,7 +100,7 @@ public abstract class PawnTest extends ChessPieceTest {
 	public final void cantPromoteFromStart() throws Throwable {
 		Pawn p = (Pawn) piece;
 		
-		board.set(p, p.startingRow, 4);
+		board.set(p, p.getStartingRow(), 4);
 		assertFalse(p.mayPromote());
 	}
 	
@@ -115,7 +116,7 @@ public abstract class PawnTest extends ChessPieceTest {
 	@Test 
 	public final void canPromote() throws Throwable {
 		Pawn p = (Pawn) piece;
-		if (plr == Player.WHITE){
+		if (plr == Player.WHITE) {
 			board.set(piece, 1, 0);
 			assertTrue(p.isValidMove(new Move(1, 0, 0, 0), board));
 			board.move(new Move(1, 0, 0, 0));
@@ -174,7 +175,7 @@ public abstract class PawnTest extends ChessPieceTest {
 		board.set(otherPiece, 5, 6);
 		
 		IChessPiece pawn = new Pawn(plr.next());
-		if (plr == Player.WHITE){
+		if (plr == Player.WHITE) {
 			board.set(piece, 3, 3);
 			board.set(pawn, 1, 2);
 			pawn.isValidMove(new Move(1, 2, 3, 2), board);
@@ -194,7 +195,7 @@ public abstract class PawnTest extends ChessPieceTest {
 		@Test
 		public final void cantEnPassant2() throws Throwable {
 			IChessPiece pawn = new Pawn(plr.next());
-			if (plr == Player.WHITE){
+			if (plr == Player.WHITE) {
 				board.set(piece, 3, 3);
 				board.set(pawn, 1, 2);
 				pawn.isValidMove(new Move(1, 2, 2, 2), board);
@@ -217,7 +218,7 @@ public abstract class PawnTest extends ChessPieceTest {
 		
 		@Test
 		public final void cantJump() throws Exception {
-			int row = ((Pawn) piece).startingRow;
+			int row = ((Pawn) piece).getStartingRow();
 			board.set(piece, row, 4);
 			board.set(new Rook(plr.next()), row + direction(), 4);
 			assertFalse(piece.isValidMove(new Move(row, 4, row

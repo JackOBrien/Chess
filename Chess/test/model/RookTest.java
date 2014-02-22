@@ -1,8 +1,5 @@
 package model;
 
-import model.*;
-import model.Pawn;
-import model.Rook;
 import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -1,10 +1,7 @@
 package model;
 
-import static org.junit.Assert.*;
-import model.*;
-
-import model.Pawn;
-import model.Queen;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 

@@ -1,7 +1,9 @@
 package model;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,7 +87,7 @@ public class ChessModelTest {
 	}
 	
 	@Test
-	public void isComplete1() throws Exception {
+	public final void isComplete1() throws Exception {
 		model.move(new Move(0, 4, 3, 0));
 		model.move(new Move(7, 3, 3, 1));
 		model.move(new Move(7, 4, 4, 2));		

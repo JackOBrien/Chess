@@ -1,7 +1,8 @@
 package model;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,10 +44,11 @@ public abstract class ChessPieceTest {
       assertFalse("ChessPiece Test 3", piece.isValidMove(move, board));
    }
 
-   @Test
+   
    //says need final modifier but then in Knight test says to take off final 
    //modifier.
-   public void canCaputre() throws Throwable {
+   @Test
+public void canCaputre() throws Throwable {
       Move m = getValidMove(2, 4);
       board.set(make(piece.player().next()), m.getToRow(), m.getToColumn());
       board.set(piece, m.getFromRow(), m.getFromColumn());
