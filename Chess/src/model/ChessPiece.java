@@ -14,22 +14,39 @@ package model;
  *******************************************************************/
 public abstract class ChessPiece implements IChessPiece {
 
+	/** The Player who this piece belongs to. */
 	private Player owner;
 
-	protected ChessPiece(Player color) {
+	/****************************************************************
+	 * Constructor sets the owner of this game piece.
+	 * 
+	 * @param color the owner of this piece.
+	 ***************************************************************/
+	protected ChessPiece(final Player color) {
 		this.owner = color;
 	}
 
-	public Player player() {
+	/****************************************************************
+	 * Returns the player who owns this game piece.
+	 * 
+	 * @return the player who owns this game piece.
+	 ***************************************************************/
+	public final Player player() {
 		return owner;
 	}
 
+	/****************************************************************
+	 * Returns the name of this piece.
+	 * Example: "King"
+	 * 
+	 * @return the name of this piece's type.
+	 ***************************************************************/
 	public abstract String type();
 
 	@Override
 	public boolean isValidMove(final Move move, final IChessBoard board) {
-		int fR = move.fromRow, fC = move.fromColumn;
-		int tR = move.toRow, tC = move.toColumn;
+		int fR = move.getFromRow(), fC = move.getFromColumn();
+		int tR = move.getToRow(), tC = move.getToColumn();
 		
 		IChessPiece from;
 		IChessPiece to;

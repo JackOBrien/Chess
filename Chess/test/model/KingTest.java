@@ -6,57 +6,57 @@ import model.*;
 
 import org.junit.Test;
 
-public class KingTest extends ChessPieceTest{
+public class KingTest extends ChessPieceTest {
 
 	private Player plr;
 	
 	@Override
-	   protected IChessPiece make(Player p) {
+	protected final IChessPiece make(final Player p) {
 	    plr = p;  
 		return new King(p);
 	   }
 
 	   @Override
-	   protected Move getValidMove(int row, int col) {
+	   protected final Move getValidMove(final int row, final int col) {
 	      int newRow = row + 1;
 
 	      return new Move(row, col, newRow, col);
 	   }
 
 	   @Test
-	   public void canMoveInRow() throws Exception {
+	   public final void canMoveInRow() throws Exception {
 	      board.set(piece, 1, 1);
 	      assertTrue(piece.isValidMove(new Move(1, 1, 1, 2), board));
 	   }
 	   
 	   @Test
-	   public void canMoveInColumn() throws Exception {
+	   public final void canMoveInColumn() throws Exception {
 	      board.set(piece, 1, 1);
 	      assertTrue(piece.isValidMove(new Move(1, 1, 2, 1), board));
 	   }
 	   
 	   @Test
-	   public void canMoveDiag() throws Exception {
+	   public final void canMoveDiag() throws Exception {
 		   board.set(piece, 1, 1);
 		   assertTrue(piece.isValidMove(new Move(1, 1, 2, 2), board));
 	   }
 	   
 	   @Test
-	   public void canCastleKingSide() throws Exception {
+	   public final void canCastleKingSide() throws Exception {
 		   board.set(piece, 7, 4);
 		   board.set(new Rook(plr), 7, 7);
 		   assertTrue(piece.isValidMove(new Move(7, 4, 7, 6), board));
 	   }
 	   
 	   @Test
-	   public void canCastleQueenSide() throws Exception {
+	   public final void canCastleQueenSide() throws Exception {
 		   board.set(piece, 0, 4);
 		   board.set(new Rook(plr), 0, 0);
 		   assertTrue(piece.isValidMove(new Move(0, 4, 0, 2), board));
 	   }
 	   
 	   @Test
-	   public void canNotCastleKingSideBlocked() throws Exception {
+	   public final void canNotCastleKingSideBlocked() throws Exception {
 		   board.set(piece, 7, 4);
 		   board.set(new Rook(plr), 7, 7);
 		   board.set(new Rook(plr), 7, 5);
@@ -64,7 +64,7 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void canNotCastleQueenSideBlocked() throws Exception {
+	   public final void canNotCastleQueenSideBlocked() throws Exception {
 		   board.set(piece, 0, 4);
 		   board.set(new Rook(plr), 0, 0);
 		   board.set(new Pawn(plr.next()), 0, 1);
@@ -72,7 +72,7 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void canNotCastleQueenSideBlocked_2() throws Exception {
+	   public final void canNotCastleQueenSideBlocked2() throws Exception {
 		   board.set(piece, 0, 4);
 		   board.set(new Rook(plr), 0, 0);
 		   board.set(new Pawn(plr.next()), 0, 3);
@@ -80,14 +80,14 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void canNotCastleQueenSideWrongTeam() throws Exception {
+	   public final void canNotCastleQueenSideWrongTeam() throws Exception {
 		   board.set(piece, 0, 4);
 		   board.set(new Rook(plr.next()), 0, 0);
 		   assertFalse(piece.isValidMove(new Move(0, 4, 0, 2), board));
 	   }
 	   
 	   @Test
-	   public void canNotCastleKingSideKingMoved() throws Exception {
+	   public final void canNotCastleKingSideKingMoved() throws Exception {
 		   board.set(piece, 7, 4);
 		   board.set(new Rook(plr), 7, 7);
 		   board.move(new Move(7, 4, 7, 3));
@@ -97,7 +97,7 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void canNotCastleKingSideRookMoved() throws Exception {
+	   public final void canNotCastleKingSideRookMoved() throws Exception {
 		   IChessPiece rook = new Rook(plr);
 		   board.set(piece, 7, 4);
 		   board.set(rook, 7, 7);
@@ -110,7 +110,7 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void canNotCastleQueenSideKingMoved() throws Exception {
+	   public final void canNotCastleQueenSideKingMoved() throws Exception {
 		   board.set(piece, 0, 4);
 		   board.set(new Rook(plr), 0, 0);
 		   board.move(new Move(0, 4, 0, 5));
@@ -120,7 +120,7 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void canNotCastleQueenSideRookMoved() throws Exception {
+	   public final void canNotCastleQueenSideRookMoved() throws Exception {
 		   IChessPiece rook = new Rook(plr);
 		   board.set(piece, 0, 4);
 		   board.set(rook, 0, 0);
@@ -133,12 +133,12 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void cantMoveAnywhereElse() throws Exception {
+	   public final void cantMoveAnywhereElse() throws Exception {
 		   board.set(piece, 4, 4);
 		   
-		   for (int r = 0; r < 8; r++){
-				for (int c = 0; c < 8; c++){
-					if (r > 5 || r < 3 || c > 5 || c < 3){
+		   for (int r = 0; r < 8; r++) {
+				for (int c = 0; c < 8; c++) {
+					if (r > 5 || r < 3 || c > 5 || c < 3) {
 						assertFalse(piece.isValidMove(new Move(4, 4, r, c)
 						, board));
 					}
@@ -148,7 +148,7 @@ public class KingTest extends ChessPieceTest{
 	   }
 	   
 	   @Test
-	   public void cantCastleInCheck_Queen() throws Exception{		   
+	   public final void cantCastleInCheckQueen() throws Exception {		   
 		   board.set(piece, 0, 4);
 		   board.set(new Rook(plr), 0, 0);
 		   assertTrue(piece.isValidMove(new Move(0, 4, 0, 2), board));

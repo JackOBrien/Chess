@@ -37,8 +37,11 @@ public class ChessBoard implements IChessBoard {
 	 * @param placePieces if true, will place game pieces. 
 	 * 			If false, will create an empty game board.
 	 ***************************************************************/
-	public ChessBoard(final int boardSize, final boolean placePieces){
+	public ChessBoard(final int boardSize, final boolean placePieces) {
 		board = new ChessPiece[boardSize][boardSize];
+		
+		whiteKing = new int[2];
+		blackKing = new int[2];
 		
 		/* Creates an empty board if placePieces is false */
 		if (!placePieces) {
@@ -53,16 +56,6 @@ public class ChessBoard implements IChessBoard {
 		
 		currentPlayer = Player.WHITE;
 		numMoves = 0;
-		
-		whiteKing = new int[2];
-		blackKing = new int[2];
-		
-		/* Default locations of the two kings */
-		whiteKing[0] = 7;
-		whiteKing[1] = 4;
-		
-		blackKing[0] = 0;
-		blackKing[1] = 4;
 	}
 	
 	/****************************************************************
@@ -82,38 +75,49 @@ public class ChessBoard implements IChessBoard {
 	/****************************************************************
 	 * Places the game pieces into their default locations on the board.
 	 ***************************************************************/
-	private void setupBoard(){
+	private void setupBoard() {
 		
 		/* Rows for the black pieces*/
 		int rowPawns = 1; 
 		int row = 0;
+		
+		// Column of the board where the pieces start
+		// (only the pieces to the right of the left-most Bishop)
+		final int queenCol = 3;
+		final int bishopCol = 5;
+		final int knightCol = 6;
+		final int rookCol = 7;
+
 		
 		/* Places both black and white pieces */
 		for (Player p : Player.values()) {				
 			board[row][0] = new Rook(p);
 			board[row][1] = new Knight(p);
 			board[row][2] = new Bishop(p);
-			board[row][3] = new Queen(p);
-			board[row][4] = new King(p);
-			board[row][5] = new Bishop(p);
-			board[row][6] = new Knight(p);
-			board[row][7] = new Rook(p);
+			board[row][queenCol] = new Queen(p);
+			board[row][King.KING_STARTING_COL] = new King(p);
+			board[row][bishopCol] = new Bishop(p);
+			board[row][knightCol] = new Knight(p);
+			board[row][rookCol] = new Rook(p);
 			
 			/* Places pawns */
-			for (int col = 0; col < 8; col++) {
+			for (int col = 0; col < numColumns(); col++) {
 				board[rowPawns][col] = new Pawn(p);
 			}
 			
-			row = 7; 
-			rowPawns = 6;
+			// Records Kings location
+			int[] loc = {row, King.KING_STARTING_COL};
+			setKing(p, loc);
+			
+			row = numRows() - 1; 
+			rowPawns = row - 1;
 		}
-		
+
 		/* Sets the rest to null */
-		for (int r = 2; r < 6; r++) {
-			{
-				for (int c = 0; c < 8; c++) {
-					board[r][c] = null;
-				}
+		for (int r = 2; r < numRows() - 2; r++) {
+
+			for (int c = 0; c < numColumns(); c++) {
+				board[r][c] = null;
 			}
 		}
 	}
@@ -138,18 +142,19 @@ public class ChessBoard implements IChessBoard {
 		
 		/* Moves piece at the from location to the to location
 		 * Sets from location to null. */
-		IChessPiece movingPiece = pieceAt(move.fromRow, move.fromColumn);
+		IChessPiece movingPiece = pieceAt(move.getFromRow(), 
+				move.getFromColumn());
 		// Checks and handles an en Passant move
 		handleEnPassant(movingPiece, move);
-		unset(move.fromRow, move.fromColumn);
-		set(movingPiece, move.toRow, move.toColumn);
+		unset(move.getFromRow(), move.getFromColumn());
+		set(movingPiece, move.getToRow(), move.getToColumn());
 		
 		// Switches turns
 		currentPlayer = currentPlayer.next();
 		
 		/* If the piece being moved is a king, the location is recorded */
 		if (movingPiece != null && movingPiece.is("King")) {
-			updateKingLocation(move.toRow, move.toColumn);
+			updateKingLocation(move.getToRow(), move.getToColumn());
 		}
 		
 		/* Increments the number of moves that have been made */
@@ -157,7 +162,10 @@ public class ChessBoard implements IChessBoard {
 	}
 	
 	/****************************************************************
-	 * @param movingPiece TODO
+	 * If a piece performs enPassant, it will remove the piece
+	 * that was attacked from the board.
+	 * 
+	 * @param movingPiece the Piece that is moving
 	 * @param move the move being attempted 
 	 ***************************************************************/
 	private void handleEnPassant(final IChessPiece movingPiece,
@@ -170,10 +178,10 @@ public class ChessBoard implements IChessBoard {
 		Pawn p = (Pawn) movingPiece;
 		
 		/* Removes attacked pawn from the board */
-		if (pieceAt(move.toRow, move.toColumn) == null 
+		if (pieceAt(move.getToRow(), move.getToColumn()) == null 
 				&& 
 				p.isAttacking(move, this)) { 
-			unset(move.toRow, move.fromColumn);
+			unset(move.getToRow(), move.getFromColumn());
 		}
 	}
 
@@ -215,7 +223,13 @@ public class ChessBoard implements IChessBoard {
 		}
 	}
 	
-	private void setKing(Player p, int[] location) {
+	/****************************************************************
+	 * Sets the location of the given king.
+	 * 
+	 * @param p the player who owns the King.
+	 * @param location the location of the given king.
+	 ***************************************************************/
+	private void setKing(final Player p, final int[] location) {
 		if (p == Player.WHITE) {
 			whiteKing = location;
 		} else {
