@@ -20,64 +20,65 @@ public class RookTest extends ChessPieceTest {
 
    @Test
    public final void canMoveInRow() throws Exception {
-      board.set(piece, 1, 1);
-      assertTrue("Rook Test 1", piece.isValidMove(new Move(1, 1, 1, 6), board));
+      getBoard().set(getPiece(), 1, 1);
+      assertTrue("Rook Test 1", getPiece().isValidMove(new Move(1, 1, 1, 6),
+    		  getBoard()));
    }
 
    @Test
    public final void canMoveInColumn() throws Throwable {
-	   board.set(piece, 1, 1);
-       assertTrue("Rook Test 2", piece.isValidMove(new Move(1, 1, 6, 1)
-       , board));
+	   getBoard().set(getPiece(), 1, 1);
+       assertTrue("Rook Test 2", getPiece().isValidMove(new Move(1, 1, 6, 1)
+       , getBoard()));
    }
 
    @Test
    public final void cannotMoveDiagonal() throws Throwable {
-	  board.set(piece, 1, 1);
-      assertFalse("Rook Test 3", piece.isValidMove(new Move(1, 1, 3, 3)
-      , board));
+	  getBoard().set(getPiece(), 1, 1);
+      assertFalse("Rook Test 3", getPiece().isValidMove(new Move(1, 1, 3, 3)
+      , getBoard()));
    }
    
    @Test
    public final void cannotMoveIfPieceInTheWay() throws Throwable { 
-	   board.set(piece, 7, 0);
-	   board.set(new Pawn(Player.WHITE), 5, 0);
-	   assertFalse(piece.isValidMove(new Move(7, 0, 4, 0), board));
+	   getBoard().set(getPiece(), 7, 0);
+	   getBoard().set(new Pawn(Player.WHITE), 5, 0);
+	   assertFalse(getPiece().isValidMove(new Move(7, 0, 4, 0), getBoard()));
    }
    
    @Test
    public final void canMoveBackwards() throws Throwable { 
-	   board.set(piece, 7, 0);
-	   assertTrue(piece.isValidMove(new Move(7, 0, 4, 0), board));
+	   getBoard().set(getPiece(), 7, 0);
+	   assertTrue(getPiece().isValidMove(new Move(7, 0, 4, 0), getBoard()));
    }
    
    @Test
    public final void canMoveCloseInRow() throws Exception {
-      board.set(piece, 1, 1);
-      assertTrue("Rook Test 1", piece.isValidMove(new Move(1, 1, 1, 2),
-    		  board));
+      getBoard().set(getPiece(), 1, 1);
+      assertTrue("Rook Test 1", getPiece().isValidMove(new Move(1, 1, 1, 2),
+    		  getBoard()));
    }
 
    @Test
    public final void canMoveCloseInColumn() throws Throwable {
-	   board.set(piece, 1, 1);
-       assertTrue("Rook Test 2", piece.isValidMove(new Move(1, 1, 0, 1),
-    		   board));
+	   getBoard().set(getPiece(), 1, 1);
+       assertTrue("Rook Test 2", getPiece().isValidMove(new Move(1, 1, 0, 1),
+    		   getBoard()));
    }
    
    @Test
    public final void cantMoveAnywhereElse() throws Throwable {
-	   board.set(piece, 4, 4);
+	   getBoard().set(getPiece(), 4, 4);
 	   
 	   for (int r = 0; r < 8; r++) {
 			for (int c = 0; c < 8; c++) {
 				if (r != 4 && c != 4 
 						|| r == 4 && c == 4) {
-					assertFalse(piece.isValidMove(new Move(4, 4, r, c), 
-							board));
+					assertFalse(getPiece().isValidMove(new Move(4, 4, r, c), 
+							getBoard()));
 				} else {
-					assertTrue(piece.isValidMove(new Move(4, 4, r, c), 
-							board));
+					assertTrue(getPiece().isValidMove(new Move(4, 4, r, c), 
+							getBoard()));
 			}
 	   }
    }

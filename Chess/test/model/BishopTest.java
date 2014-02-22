@@ -21,54 +21,54 @@ public class BishopTest extends ChessPieceTest {
 	
 	@Test
 	public final void canMoveRight() throws Exception {
-		board.set(piece, 5, 5);
-		assertTrue(piece.isValidMove(new Move(5, 5, 3, 7), board));
+		getBoard().set(getPiece(), 5, 5);
+		assertTrue(getPiece().isValidMove(new Move(5, 5, 3, 7), getBoard()));
 		
 	}
 	
 	@Test
 	public final void canMoveLeft() throws Exception {
-		board.set(piece, 0, 7);
-		assertTrue(piece.isValidMove(new Move(0, 7, 7, 0), board));
+		getBoard().set(getPiece(), 0, 7);
+		assertTrue(getPiece().isValidMove(new Move(0, 7, 7, 0), getBoard()));
 		
 	}
 	
 	@Test
 	public final void cantMoveIfPieceInWay1() throws Exception {
-		board.set(piece, 4, 4);
-		board.set(new Pawn(piece.player().next()), 2, 2);
-		assertFalse(piece.isValidMove(new Move(4, 4, 1, 1), board));
+		getBoard().set(getPiece(), 4, 4);
+		getBoard().set(new Pawn(getPiece().player().next()), 2, 2);
+		assertFalse(getPiece().isValidMove(new Move(4, 4, 1, 1), getBoard()));
 	}
 	@Test
 	public final void canMoveIfPieceInWay2() throws Exception {
-		board.set(piece, 4, 4);
-		board.set(new Pawn(piece.player()), 5, 3);
-		assertTrue(piece.isValidMove(new Move(4, 4, 3, 3), board));
+		getBoard().set(getPiece(), 4, 4);
+		getBoard().set(new Pawn(getPiece().player()), 5, 3);
+		assertTrue(getPiece().isValidMove(new Move(4, 4, 3, 3), getBoard()));
 	}
 	@Test
 	public final void cantMoveIfPieceInWay3() throws Exception {
-		board.set(piece, 4, 4);
-		board.set(new Pawn(piece.player().next()), 2, 6);
-		assertFalse(piece.isValidMove(new Move(4, 4, 1, 7), board));
+		getBoard().set(getPiece(), 4, 4);
+		getBoard().set(new Pawn(getPiece().player().next()), 2, 6);
+		assertFalse(getPiece().isValidMove(new Move(4, 4, 1, 7), getBoard()));
 	}
 	@Test
 	public final void cantMoveIfPieceInWay4() throws Exception {
-		board.set(piece, 4, 4);
-		board.set(new Pawn(piece.player().next()), 4, 5);
-		assertTrue(piece.isValidMove(new Move(4, 4, 5, 5), board));
+		getBoard().set(getPiece(), 4, 4);
+		getBoard().set(new Pawn(getPiece().player().next()), 4, 5);
+		assertTrue(getPiece().isValidMove(new Move(4, 4, 5, 5), getBoard()));
 	}
 	
 	@Override
 	public final void canCaputre() throws Throwable {
-		board.set(piece, 7, 0);
-		board.set(make(piece.player().next()), 5, 2);
-		assertTrue(piece.isValidMove(new Move(7, 0, 5, 2), board));
+		getBoard().set(getPiece(), 7, 0);
+		getBoard().set(make(getPiece().player().next()), 5, 2);
+		assertTrue(getPiece().isValidMove(new Move(7, 0, 5, 2), getBoard()));
 	}
 	
 	@Test
 	public final void cantCaputre() throws Throwable {
-		board.set(piece, 7, 0);
-		board.set(make(piece.player()), 5, 2);
-		assertFalse(piece.isValidMove(new Move(7, 0, 5, 2), board));
+		getBoard().set(getPiece(), 7, 0);
+		getBoard().set(make(getPiece().player()), 5, 2);
+		assertFalse(getPiece().isValidMove(new Move(7, 0, 5, 2), getBoard()));
 	}
 }

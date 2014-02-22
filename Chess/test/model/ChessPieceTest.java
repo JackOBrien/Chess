@@ -18,10 +18,28 @@ public abstract class ChessPieceTest {
 
    private static final int BOARD_SIZE = 8;
 
-   protected ChessBoard board;
-   protected IChessPiece piece;
+   private ChessBoard board;
+   private IChessPiece piece;
 
-   @Before
+   
+   
+   public final ChessBoard getBoard() {
+	return board;
+   }
+
+   public final void setBoard(final ChessBoard pBoard) {
+	this.board = pBoard;
+   }
+
+   public final IChessPiece getPiece() {
+	return piece;
+   }
+
+   public final void setPiece(final IChessPiece pPiece) {
+	this.piece = pPiece;
+   }
+
+@Before
    public final void makeBoard() {
       // Don't put any pieces on the board.
       board = new ChessBoard(BOARD_SIZE, false);
