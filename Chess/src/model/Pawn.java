@@ -38,8 +38,11 @@ public class Pawn extends ChessPiece {
 	 ***************************************************************/
 	public Pawn(final Player color) {
 		super(color);
-	    setDirection(player() == Player.WHITE ? -1 : 1);
-		setStartingRow(player() == Player.WHITE ? 6 : 1);
+	    
+		final int whiteStartingRow = 6;
+		
+		setDirection(player() == Player.WHITE ? -1 : 1);
+		setStartingRow(player() == Player.WHITE ? whiteStartingRow : 1);
 		setGamePosition(0);
 		setMovedTwice(false);
 		setLastMove(null);
@@ -162,7 +165,7 @@ public class Pawn extends ChessPiece {
 	 * @param pLastMove the last move used by the pawn.
 	 ***************************************************************/
 	public final void setLastMove(final Move pLastMove) {
-		this.lastMove = pLastMove;
+		lastMove = pLastMove;
 	}
 
 	/****************************************************************
@@ -269,7 +272,8 @@ public class Pawn extends ChessPiece {
 		if (player() == Player.WHITE) {
 			return lastMove.getToRow() == 0;
 		} else {
-			return lastMove.getToRow() == 7;
+			final int bottomRow = 7;
+			return lastMove.getToRow() == bottomRow;
 		}
 	}
 }
