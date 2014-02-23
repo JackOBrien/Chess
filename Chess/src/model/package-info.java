@@ -2,7 +2,7 @@
  * CIS 350 - 01
  * Chess
  *
- * The game logic for Chess
+ * The game logic for Chess.
  *
  * @author John O'Brien
  * @author Louis Marzorati

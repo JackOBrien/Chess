@@ -14,7 +14,7 @@ import org.junit.Test;
 public class PlayerTest {
 
 	@Test
-	public void test() {
+	public final void test() {
 		Player.valueOf(Player.WHITE.toString());
 	}
 
