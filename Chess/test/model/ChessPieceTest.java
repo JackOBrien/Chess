@@ -25,16 +25,8 @@ public abstract class ChessPieceTest {
 	return board;
    }
 
-   public final void setBoard(final ChessBoard pBoard) {
-	board = pBoard;
-   }
-
    public final IChessPiece getPiece() {
 	return piece;
-   }
-
-   public final void setPiece(final IChessPiece pPiece) {
-	piece = pPiece;
    }
 
 @Before
