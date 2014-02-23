@@ -50,24 +50,10 @@ public class Move {
 	}
 
 	/****************************************************************
-	 * @param fR the fromRow to set.
-	 ***************************************************************/
-	public final void setFromRow(final int fR) {
-		this.fromRow = fR;
-	}
-
-	/****************************************************************
 	 * @return the fromColumn.
 	 ***************************************************************/
 	public final int getFromColumn() {
 		return fromColumn;
-	}
-
-	/****************************************************************
-	 * @param fC the fromColumn to set.
-	 ***************************************************************/
-	public final void setFromColumn(final int fC) {
-		this.fromColumn = fC;
 	}
 
 	/****************************************************************
@@ -78,23 +64,9 @@ public class Move {
 	}
 
 	/****************************************************************
-	 * @param tR the toRow to set.
-	 ***************************************************************/
-	public final void setToRow(final int tR) {
-		this.toRow = tR;
-	}
-
-	/****************************************************************
 	 * @return the toColumn.
 	 ***************************************************************/
 	public final int getToColumn() {
 		return toColumn;
-	}
-
-	/****************************************************************
-	 * @param tC the toColumn to set.
-	 ***************************************************************/
-	public final void setToColumn(final int tC) {
-		this.toColumn = tC;
 	}
 }
