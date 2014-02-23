@@ -78,27 +78,23 @@ public class King extends ChessPiece {
 	 * @param fC the column location of the King.
 	 ***************************************************************/
 	private void checkifMoved(final int fR, final int fC) {
-		
-		/* Once the piece has moved, hasMoved will always be true */
-		if (!hasMoved) {
-		
-			/* Checks if the initial location is still -1, as set 
-			 * by the constructor. */
-			if (initialRow == -1 && initialCol == -1) {
-				initialRow = fR;
-				initialCol = fC;
-				hasMoved = false;
-				
+
+		/* Checks if the initial location is still -1, as set 
+		 * by the constructor. */
+		if (initialRow == -1) {
+			initialRow = fR;
+			initialCol = fC;
+			hasMoved = false;
+
 			/* Checks if the initial location is the same as it was 
 			 * when this piece last checked for a valid move*/	
-			} else if (initialRow == fR && initialCol == fC) {
-				hasMoved = false;
-			} else {
-				hasMoved = true;
-			}
+		} else if (initialRow == fR && initialCol == fC) {
+			hasMoved = false;
+		} else {
+			hasMoved = true;
 		}
 	}
-	
+
 	/****************************************************************
 	 * Tells if the King may castle.
 	 * 
