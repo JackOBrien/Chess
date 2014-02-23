@@ -79,13 +79,12 @@ public class Pawn extends ChessPiece {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 
 	/****************************************************************
 	 * Tells if the pawn's destination is null and it is moving 
-	 * to one of it's two forward corners
+	 * to one of it's two forward corners.
 	 * 
 	 * @param m the move being attempted
 	 * @param b the board the move takes place on
