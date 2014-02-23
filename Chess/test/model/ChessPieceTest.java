@@ -15,54 +15,54 @@ import org.junit.Test;
 
 public abstract class ChessPieceTest {
 
-   private static final int BOARD_SIZE = 8;
+	private static final int BOARD_SIZE = 8;
 
-   private ChessBoard board;
-   private IChessPiece piece;
+	private ChessBoard board;
+	private IChessPiece piece;
 
-   public final ChessBoard getBoard() {
-	return board;
-   }
+	public final ChessBoard getBoard() {
+		return board;
+	}
 
-   public final IChessPiece getPiece() {
-	return piece;
-   }
+	public final IChessPiece getPiece() {
+		return piece;
+	}
 
-@Before
-   public final void makeBoard() {
-      // Don't put any pieces on the board.
-      board = new ChessBoard(BOARD_SIZE, false);
-      piece = make();
-   }
+	@Before
+	public final void makeBoard() {
+		// Don't put any pieces on the board.
+		board = new ChessBoard(BOARD_SIZE, false);
+		piece = make();
+	}
 
-   protected final IChessPiece make() {
-      return make(Player.WHITE);
-   }
+	protected final IChessPiece make() {
+		return make(Player.WHITE);
+	}
 
-   protected abstract IChessPiece make(Player p);
+	protected abstract IChessPiece make(Player p);
 
-   protected abstract Move getValidMove(int row, int col);
+	protected abstract Move getValidMove(int row, int col);
 
-   @Test
-   public final void complainsIfTargetOccupiedBySamePlayer() throws Throwable {
-      Move move = getValidMove(2, 4);
-      board.set(make(), move.getToRow(), move.getToColumn());
-      board.set(piece, move.getFromRow(), move.getFromColumn());
-      assertFalse("ChessPiece Test 3", piece.isValidMove(move, board));
-   }
-   
-   @Test
-   public void canCaputre() throws Throwable { }
-   
-   @Test
-   public final void hasATypeString() throws Throwable {
-	   assertNotNull(piece.type());
-   }
+	@Test
+	public final void complainsIfTargetOccupiedBySamePlayer() throws Throwable {
+		Move move = getValidMove(2, 4);
+		board.set(make(), move.getToRow(), move.getToColumn());
+		board.set(piece, move.getFromRow(), move.getFromColumn());
+		assertFalse("ChessPiece Test 3", piece.isValidMove(move, board));
+	}
 
-   @Test (expected = IllegalArgumentException.class)
-   public final void complainsIfImproperFromLocation() throws Throwable {
-	   Move m = new Move(4, 4, 4, 5);
-	   piece.isValidMove(m, board);
-   }
+	@Test
+	public void canCaputre() throws Throwable { }
+
+	@Test
+	public final void hasATypeString() throws Throwable {
+		assertNotNull(piece.type());
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public final void complainsIfImproperFromLocation() throws Throwable {
+		Move m = new Move(4, 4, 4, 5);
+		piece.isValidMove(m, board);
+	}
 
 }
