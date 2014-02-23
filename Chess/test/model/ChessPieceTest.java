@@ -5,12 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
+/********************************************************************
  * Test the {@code ChessPiece} class.
  *
  * @author Zachary Kurmas
- * @author Jack O'Brien
- */
+ *******************************************************************/
 // Created  12/8/12 at 9:28 PM
 // (C) Zachary Kurmas 2012
 
