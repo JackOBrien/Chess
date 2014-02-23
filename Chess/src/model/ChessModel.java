@@ -1,16 +1,16 @@
 package model;
 
 /********************************************************************
- * CIS 350 - 01.
+ * CIS 350 - 01
  * Chess
  *
- * ChessModel to handle game logic
+ * ChessModel to handle game logic.
  *
  * @author John O'Brien
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class ChessModel implements IChessModel {
 
@@ -33,9 +33,7 @@ public class ChessModel implements IChessModel {
 	@Override
 	public final boolean isComplete() {
 		
-		if (!inCheck()) {
-			return false;
-		}
+		if (!inCheck()) { return false; }
 
 		// Relative coordinates of all points around a piece
 		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
@@ -199,7 +197,6 @@ public class ChessModel implements IChessModel {
 	private boolean basicallyLegal(final IChessPiece piece, final Move m) {		
 		Player plr = piece.player();
 
-		
 		if (plr.equals(currentPlayer()) && piece.isValidMove(m, board)) {
 			return true;
 		}
@@ -235,7 +232,6 @@ public class ChessModel implements IChessModel {
 			if (tR == row && tC == col) { return true; }
 
 		}
-		
 		return false;
 	}
 

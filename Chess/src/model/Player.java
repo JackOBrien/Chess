@@ -11,7 +11,7 @@ package model;
  * @author Shane Higgins
  * @author Caleb Woods
  * @author Zachary Kurmas
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public enum Player {
 
@@ -21,12 +21,12 @@ public enum Player {
 	/** The player who's pieces are white. */
 	WHITE;
 
-/****************************************************************
- * Return the Player whose turn is next.
- * 
- * @return the Player whose turn is next.
- ***************************************************************/
-public Player next() {
-      return this == BLACK ? WHITE : BLACK;
-   }
+	/****************************************************************
+	 * Return the Player whose turn is next.
+	 * 
+	 * @return the Player whose turn is next.
+	 ***************************************************************/
+	public Player next() {
+		return this == BLACK ? WHITE : BLACK;
+	}
 }
