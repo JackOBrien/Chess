@@ -14,7 +14,7 @@ import org.junit.Test;
 public class PlayerTest {
 
 	@Test
-	public final void test() {
+	public final void testEnum() {
 		Player.valueOf(Player.WHITE.toString());
 	}
 
