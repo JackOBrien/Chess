@@ -70,5 +70,4 @@ public interface IChessModel {
     * @return game board used by the model.
     ***************************************************************/
    IChessBoard getBoard();
-
 }
