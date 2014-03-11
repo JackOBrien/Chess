@@ -1,5 +1,7 @@
 package main;
 
+import view.ChessGUI;
+
 /********************************************************************
  * CIS 350 - 01
  * Chess
@@ -15,8 +17,7 @@ public class Main {
 	 * @param args
 	 ***************************************************************/
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		new ChessGUI();
 	}
 
 }
