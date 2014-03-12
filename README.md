@@ -4,7 +4,7 @@ Chess
 Chess project for CIS 350-01  
 
 
-![Hello](http://i.imgur.com/PRpbmSc.png)
+![Now with warm colors!](http://i.imgur.com/dRK5ZAG.png)
 
 **Features:**  
 * Notifies the players who is in check.
