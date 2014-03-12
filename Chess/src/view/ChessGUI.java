@@ -7,9 +7,15 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,6 +25,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRootPane;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.plaf.MenuBarUI;
 
 import model.IChessPiece;
@@ -55,6 +64,13 @@ public class ChessGUI implements IChessGUI {
 	private ImageIcon gvsu = loadIcon("images\\GVSUlogoSmall.png");
 	private ImageIcon kingLogo = loadIcon("images\\kingIconLarge.png");
 	
+	private final int IMG_SIZE = 60;
+	
+	private Color light;
+	private Color dark;
+	private Color selected;
+//	private Color highlighted;
+	
 	private JButton[][] board;
 	
 	private JFrame topWindow;
@@ -66,15 +82,74 @@ public class ChessGUI implements IChessGUI {
 	 ***************************************************************/
 	public ChessGUI(int numRows, int numCols) {
 		topWindow = new JFrame();
-		topWindow.setLayout(new GridLayout(8, 8));
+		topWindow.setLayout(new GridLayout(numRows, numCols));
+		
+		// Doesn't allow the color to change when pressed
+		UIManager.put("Button.select", Color.TRANSLUCENT);
 		
 		board = new JButton[numRows][numCols];
 		
-//		setupBlankBoard(); TODO
+		light = new Color(196, 177, 143);
+		dark = new Color(49, 46, 40);
+		selected = new Color(255, 179, 47);
+		
+		setupBlankBoard();
 		setupMenu();
 		setupFrame();
 	}
 
+	private void setupBlankBoard() {
+		
+		// First square is light.
+		boolean lightSquare = true;
+		
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				
+				// Creates the JButton with default style
+				JButton button = new JButton();
+				button.setPreferredSize(new Dimension(IMG_SIZE, IMG_SIZE));
+				button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				button.addMouseListener(mouseListner);
+				button.setOpaque(true);
+				button.setFocusable(false);
+				
+				Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
+				
+				button.setBorder(line);
+				
+				// Adds an actionCommand for the button with the
+				// coordinates of its location on the board: r,c.
+				String name = r + "," + c;
+				button.setActionCommand(name);
+				
+				// Chooses the proper background color (light or dark)
+				// depending on the boolean value.
+				Color bg = dark;
+				
+				if (lightSquare) {
+					bg = light;
+				}
+				
+				button.setBackground(bg);
+				
+				board[r][c] = button;
+				topWindow.add(button);
+								
+				// Switches from dark to light or light to dark to 
+				// prepare for the next column.
+				lightSquare = !lightSquare;
+			}
+			
+			// Switches from dark to light or light to dark to 
+			// prepare for the next row.
+			lightSquare = !lightSquare;
+		}
+		
+		topWindow.pack();
+		topWindow.setVisible(true);
+	}
+	
 	private void setupFrame() {
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
@@ -97,10 +172,10 @@ public class ChessGUI implements IChessGUI {
 		menu.setForeground(Color.WHITE);
 		
 		menuBar.setLayout(new BorderLayout());
+		menuBar.setBorderPainted(false);
 		
 		menu.add(item);
 		menuBar.add(menu);
-//		menuBar.add(new JLabel("testing"), BorderLayout.LINE_END);
 		
 		topWindow.setJMenuBar(menuBar);
 	}
@@ -119,24 +194,45 @@ public class ChessGUI implements IChessGUI {
 
 		return new ImageIcon(imgURL);
 	}
+
+	@Override
+	public void setSelected(int row, int col) {
+		board[row][col].setBackground(selected);
+	}
 	
 	@Override
-	public void initializeBoard(JButton[][] pBoard) {
-		board = pBoard;
+	public void setDeselected(int row, int col) {
+		Color bg = light;
 		
-		for (int r = 0; r < board.length; r++) {
-			for (int c = 0; c < board[0].length; c++) {
-				topWindow.add(board[r][c]);
+		/* Checks for even or odd row. */
+		if (row % 2 == 0) {
+			
+			/* Checks for odd column. */
+			if (col % 2 != 0) {
+				bg = dark;
+			}
+		} else {
+			
+			/* Checks for even column. */
+			if (col % 2 == 0) {
+				bg = dark;
 			}
 		}
 		
-		topWindow.pack();
-		topWindow.setVisible(true);
+		board[row][col].setBackground(bg);
 	}
-
+	
 	@Override
-	public void changeColor(int row, int col, Color c) {
-		board[row][col].setBackground(c);
+	public void changeImage(int row, int col, String type, boolean white) {
+		ImageIcon img = imageFinder(type, white);
+		
+		// The amount of extra space between the edge of 
+		// the button an the edge of the image. Default 5.
+		final int borderSpace = 5;
+		
+		img = resizeImage(img, IMG_SIZE - borderSpace);
+		
+		board[row][col].setIcon(img);
 	}
 	
 	@Override
@@ -200,4 +296,69 @@ public class ChessGUI implements IChessGUI {
 		return image;
 	}
 	
+	@Override
+	public void setMoveHandler(ActionListener mh) {
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				board[r][c].addActionListener(mh);
+			}
+		}
+	}
+	
+	/****************************************************************
+	 * Takes an ImageIcon and changes its size.
+	 * 
+	 * @param icon the ImageIcon to be changed.
+	 * @param size the new width and height of the image.
+	 * @return the resized ImageIcon.
+	 ***************************************************************/
+	private ImageIcon resizeImage(ImageIcon icon, int size) {
+		
+		if (icon == null) { return icon; }
+		
+		Image img = icon.getImage();
+				
+		Image resized = img.getScaledInstance(size, size, 
+				Image.SCALE_AREA_AVERAGING);
+		return new ImageIcon(resized);
+	}
+	
+	/** Adds new outlines to buttons when they're being interacted with. */
+	private MouseListener mouseListner = new MouseListener() {
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			JButton button = (JButton) e.getComponent();
+
+			Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
+			button.setBorder(line);
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			JButton button = (JButton) e.getComponent();	
+			
+			Border border = BorderFactory.createLoweredSoftBevelBorder();
+			button.setBorder(border);
+		}
+		
+		@Override
+		public void mouseExited(MouseEvent e) {
+			JButton button = (JButton) e.getComponent();
+			
+			Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
+			button.setBorder(line);
+		}
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			JButton button = (JButton) e.getComponent();
+			
+			Border border = BorderFactory.createRaisedSoftBevelBorder();
+			button.setBorder(border);
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) { }
+	};
 }

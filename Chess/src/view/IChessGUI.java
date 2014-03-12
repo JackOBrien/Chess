@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,20 +18,6 @@ import javax.swing.JButton;
 public interface IChessGUI {
 
 	/****************************************************************
-	 * @param pBoard TODO
-	 ***************************************************************/
-	void initializeBoard(JButton[][] pBoard);
-
-	/****************************************************************
-	 * Changes the background color of the piece at the given location
-	 * 
-	 * @param row row location of the piece.
-	 * @param col column location of the piece.
-	 * @param c the Color to change the background to.
-	 ***************************************************************/
-	void changeColor(int row, int col, Color c);
-
-	/****************************************************************
 	 * Helper method to return the image that matches the
 	 * described chess piece.
 	 * 
@@ -39,5 +26,42 @@ public interface IChessGUI {
 	 * @return  image corresponding to the piece described.
 	 ***************************************************************/
 	ImageIcon imageFinder(String type, boolean white);
+
+	/****************************************************************
+	 * Changes the image of the given cell to the image of the
+	 * piece described
+	 * 
+	 * @param row row location of the piece.
+	 * @param col column location of the piece.
+	 * @param type the name of the piece, i.e. "King".
+	 * @param white tells if the piece is white or not.
+	 ***************************************************************/
+	void changeImage(int row, int col, String type, boolean white);
+
+	/****************************************************************
+	 * Adds an ActionListner to all buttons to handle the moving
+	 * of game pieces.
+	 * 
+	 * @param mh the ActionListner to handle moves.
+	 ***************************************************************/
+	void setMoveHandler(ActionListener mh);
+
+	/****************************************************************
+	 * Changes the background color of the piece at the given location
+	 * to be the color for selected pieces.
+	 * 
+	 * @param row row location of the piece.
+	 * @param col column location of the piece.
+	 ***************************************************************/
+	void setSelected(int row, int col);
+	
+	/****************************************************************
+	 * Changes the background color of the piece at the given location
+	 * to be the color for unselected pieces.
+	 * 
+	 * @param row row location of the piece.
+	 * @param col column location of the piece.
+	 ***************************************************************/
+	void setDeselected(int row, int col);
 
 }
