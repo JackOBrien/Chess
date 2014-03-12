@@ -1,12 +1,19 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JRootPane;
+
+import presenter.Presenter;
 
 /********************************************************************
  * CIS 350 - 01
@@ -19,55 +26,51 @@ import javax.swing.JFrame;
  *******************************************************************/
 public class ChessGUI implements IChessGUI {
 
-	private ImageIcon w_bish = loadIcon("images\\w_bish.png");
+	private ImageIcon gvsu = Presenter.loadIcon("images\\GVSUlogoSmall.png");
+	private ImageIcon kingLogo = Presenter.loadIcon("images\\kingIconLarge.png");
 	
-	private final int DEFAULT_IMAGE_SIZE = 60;
+	private JButton[][] board;
 	
-	/********************************************************
-	 * Static method to load the ImageIcon from the given location
-	 * 
-	 * @param name  Name of the file
-	 * @return  The requested image
-	 *******************************************************/
-	private static  ImageIcon loadIcon(String name) {
-		java.net.URL imgURL = ChessGUI.class.getResource(name);
-		if (imgURL == null) {
-			throw new RuntimeException("Icon resource not found.");
-		}  
-
-		return new ImageIcon(imgURL);
-	}
+	private JFrame topWindow;
+	
+	
 	
 	/****************************************************************
-	 * TODO
-	 * 
-	 * @param button
-	 * @return
+	 * TODO 
 	 ***************************************************************/
-	private ImageIcon resizeImage(JButton button) {
-		ImageIcon icon = ((ImageIcon) button.getIcon());
-		Image img = icon.getImage();
-		
-		int size = button.getHeight();
-		
-		Image resized = img.getScaledInstance(size, size, 
-				Image.SCALE_AREA_AVERAGING);
-		return new ImageIcon(resized);
-	}
-	
 	public ChessGUI() {
-		JFrame frame = new JFrame();
-		JButton b = new JButton();
-		b.setIcon(w_bish);
-		b.setSize(new Dimension(DEFAULT_IMAGE_SIZE, DEFAULT_IMAGE_SIZE));
-		b.setBackground(Color.gray);
-		b.setIcon(resizeImage(b));
+		topWindow = new JFrame();
+		topWindow.setLayout(new GridLayout(8, 8));
 		
-		frame.add(b);
-		
-		frame.setVisible(true);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setUpFrame();
 	}
 
+	private void setUpFrame() {
+		List<Image> al = new ArrayList<Image>();
+		al.add(gvsu.getImage());
+		al.add(kingLogo.getImage());
+		
+		topWindow.setTitle("CIS 350: Chess Game");
+		topWindow.setIconImages(al);
+		topWindow.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		topWindow.setVisible(true);
+		topWindow.pack();
+		topWindow.setResizable(false);
+		topWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	@Override
+	public void initializeBoard(JButton[][] pBoard) {
+		board = pBoard;
+		
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				topWindow.add(board[r][c]);
+			}
+		}
+		
+		topWindow.pack();
+	}
+
+	
 }

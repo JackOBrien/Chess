@@ -1,6 +1,10 @@
 package main;
 
+import presenter.Presenter;
+import model.ChessModel;
+import model.IChessModel;
 import view.ChessGUI;
+import view.IChessGUI;
 
 /********************************************************************
  * CIS 350 - 01
@@ -17,7 +21,9 @@ public class Main {
 	 * @param args
 	 ***************************************************************/
 	public static void main(String[] args) {
-		new ChessGUI();
+		IChessModel model = new ChessModel();
+		IChessGUI view = new ChessGUI();
+		new Presenter(model, view);
 	}
 
 }
