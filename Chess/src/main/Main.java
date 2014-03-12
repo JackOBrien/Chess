@@ -22,7 +22,12 @@ public class Main {
 	 ***************************************************************/
 	public static void main(String[] args) {
 		IChessModel model = new ChessModel();
-		IChessGUI view = new ChessGUI();
+		
+		// board size
+		int numRows = model.getBoard().numRows();
+		int numCols = model.getBoard().numColumns();
+		
+		IChessGUI view = new ChessGUI(numRows, numCols);
 		new Presenter(model, view);
 	}
 
