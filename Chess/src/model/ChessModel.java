@@ -22,12 +22,15 @@ public class ChessModel implements IChessModel {
 
 	/** Tells which player is in check. */
 	private Player playerInCheck;
+	
+	private boolean bothPlayersInCheck;
 
 	/****************************************************************
 	 * Constructor sets up both the 'real' and test game board.
 	 ***************************************************************/
 	public ChessModel() {
 		board = new ChessBoard(size, true);
+		bothPlayersInCheck = false;
 	}
 
 	@Override
@@ -176,7 +179,7 @@ public class ChessModel implements IChessModel {
 			
 		/* Checks to be sure that the current player 
 		 * is not in check, but that their enemy is. */
-		} else if (plr != playerInCheck) {
+		} else if (plr != playerInCheck && !bothPlayersInCheck) {
 			valid =  true;
 		}
 
@@ -267,7 +270,8 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public final boolean inCheck() {
-
+		playerInCheck = null;
+		
 		Player p = Player.WHITE;
 
 		// Location of the white king
@@ -288,9 +292,7 @@ public class ChessModel implements IChessModel {
 			for (int c = 0; c < size; c++) {
 				IChessPiece piece = pieceAt(r, c);
 
-				if (piece == null) {
-					continue;
-				}
+				if (piece == null) { continue; }
 
 				Move m;
 
@@ -303,14 +305,19 @@ public class ChessModel implements IChessModel {
 				}
 				
 				if (piece.isValidMove(m, board)) {
+					
+					if (playerInCheck != null && p == playerInCheck.next()) {
+						bothPlayersInCheck = true;
+						return true;
+					}
+					
 					playerInCheck = p;
-					return true;
+					bothPlayersInCheck = false;
 				}
 			}
 		}
 
-		playerInCheck = null;
-		return false;
+		return playerInCheck != null;
 	}
 
 	@Override
