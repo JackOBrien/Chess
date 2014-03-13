@@ -142,19 +142,19 @@ public class ChessBoard implements IChessBoard {
 		
 		/* Moves piece at the from location to the to location
 		 * Sets from location to null. */
-		IChessPiece movingPiece = pieceAt(move.getFromRow(), 
-				move.getFromColumn());
+		IChessPiece movingPiece = pieceAt(move.fromRow(), 
+				move.fromColumn());
 		// Checks and handles an en Passant move
 		handleEnPassant(movingPiece, move);
-		unset(move.getFromRow(), move.getFromColumn());
-		set(movingPiece, move.getToRow(), move.getToColumn());
+		unset(move.fromRow(), move.fromColumn());
+		set(movingPiece, move.toRow(), move.toColumn());
 		
 		// Switches turns
 		currentPlayer = currentPlayer.next();
 		
 		/* If the piece being moved is a king, the location is recorded */
 		if (movingPiece != null && movingPiece.is("King")) {
-			updateKingLocation(move.getToRow(), move.getToColumn());
+			updateKingLocation(move.toRow(), move.toColumn());
 		}
 		
 		/* Increments the number of moves that have been made */
@@ -178,10 +178,10 @@ public class ChessBoard implements IChessBoard {
 		Pawn p = (Pawn) movingPiece;
 		
 		/* Removes attacked pawn from the board */
-		if (pieceAt(move.getToRow(), move.getToColumn()) == null 
+		if (pieceAt(move.toRow(), move.toColumn()) == null 
 				&& 
 				p.isAttacking(move, this)) { 
-			unset(move.getToRow(), move.getFromColumn());
+			unset(move.fromRow(), move.toColumn());
 		}
 	}
 
@@ -282,11 +282,11 @@ public class ChessBoard implements IChessBoard {
 		String type = p.type();
 		
 		if (type.equals("Pawn")) {
-			b[r][c] = new Pawn(plr);
+			b[r][c] = (Pawn)p;
 		}
 
 		if (type.equals("Rook")) {
-			b[r][c] = new Rook(plr);
+			b[r][c] = (Rook)p;
 		}
 
 		if (type.equals("Bishop")) {
@@ -303,7 +303,7 @@ public class ChessBoard implements IChessBoard {
 
 		/* The king also records the location of the kings */
 		if (type.equals("King")) {
-			b[r][c] = new King(plr);
+			b[r][c] = (King)p;
 			int [] location = {r, c};
 			setKing(plr, location);
 		}

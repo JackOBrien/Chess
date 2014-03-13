@@ -45,7 +45,7 @@ public class Rook extends ChessPiece {
 			return false;
 		}
 		
-		hasMoved = checkifMoved(move.getFromRow(), move.getFromColumn());
+		hasMoved = checkifMoved(move.fromRow(), move.fromColumn());
 		
 		/* Ensures the piece is moving diagonally and isn't jumping 
 		 * over any pieces */
@@ -95,8 +95,8 @@ public class Rook extends ChessPiece {
 	 ***************************************************************/
 	protected static boolean movingPerpendicular(final Move m, 
 			final IChessBoard board) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();
 		
 		/* Ensures that only the row OR the column is changing */
 		if (fR != tR && fC != tC) { return false; }

@@ -48,8 +48,8 @@ public class King extends ChessPiece {
 			return false;
 		}
 		
-		int fR = move.getFromRow(), fC = move.getFromColumn();
-		int tR = move.getToRow(), tC = move.getToColumn();
+		int fR = move.fromRow(), fC = move.fromColumn();
+		int tR = move.toRow(), tC = move.toColumn();
 		
 		checkifMoved(fR, fC);
 
@@ -103,8 +103,8 @@ public class King extends ChessPiece {
 	 * @return true if the King may castle, false otherwise.
 	 ***************************************************************/
 	private boolean mayCastle(final Move m, final IChessBoard b) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();	
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();	
 		
 		/* The can't castle if it has moved before */
 		if (hasMoved || fC != KING_STARTING_COL) { return false; }
@@ -141,8 +141,8 @@ public class King extends ChessPiece {
 	 * @return the Rook participating in the castle
 	 ***************************************************************/
 	private Rook whichSide(final Move m, final IChessBoard b) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();	
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();	
 		
 		/* Castling on the King's side */
 		if (tC == fC + 2) {

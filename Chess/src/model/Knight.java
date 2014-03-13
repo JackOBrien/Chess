@@ -41,8 +41,8 @@ public class Knight extends ChessPiece {
 		final int[] validRow = {1, 2, 2, 1, -1, -2, -2, -1};
 		final int[] validCol = {-2, -1, 1, 2, 2, 1, -1, -2};
 
-		int fR = move.getFromRow(), fC = move.getFromColumn();
-		int tR = move.getToRow(), tC = move.getToColumn();
+		int fR = move.fromRow(), fC = move.fromColumn();
+		int tR = move.toRow(), tC = move.toColumn();
 
 		/* Loops through array of relative valid positions 
 		 * and returns true if it finds a match*/

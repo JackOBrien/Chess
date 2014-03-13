@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import view.IChessGUI;
 import model.IChessModel;
 import model.IChessPiece;
+import model.Move;
+import model.Pawn;
 import model.Player;
 
 /********************************************************************
@@ -77,6 +79,24 @@ public class Presenter {
 		}
 	}
 	
+	private void highlightValidMoves(int row, int col) {
+		int size = model.getBoard().numRows();
+		
+		for (int r = 0; r < size; r++) {
+			for (int c = 0; c < size; c++) {
+				Move m = new Move(row, col, r, c);
+				
+				if (r == 5 && c == 4) {
+					model.isValidMove(m);
+				}
+				
+				if (model.isValidMove(m)) {
+					view.setHighlighted(r, c);
+				}
+			}
+		}
+	}
+	
 	/** ActionListener to handle selecting and moving game pieces */
 	private ActionListener moveHandler = new ActionListener() {
 		
@@ -90,35 +110,77 @@ public class Presenter {
 			
 			IChessPiece piece = model.pieceAt(row, col);
 			
-			/* There is no action when selecting a blank cell. */
-			if (piece == null) { return; } 
-			
 			/* Checks if the player is choosing a piece or its destination. */
 			if (!isPieceSelected) {
+				
+				/* There is no action when selecting a blank cell. */
+				if (piece == null) { return; } 
 				
 				/* There is no action if you select a piece from the 
 				 * wrong player. */
 				if (model.currentPlayer() != piece.player()) { return; }
 				
-				if (selectedPiece != e.getActionCommand()) {
-					view.setSelected(row, col);
-					selectedPiece = e.getActionCommand();
-					isPieceSelected = true;
-				} else {
-					
-				}
+				/* Recolors the selected piece. */
+				view.setSelected(row, col);
+				selectedPiece = e.getActionCommand();
+				isPieceSelected = true;
+				highlightValidMoves(row, col);
 				
+
+				return;
 				
 			} else {
+				
+				/* Checks if you are deselecting the piece. */
 				if (selectedPiece == e.getActionCommand()) {
-					view.setDeselected(row, col);
+					view.deselectAll();
 					selectedPiece = "";
 					isPieceSelected = false;
 					return;
 				}
+								
+				// Parses the selected piece
+				String[] loc = selectedPiece.split(",");
+				int fromRow = Integer.parseInt(loc[0]);
+				int fromColumn = Integer.parseInt(loc[1]);
+				
+				piece = model.pieceAt(fromRow, fromColumn);
+				
+				Move move = new Move(fromRow, fromColumn, row, col);
+				
+				/* There is no action if the move is not valid */
+				if (!model.isValidMove(move)) { return; }
+				
+				boolean white = piece.player() == Player.WHITE;
+								
+				handleEnPassant(move);
+				
+				model.move(move);
+				view.changeImage(fromRow, fromColumn, "", true);
+				view.changeImage(row, col, piece.type(), white);
+								
+				view.deselectAll();
+				isPieceSelected = false;
 			}
 			
 		}
 	};
+
+	/****************************************************************
+	 * @param move
+	 ***************************************************************/
+	protected void handleEnPassant(Move move) {
+		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
+		
+		if (piece == null || !piece.is("Pawn")) { return; }
+		
+		Pawn pawn = (Pawn) piece;
+		
+		if (pawn.isAttacking(move, model.getBoard()) && 
+				model.pieceAt(move.toRow(), move.toColumn()) == null) {
+			view.changeImage(move.fromRow(), move.toColumn(), "", true);
+			
+		}
+	}
 	
 }

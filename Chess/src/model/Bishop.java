@@ -51,13 +51,13 @@ public class Bishop extends ChessPiece {
 	 ***************************************************************/
 	protected static boolean movingDiagonally(final Move m,
 			final IChessBoard board) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
+		int fR = m.fromRow(), fC = m.fromColumn();
 		
 		// The difference in the to row and the from row
-		int rowDiff = m.getToRow() - fR;
+		int rowDiff = m.toRow() - fR;
 
 		// The difference in the to column and the from column
-		int colDiff = m.getToColumn() - fC;
+		int colDiff = m.toColumn() - fC;
 
 		// Negative: Up, Positive: Down
 		int rowDir = (rowDiff > 0) ? 1 : -1;

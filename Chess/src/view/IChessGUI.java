@@ -54,14 +54,19 @@ public interface IChessGUI {
 	 * @param col column location of the piece.
 	 ***************************************************************/
 	void setSelected(int row, int col);
-	
+
 	/****************************************************************
 	 * Changes the background color of the piece at the given location
-	 * to be the color for unselected pieces.
+	 * to be the color for highlighted pieces.
 	 * 
 	 * @param row row location of the piece.
 	 * @param col column location of the piece.
 	 ***************************************************************/
-	void setDeselected(int row, int col);
+	void setHighlighted(int row, int col);
+
+	/****************************************************************
+	 * Set the color of all buttons to their regular background color.
+	 ***************************************************************/
+	void deselectAll();
 
 }

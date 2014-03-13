@@ -46,8 +46,8 @@ public abstract class ChessPieceTest {
 	@Test
 	public final void complainsIfTargetOccupiedBySamePlayer() throws Throwable {
 		Move move = getValidMove(2, 4);
-		board.set(make(), move.getToRow(), move.getToColumn());
-		board.set(piece, move.getFromRow(), move.getFromColumn());
+		board.set(make(), move.toRow(), move.toColumn());
+		board.set(piece, move.fromRow(), move.fromColumn());
 		assertFalse("ChessPiece Test 3", piece.isValidMove(move, board));
 	}
 

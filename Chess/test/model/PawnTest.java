@@ -36,8 +36,6 @@ public abstract class PawnTest extends ChessPieceTest {
 	   getBoard().set(getPiece(), 4, 4);
 	   Move m = new Move(4, 4, 4 + direction(), 4);
 	   assertTrue(getPiece().isValidMove(m, getBoard()));
-	   Pawn p = (Pawn) getPiece();
-	   assertEquals(m, p.getLastMove());
 	}
 	
 	@Test

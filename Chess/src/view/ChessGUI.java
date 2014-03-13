@@ -69,7 +69,7 @@ public class ChessGUI implements IChessGUI {
 	private Color light;
 	private Color dark;
 	private Color selected;
-//	private Color highlighted;
+	private Color highlighted;
 	
 	private JButton[][] board;
 	
@@ -91,7 +91,9 @@ public class ChessGUI implements IChessGUI {
 		
 		light = new Color(196, 177, 143);
 		dark = new Color(49, 46, 40);
-		selected = new Color(255, 179, 47);
+//		selected = new Color(255, 179, 47);
+		selected = new Color(146, 0, 17);
+		highlighted = new Color(214, 55, 57);
 		
 		setupBlankBoard();
 		setupMenu();
@@ -200,8 +202,7 @@ public class ChessGUI implements IChessGUI {
 		board[row][col].setBackground(selected);
 	}
 	
-	@Override
-	public void setDeselected(int row, int col) {
+	private void setDeselected(int row, int col) {
 		Color bg = light;
 		
 		/* Checks for even or odd row. */
@@ -220,6 +221,20 @@ public class ChessGUI implements IChessGUI {
 		}
 		
 		board[row][col].setBackground(bg);
+	}
+	
+	@Override
+	public void deselectAll() {
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				setDeselected(r, c);
+			}
+		}
+	}
+	
+	@Override
+	public void setHighlighted(int row, int col) {
+		board[row][col].setBackground(highlighted);
 	}
 	
 	@Override
@@ -329,9 +344,9 @@ public class ChessGUI implements IChessGUI {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			JButton button = (JButton) e.getComponent();
-
-			Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
-			button.setBorder(line);
+			
+			Border border = BorderFactory.createRaisedSoftBevelBorder();
+			button.setBorder(border);
 		}
 		
 		@Override

@@ -143,7 +143,7 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public final boolean isValidMove(final Move move) {
-		IChessPiece piece = pieceAt(move.getFromRow(), move.getFromColumn());
+		IChessPiece piece = pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null) { return false; }
 		
@@ -219,7 +219,7 @@ public class ChessModel implements IChessModel {
 		int colE = location[1];
 		
 		// Location of the current king
-		int tR = m.getToRow(), tC = m.getToColumn();
+		int tR = m.toRow(), tC = m.toColumn();
 		
 		// Relative coordinates of all points around a piece
 		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
@@ -242,7 +242,7 @@ public class ChessModel implements IChessModel {
 	 * @return true if a king tries to castle while in check.
 	 ***************************************************************/
 	private boolean tryingToCastelInCheck(final Move m) {
-		IChessPiece piece = pieceAt(m.getFromRow(), m.getFromColumn());
+		IChessPiece piece = pieceAt(m.fromRow(), m.fromColumn());
 		
 		/* Only Kings can Castle */
 		/* If the game isn't in check, the king is ok to castle */
@@ -251,7 +251,7 @@ public class ChessModel implements IChessModel {
 		/* If this king isn't in check then it's free to go! */
 		if (piece.player() != playerInCheck) { return false; }
 		
-		int distance = Math.abs(m.getToColumn() - m.getFromColumn());
+		int distance = Math.abs(m.toColumn() - m.fromColumn());
 		
 		/* Ensures the king is in the proper position and is
 		 * trying to castle. If so, the move is invalid */
