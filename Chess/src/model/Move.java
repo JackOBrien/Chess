@@ -45,28 +45,28 @@ public class Move {
 	/****************************************************************
 	 * @return the fromRow.
 	 ***************************************************************/
-	public final int getFromRow() {
+	public final int fromRow() {
 		return fromRow;
 	}
 
 	/****************************************************************
 	 * @return the fromColumn.
 	 ***************************************************************/
-	public final int getFromColumn() {
+	public final int fromColumn() {
 		return fromColumn;
 	}
 
 	/****************************************************************
 	 * @return the toRow.
 	 ***************************************************************/
-	public final int getToRow() {
+	public final int toRow() {
 		return toRow;
 	}
 
 	/****************************************************************
 	 * @return the toColumn.
 	 ***************************************************************/
-	public final int getToColumn() {
+	public final int toColumn() {
 		return toColumn;
 	}
 }
