@@ -144,8 +144,9 @@ public class ChessBoard implements IChessBoard {
 		 * Sets from location to null. */
 		IChessPiece movingPiece = pieceAt(move.fromRow(), 
 				move.fromColumn());
-		// Checks and handles an en Passant move
+		// Checks for and handles an en Passant and Casteling
 		handleEnPassant(movingPiece, move);
+		handleCastle(movingPiece, move);
 		unset(move.fromRow(), move.fromColumn());
 		set(movingPiece, move.toRow(), move.toColumn());
 		
@@ -183,6 +184,36 @@ public class ChessBoard implements IChessBoard {
 				p.isAttacking(move, this)) { 
 			unset(move.fromRow(), move.toColumn());
 		}
+	}
+	
+	/****************************************************************
+	 * If a piece performs a Castle, it will remove the piece
+	 * that was attacked from the board.
+	 * 
+	 * @param movingPiece the Piece that is moving.
+	 * @param move the move being attempted.
+	 ***************************************************************/
+	private void handleCastle(final IChessPiece movingPiece, final Move m) {
+		
+		if (movingPiece == null || !movingPiece.is("King")) { return; }
+		
+		
+		int distance = m.toColumn() - m.fromColumn();
+		int direction = distance > 0 ? 1 : -1;
+		
+		if (distance * direction != 2) { return; }
+
+		int rookColumn = 0;
+		
+		if (direction == 1) {
+			rookColumn = numColumns() - 1;
+		} 
+
+		Rook rook = (Rook) pieceAt(m.fromRow(), rookColumn);
+		
+		unset(m.fromRow(), rookColumn);
+		set(rook, m.fromRow(), m.fromColumn() + direction);
+
 	}
 
 	/****************************************************************

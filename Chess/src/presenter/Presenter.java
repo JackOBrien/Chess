@@ -154,6 +154,7 @@ public class Presenter {
 				boolean white = piece.player() == Player.WHITE;
 								
 				handleEnPassant(move);
+				handleCastle(move);
 				
 				model.move(move);
 				view.changeImage(fromRow, fromColumn, "", true);
@@ -167,7 +168,10 @@ public class Presenter {
 	};
 
 	/****************************************************************
-	 * @param move
+	 * If a piece performs enPassant, it will remove the piece
+	 * that was attacked from the board.
+	 * 
+	 * @param move the move being attempted.
 	 ***************************************************************/
 	protected void handleEnPassant(Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
@@ -181,6 +185,35 @@ public class Presenter {
 			view.changeImage(move.fromRow(), move.toColumn(), "", true);
 			
 		}
+	}
+	
+	/****************************************************************
+	 * If a piece performs a Castle, it will remove the piece
+	 * that was attacked from the board.
+	 * 
+	 * @param move the move being attempted.
+	 ***************************************************************/
+	protected void handleCastle(Move move) {
+		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
+		
+		if (piece == null || !piece.is("King")) { return; }
+		
+		int distance = move.toColumn() - move.fromColumn();
+		int direction = distance > 0 ? 1 : -1;
+		
+		if (distance * direction != 2) { return; }
+
+		int rookColumn = 0;
+
+		if (direction == 1) {
+			rookColumn = model.getBoard().numColumns() - 1;
+		} 
+		
+		boolean white = piece.player() == Player.WHITE;
+		
+		view.changeImage(move.fromRow(), rookColumn, "", false);
+		view.changeImage(move.fromRow(), move.fromColumn() + direction, 
+				"Rook", white);
 	}
 	
 }
