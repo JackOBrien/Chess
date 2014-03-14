@@ -3,8 +3,11 @@ Chess
 
 Chess project for CIS 350-01  
 
+** NOTES FOR THE TEAM: **
+Please, do not add setters and getter for *every* instance variable!
 
-![Hello](http://i.imgur.com/PRpbmSc.png)
+
+![Now with warm colors!](http://i.imgur.com/dRK5ZAG.png)
 
 **Features:**  
 * Notifies the players who is in check.

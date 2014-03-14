@@ -10,7 +10,7 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class King extends ChessPiece {
 
@@ -48,8 +48,8 @@ public class King extends ChessPiece {
 			return false;
 		}
 		
-		int fR = move.getFromRow(), fC = move.getFromColumn();
-		int tR = move.getToRow(), tC = move.getToColumn();
+		int fR = move.fromRow(), fC = move.fromColumn();
+		int tR = move.toRow(), tC = move.toColumn();
 		
 		checkifMoved(fR, fC);
 
@@ -78,27 +78,23 @@ public class King extends ChessPiece {
 	 * @param fC the column location of the King.
 	 ***************************************************************/
 	private void checkifMoved(final int fR, final int fC) {
-		
-		/* Once the piece has moved, hasMoved will always be true */
-		if (!hasMoved) {
-		
-			/* Checks if the initial location is still -1, as set 
-			 * by the constructor. */
-			if (initialRow == -1 && initialCol == -1) {
-				initialRow = fR;
-				initialCol = fC;
-				hasMoved = false;
-				
+
+		/* Checks if the initial location is still -1, as set 
+		 * by the constructor. */
+		if (initialRow == -1) {
+			initialRow = fR;
+			initialCol = fC;
+			hasMoved = false;
+
 			/* Checks if the initial location is the same as it was 
 			 * when this piece last checked for a valid move*/	
-			} else if (initialRow == fR && initialCol == fC) {
-				hasMoved = false;
-			} else {
-				hasMoved = true;
-			}
+		} else if (initialRow == fR && initialCol == fC) {
+			hasMoved = false;
+		} else {
+			hasMoved = true;
 		}
 	}
-	
+
 	/****************************************************************
 	 * Tells if the King may castle.
 	 * 
@@ -107,8 +103,8 @@ public class King extends ChessPiece {
 	 * @return true if the King may castle, false otherwise.
 	 ***************************************************************/
 	private boolean mayCastle(final Move m, final IChessBoard b) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();	
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();	
 		
 		/* The can't castle if it has moved before */
 		if (hasMoved || fC != KING_STARTING_COL) { return false; }
@@ -145,8 +141,8 @@ public class King extends ChessPiece {
 	 * @return the Rook participating in the castle
 	 ***************************************************************/
 	private Rook whichSide(final Move m, final IChessBoard b) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();	
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();	
 		
 		/* Castling on the King's side */
 		if (tC == fC + 2) {

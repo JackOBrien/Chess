@@ -69,19 +69,33 @@ public class RookTest extends ChessPieceTest {
    @Test
    public final void cantMoveAnywhereElse() throws Throwable {
 	   getBoard().set(getPiece(), 4, 4);
-	   
+
 	   for (int r = 0; r < 8; r++) {
-			for (int c = 0; c < 8; c++) {
-				if (r != 4 && c != 4 
-						|| r == 4 && c == 4) {
-					assertFalse(getPiece().isValidMove(new Move(4, 4, r, c), 
-							getBoard()));
-				} else {
-					assertTrue(getPiece().isValidMove(new Move(4, 4, r, c), 
-							getBoard()));
-			}
+		   for (int c = 0; c < 8; c++) {
+			   if (r != 4 && c != 4 
+					   || r == 4 && c == 4) {
+				   assertFalse(getPiece().isValidMove(new Move(4, 4, r, c), 
+						   getBoard()));
+			   } else {
+				   assertTrue(getPiece().isValidMove(new Move(4, 4, r, c), 
+						   getBoard()));
+			   }
+		   }
 	   }
    }
-  }
+   
+   @Test
+   public final void checkIfMoved() throws Throwable {
+	   IChessBoard board = getBoard();
+	   Rook r = new Rook(Player.WHITE);
+	   board.set(r, 7, 7);
+	   assertFalse(r.checkifMoved(7, 7));
+	   r.isValidMove(new Move(7, 7, 7, 6), board);
+	   assertFalse(r.checkifMoved(7, 7));
+	   r.isValidMove(new Move(7, 7, 7, 6), board);
+	   board.move(new Move(7, 7, 7, 6));
+	   assertTrue(r.checkifMoved(7, 6));
+
+   }
 
 }

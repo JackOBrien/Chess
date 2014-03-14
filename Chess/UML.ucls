@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.4" icons="false" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
-  <interface id="1" language="java" name="model.IChessBoard" project="Chess" file="/Chess/src/model/IChessBoard.java" 
+  <interface id="1" language="java" name="model.IChessPiece" project="Chess" file="/Chess/src/model/IChessPiece.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="124" y="114"/>    
+    <position height="-1" width="-1" x="342" y="1293"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,61 +12,61 @@
   </interface>  
   <interface id="2" language="java" name="model.IChessModel" project="Chess" file="/Chess/src/model/IChessModel.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="289" y="90"/>    
+    <position height="174" width="148" x="1005" y="904"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="3" language="java" name="model.IChessPiece" project="Chess" file="/Chess/src/model/IChessPiece.java" 
+  <class id="3" language="java" name="model.ChessModel" project="Chess" file="/Chess/src/model/ChessModel.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="601" y="69"/>    
+    <position height="-1" width="-1" x="1080" y="-6"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="model.Queen" project="Chess" file="/Chess/src/model/Queen.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="110" width="213" x="598" y="642"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="model.Move" project="Chess" file="/Chess/src/model/Move.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="868" y="1761"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="model.Pawn" project="Chess" file="/Chess/src/model/Pawn.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="414" width="238" x="-186" y="904"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="7" language="java" name="model.IChessBoard" project="Chess" file="/Chess/src/model/IChessBoard.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="647" y="1507"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="4" language="java" name="model.ChessBoard" project="Chess" file="/Chess/src/model/ChessBoard.java" 
+  <class id="8" language="java" name="model.ChessPiece" project="Chess" file="/Chess/src/model/ChessPiece.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="132" y="451"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="model.ChessModel" project="Chess" file="/Chess/src/model/ChessModel.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="370" y="475"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="model.ChessPiece" project="Chess" file="/Chess/src/model/ChessPiece.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="846" y="239"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="model.Bishop" project="Chess" file="/Chess/src/model/Bishop.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="610" y="489"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="model.King" project="Chess" file="/Chess/src/model/King.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="860" y="480"/>    
+    <position height="142" width="213" x="493" y="460"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,25 +75,25 @@
   </class>  
   <class id="9" language="java" name="model.Knight" project="Chess" file="/Chess/src/model/Knight.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="598" y="220"/>    
+    <position height="-1" width="-1" x="958" y="1285"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="model.Move" project="Chess" file="/Chess/src/model/Move.java" binary="false" 
+  <class id="10" language="java" name="model.Bishop" project="Chess" file="/Chess/src/model/Bishop.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="428" y="210"/>    
+    <position height="126" width="239" x="577" y="904"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="model.Pawn" project="Chess" file="/Chess/src/model/Pawn.java" binary="false" 
+  <class id="11" language="java" name="model.Rook" project="Chess" file="/Chess/src/model/Rook.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1101" y="144"/>    
+    <position height="206" width="256" x="134" y="904"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -102,75 +102,414 @@
   </class>  
   <enumeration id="12" language="java" name="model.Player" project="Chess" file="/Chess/src/model/Player.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="806" y="72"/>    
+    <position height="-1" width="-1" x="170" y="1721"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <class id="13" language="java" name="model.Queen" project="Chess" file="/Chess/src/model/Queen.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="598" y="347"/>    
+  <class id="13" language="java" name="model.ChessBoard" project="Chess" file="/Chess/src/model/ChessBoard.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="382" width="234" x="472" y="38"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="model.Rook" project="Chess" file="/Chess/src/model/Rook.java" binary="false" 
+  <class id="14" language="java" name="model.King" project="Chess" file="/Chess/src/model/King.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1112" y="399"/>    
+    <position height="222" width="213" x="198" y="642"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="15">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <realization id="16">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
-  <generalization id="17">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <generalization id="19">    
+  <association id="15">    
+    <bendpoint x="462" y="460"/>    
+    <bendpoint x="462" y="642"/>    
+    <bendpoint x="462" y="904"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="16" name="board"/>      
+      <multiplicity id="17" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="18">    
     <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="19">    
+    <bendpoint x="441" y="642"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="8"/>  
   </generalization>  
-  <association id="20">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="21" name="owner"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
+  <dependency id="20">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="22">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="23">    
+    <bendpoint x="-259" y="38"/>    
+    <bendpoint x="-259" y="460"/>    
+    <bendpoint x="-259" y="642"/>    
+    <bendpoint x="-259" y="904"/>    
+    <bendpoint x="-259" y="1358"/>    
+    <bendpoint x="-259" y="1524"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="24" name="playerInCheck"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
+    <display labels="false" multiplicity="false"/>  
   </association>  
-  <realization id="23">    
-    <end type="SOURCE" refId="5"/>    
+  <generalization id="26">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="27">    
+    <bendpoint x="479" y="1396"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="28">    
+    <bendpoint x="441" y="904"/>    
+    <bendpoint x="483" y="1358"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="29">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="30">    
+    <bendpoint x="867" y="904"/>    
+    <bendpoint x="825" y="1358"/>    
+    <bendpoint x="825" y="1524"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="31">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="32">    
+    <bendpoint x="546" y="904"/>    
+    <bendpoint x="504" y="1358"/>    
+    <bendpoint x="504" y="1524"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <association id="33">    
+    <bendpoint x="-238" y="460"/>    
+    <bendpoint x="-238" y="642"/>    
+    <bendpoint x="-238" y="904"/>    
+    <bendpoint x="-238" y="1358"/>    
+    <bendpoint x="-238" y="1524"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="34" name="currentPlayer"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="36">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="37">    
+    <bendpoint x="103" y="904"/>    
+    <bendpoint x="103" y="1358"/>    
+    <bendpoint x="145" y="1524"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="38">    
+    <bendpoint x="-217" y="460"/>    
+    <bendpoint x="-217" y="642"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <generalization id="39">    
+    <bendpoint x="909" y="904"/>    
+    <bendpoint x="888" y="642"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="40">    
+    <bendpoint x="184" y="1396"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="41">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="42">    
+    <bendpoint x="757" y="460"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="43">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="44">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="45">    
+    <bendpoint x="1162" y="1358"/>    
+    <bendpoint x="1162" y="1524"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="46">    
+    <bendpoint x="773" y="1396"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="47">    
+    <bendpoint x="972" y="460"/>    
+    <bendpoint x="993" y="642"/>    
+    <bendpoint x="1183" y="904"/>    
+    <bendpoint x="1183" y="1358"/>    
+    <bendpoint x="1183" y="1524"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="48">    
+    <bendpoint x="61" y="1358"/>    
+    <bendpoint x="103" y="1524"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="49" name="lastMove"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="51">    
+    <bendpoint x="420" y="904"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="53">    
+    <bendpoint x="951" y="460"/>    
+    <bendpoint x="951" y="642"/>    
+    <bendpoint x="951" y="904"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <association id="54">    
+    <bendpoint x="1054" y="240"/>    
+    <bendpoint x="993" y="460"/>    
+    <bendpoint x="972" y="642"/>    
+    <bendpoint x="930" y="904"/>    
+    <bendpoint x="804" y="1358"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="55" name="board"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="57">    
+    <bendpoint x="188" y="1358"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <realization id="58">    
+    <bendpoint x="930" y="460"/>    
+    <bendpoint x="930" y="642"/>    
+    <bendpoint x="888" y="904"/>    
+    <bendpoint x="783" y="1358"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="7"/>  
+  </realization>  
+  <dependency id="59">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="60">    
+    <bendpoint x="736" y="38"/>    
+    <bendpoint x="736" y="460"/>    
+    <bendpoint x="546" y="642"/>    
+    <bendpoint x="504" y="904"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="61">    
+    <bendpoint x="124" y="1358"/>    
+    <bendpoint x="124" y="1524"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="62">    
+    <bendpoint x="741" y="1358"/>    
+    <bendpoint x="756" y="1524"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="63">    
+    <bendpoint x="1099" y="1358"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="64">    
+    <bendpoint x="842" y="1396"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="65">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="66">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="67">    
+    <bendpoint x="167" y="460"/>    
+    <bendpoint x="167" y="642"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="68">    
+    <bendpoint x="846" y="904"/>    
+    <bendpoint x="762" y="1358"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="69">    
+    <bendpoint x="1141" y="1358"/>    
+    <bendpoint x="1099" y="1524"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <realization id="70">    
+    <bendpoint x="1073" y="236"/>    
+    <bendpoint x="1014" y="460"/>    
+    <bendpoint x="1014" y="642"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
-  <generalization id="24">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="6"/>  
+  <dependency id="71">    
+    <bendpoint x="841" y="460"/>    
+    <bendpoint x="841" y="642"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <generalization id="72">    
+    <bendpoint x="567" y="642"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="8"/>  
   </generalization>  
-  <generalization id="25">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <realization id="26">    
+  <dependency id="73">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="74">    
+    <bendpoint x="546" y="1358"/>    
+    <bendpoint x="546" y="1524"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="75">    
+    <bendpoint x="525" y="642"/>    
+    <bendpoint x="525" y="904"/>    
+    <bendpoint x="525" y="1358"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="76">    
+    <bendpoint x="-26" y="1358"/>    
+    <bendpoint x="-26" y="1524"/>    
     <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="3"/>  
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="77">    
+    <bendpoint x="344" y="460"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="78">    
+    <bendpoint x="1204" y="38"/>    
+    <bendpoint x="1204" y="460"/>    
+    <bendpoint x="1204" y="642"/>    
+    <bendpoint x="1204" y="904"/>    
+    <bendpoint x="1204" y="1358"/>    
+    <bendpoint x="1204" y="1524"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="79">    
+    <bendpoint x="909" y="642"/>    
+    <bendpoint x="974" y="904"/>    
+    <bendpoint x="1120" y="1358"/>    
+    <bendpoint x="1120" y="1524"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="80">    
+    <bendpoint x="167" y="1358"/>    
+    <bendpoint x="167" y="1524"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="81">    
+    <bendpoint x="82" y="904"/>    
+    <bendpoint x="82" y="1358"/>    
+    <bendpoint x="82" y="1524"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <generalization id="82">    
+    <bendpoint x="146" y="642"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <association id="83">    
+    <bendpoint x="-196" y="642"/>    
+    <bendpoint x="-217" y="904"/>    
+    <bendpoint x="-217" y="1358"/>    
+    <bendpoint x="-217" y="1524"/>    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="84" name="owner"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <dependency id="86">    
+    <bendpoint x="209" y="1358"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <realization id="87">    
+    <bendpoint x="483" y="642"/>    
+    <bendpoint x="483" y="904"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="1"/>  
   </realization>  
+  <dependency id="88">    
+    <bendpoint x="586" y="1358"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

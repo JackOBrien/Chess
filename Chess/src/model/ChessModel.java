@@ -1,16 +1,16 @@
 package model;
 
 /********************************************************************
- * CIS 350 - 01.
+ * CIS 350 - 01
  * Chess
  *
- * ChessModel to handle game logic
+ * ChessModel to handle game logic.
  *
  * @author John O'Brien
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class ChessModel implements IChessModel {
 
@@ -22,20 +22,21 @@ public class ChessModel implements IChessModel {
 
 	/** Tells which player is in check. */
 	private Player playerInCheck;
+	
+	private boolean bothPlayersInCheck;
 
 	/****************************************************************
 	 * Constructor sets up both the 'real' and test game board.
 	 ***************************************************************/
 	public ChessModel() {
 		board = new ChessBoard(size, true);
+		bothPlayersInCheck = false;
 	}
 
 	@Override
 	public final boolean isComplete() {
 		
-		if (!inCheck()) {
-			return false;
-		}
+		if (!inCheck()) { return false; }
 
 		// Relative coordinates of all points around a piece
 		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
@@ -145,7 +146,7 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public final boolean isValidMove(final Move move) {
-		IChessPiece piece = pieceAt(move.getFromRow(), move.getFromColumn());
+		IChessPiece piece = pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null) { return false; }
 		
@@ -178,7 +179,7 @@ public class ChessModel implements IChessModel {
 			
 		/* Checks to be sure that the current player 
 		 * is not in check, but that their enemy is. */
-		} else if (plr != playerInCheck) {
+		} else if (plr != playerInCheck && !bothPlayersInCheck) {
 			valid =  true;
 		}
 
@@ -199,7 +200,6 @@ public class ChessModel implements IChessModel {
 	private boolean basicallyLegal(final IChessPiece piece, final Move m) {		
 		Player plr = piece.player();
 
-		
 		if (plr.equals(currentPlayer()) && piece.isValidMove(m, board)) {
 			return true;
 		}
@@ -222,7 +222,7 @@ public class ChessModel implements IChessModel {
 		int colE = location[1];
 		
 		// Location of the current king
-		int tR = m.getToRow(), tC = m.getToColumn();
+		int tR = m.toRow(), tC = m.toColumn();
 		
 		// Relative coordinates of all points around a piece
 		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
@@ -235,7 +235,6 @@ public class ChessModel implements IChessModel {
 			if (tR == row && tC == col) { return true; }
 
 		}
-		
 		return false;
 	}
 
@@ -246,7 +245,7 @@ public class ChessModel implements IChessModel {
 	 * @return true if a king tries to castle while in check.
 	 ***************************************************************/
 	private boolean tryingToCastelInCheck(final Move m) {
-		IChessPiece piece = pieceAt(m.getFromRow(), m.getFromColumn());
+		IChessPiece piece = pieceAt(m.fromRow(), m.fromColumn());
 		
 		/* Only Kings can Castle */
 		/* If the game isn't in check, the king is ok to castle */
@@ -255,7 +254,7 @@ public class ChessModel implements IChessModel {
 		/* If this king isn't in check then it's free to go! */
 		if (piece.player() != playerInCheck) { return false; }
 		
-		int distance = Math.abs(m.getToColumn() - m.getFromColumn());
+		int distance = Math.abs(m.toColumn() - m.fromColumn());
 		
 		/* Ensures the king is in the proper position and is
 		 * trying to castle. If so, the move is invalid */
@@ -271,7 +270,8 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public final boolean inCheck() {
-
+		playerInCheck = null;
+		
 		Player p = Player.WHITE;
 
 		// Location of the white king
@@ -292,9 +292,7 @@ public class ChessModel implements IChessModel {
 			for (int c = 0; c < size; c++) {
 				IChessPiece piece = pieceAt(r, c);
 
-				if (piece == null) {
-					continue;
-				}
+				if (piece == null) { continue; }
 
 				Move m;
 
@@ -307,14 +305,19 @@ public class ChessModel implements IChessModel {
 				}
 				
 				if (piece.isValidMove(m, board)) {
+					
+					if (playerInCheck != null && p == playerInCheck.next()) {
+						bothPlayersInCheck = true;
+						return true;
+					}
+					
 					playerInCheck = p;
-					return true;
+					bothPlayersInCheck = false;
 				}
 			}
 		}
 
-		playerInCheck = null;
-		return false;
+		return playerInCheck != null;
 	}
 
 	@Override

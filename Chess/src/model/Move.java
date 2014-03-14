@@ -11,7 +11,7 @@ package model;
  * @author Shane Higgins
  * @author Caleb Woods
  * @author Zachary Kurmas
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class Move {
 
@@ -45,56 +45,28 @@ public class Move {
 	/****************************************************************
 	 * @return the fromRow.
 	 ***************************************************************/
-	public final int getFromRow() {
+	public final int fromRow() {
 		return fromRow;
-	}
-
-	/****************************************************************
-	 * @param fR the fromRow to set.
-	 ***************************************************************/
-	public final void setFromRow(final int fR) {
-		this.fromRow = fR;
 	}
 
 	/****************************************************************
 	 * @return the fromColumn.
 	 ***************************************************************/
-	public final int getFromColumn() {
+	public final int fromColumn() {
 		return fromColumn;
-	}
-
-	/****************************************************************
-	 * @param fC the fromColumn to set.
-	 ***************************************************************/
-	public final void setFromColumn(final int fC) {
-		this.fromColumn = fC;
 	}
 
 	/****************************************************************
 	 * @return the toRow.
 	 ***************************************************************/
-	public final int getToRow() {
+	public final int toRow() {
 		return toRow;
-	}
-
-	/****************************************************************
-	 * @param tR the toRow to set.
-	 ***************************************************************/
-	public final void setToRow(final int tR) {
-		this.toRow = tR;
 	}
 
 	/****************************************************************
 	 * @return the toColumn.
 	 ***************************************************************/
-	public final int getToColumn() {
+	public final int toColumn() {
 		return toColumn;
-	}
-
-	/****************************************************************
-	 * @param tC the toColumn to set.
-	 ***************************************************************/
-	public final void setToColumn(final int tC) {
-		this.toColumn = tC;
 	}
 }

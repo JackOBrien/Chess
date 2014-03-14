@@ -1,9 +1,11 @@
 package model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 
@@ -32,8 +34,8 @@ public abstract class PawnTest extends ChessPieceTest {
 	@Test
 	public final void canMoveInRow() throws Exception {
 	   getBoard().set(getPiece(), 4, 4);
-	   assertTrue(getPiece().isValidMove(new Move(4, 4, 4 + direction() , 4), 
-			   getBoard()));
+	   Move m = new Move(4, 4, 4 + direction(), 4);
+	   assertTrue(getPiece().isValidMove(m, getBoard()));
 	}
 	
 	@Test

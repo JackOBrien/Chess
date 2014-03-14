@@ -11,7 +11,7 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class Knight extends ChessPiece {
 
@@ -32,18 +32,18 @@ public class Knight extends ChessPiece {
 
 	@Override
 	public final boolean isValidMove(final Move move, final IChessBoard board) {
-		
+
 		if (!super.isValidMove(move, board)) {
 			return false;
 		}
-		
+
 		// Relative valid positions
 		final int[] validRow = {1, 2, 2, 1, -1, -2, -2, -1};
 		final int[] validCol = {-2, -1, 1, 2, 2, 1, -1, -2};
-			
-		int fR = move.getFromRow(), fC = move.getFromColumn();
-		int tR = move.getToRow(), tC = move.getToColumn();
-		
+
+		int fR = move.fromRow(), fC = move.fromColumn();
+		int tR = move.toRow(), tC = move.toColumn();
+
 		/* Loops through array of relative valid positions 
 		 * and returns true if it finds a match*/
 		for (int i = 0; i < validRow.length; i++) {

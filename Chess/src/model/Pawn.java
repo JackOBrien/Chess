@@ -11,7 +11,7 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class Pawn extends ChessPiece {
 
@@ -30,7 +30,7 @@ public class Pawn extends ChessPiece {
 	
 	/** Keeps track of what this pawn's last turn was. */
 	private Move lastMove;
-
+	
 	/****************************************************************
 	 * Constructor for Pawn.
 	 * 
@@ -38,11 +38,14 @@ public class Pawn extends ChessPiece {
 	 ***************************************************************/
 	public Pawn(final Player color) {
 		super(color);
-	    setDirection(player() == Player.WHITE ? -1 : 1);
-		setStartingRow(player() == Player.WHITE ? 6 : 1);
-		setGamePosition(0);
-		setMovedTwice(false);
-		setLastMove(null);
+	    
+		final int whiteStartingRow = 6;
+		
+		direction = player() == Player.WHITE ? -1 : 1;
+		startingRow = player() == Player.WHITE ? whiteStartingRow : 1;
+		gamePosition = 0;
+		movedTwice = false;
+		lastMove = null;		
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class Pawn extends ChessPiece {
 
 	@Override
 	public final boolean isValidMove(final Move move, final IChessBoard board) {
-		
+				
 		if (!super.isValidMove(move, board)) {
 			return false;
 		}
@@ -60,11 +63,11 @@ public class Pawn extends ChessPiece {
 		/* Checks for for en Passant move */
 		if (canEnPassant(move, board)) { return true; }
 				
-		int fR = move.getFromRow(), fC = move.getFromColumn();
-		int tR = move.getToRow(), tC = move.getToColumn();
+		int fR = move.fromRow(), fC = move.fromColumn();
+		int tR = move.toRow(), tC = move.toColumn();
 		
 		/* Ensures the pawn doesn't move backwards */
-		if ((tR - fR) * getDirection() < 0) {
+		if ((tR - fR) * direction < 0) {
 			return false;
 		}
 		
@@ -74,96 +77,13 @@ public class Pawn extends ChessPiece {
 		}
 
 		/* Checks if the piece is attacking */
-		if (board.pieceAt(move.getToRow(), move.getToColumn()) != null) {
+		if (board.pieceAt(move.toRow(), move.toColumn()) != null) {
 			if (isAttacking(move, board)) {
-				setLastMove(move);
+				lastMove = move;
 				return true;
 			}
 		}
-		
 		return false;
-	}
-	
-	
-	/****************************************************************
-	 * Getter for direction.
-	 * 
-	 * @return direction
-	 ***************************************************************/
-	public final int getDirection() {
-		return direction;
-	}
-	/****************************************************************
-	 * Setter for direction.
-	 * 
-	 * @param pDirection the direction the pawn is moving
-	 ***************************************************************/
-	public final void setDirection(final int pDirection) {
-		this.direction = pDirection;
-	}
-	/****************************************************************
-	 * Getter for starting row.
-	 * 
-	 * @return startingRow the row the pawn starts in
-	 ***************************************************************/
-	public final int getStartingRow() {
-		return startingRow;
-	}
-	/****************************************************************
-	 * Setter for starting Row.
-	 * 
-	 * @param pStartingRow the row in which pawns start
-	 ***************************************************************/
-	public final void setStartingRow(final int pStartingRow) {
-		this.startingRow = pStartingRow;
-	}
-	/****************************************************************
-	 * Getter for GamePosition.
-	 * 
-	 * @return gamePosition the number of moves the pawn has made
-	 ***************************************************************/
-	public final int getGamePosition() {
-		return gamePosition;
-	}
-	/****************************************************************
-	 * Setter for GamePosition.
-	 * 
-	 * @param pGamePosition the new game position.
-	 ***************************************************************/
-	public final void setGamePosition(final int pGamePosition) {
-		this.gamePosition = pGamePosition;
-	}
-	/****************************************************************
-	 * Getter for isMovedTwice.
-	 * 
-	 * @return boolean true if moved twice false otherwise
-	 ***************************************************************/
-	public final boolean isMovedTwice() {
-		return movedTwice;
-	}
-	/****************************************************************
-	 * Setter for movedTwice.
-	 * 
-	 * @param pMovedTwice whether or not the pawn has moved twice.
-	 ***************************************************************/
-	public final void setMovedTwice(final boolean pMovedTwice) {
-		this.movedTwice = pMovedTwice;
-	}
-	/****************************************************************
-	 * Getter for lastMove.
-	 * 
-	 * @return lastMove the pawn's last move
-	 ****************************************************************/
-	public final Move getLastMove() {
-		return lastMove;
-	}
-	/****************************************************************
-	 * Setter for lastMove.
-	 * 
-	 * @param pLastMove the last move used by the pawn.
-	 ***************************************************************/
-	public final void setLastMove(final Move pLastMove) {
-		this.lastMove = pLastMove;
 	}
 
 	/****************************************************************
@@ -175,11 +95,11 @@ public class Pawn extends ChessPiece {
 	 * @return true if the piece is attacking, false otherwise
 	 ***************************************************************/
 	public final boolean isAttacking(final Move m, final IChessBoard b) {
-			int rowDist = m.getToRow() - m.getFromRow();
-			int colDist = Math.abs(m.getFromColumn() - m.getToColumn());
+			int rowDist = m.toRow() - m.fromRow();
+			int colDist = Math.abs(m.fromColumn() - m.toColumn());
 
 			// Piece must move up one row and over one column
-			return (rowDist == getDirection() && colDist == 1);
+			return (rowDist == direction && colDist == 1);
 	}
 	
 	/****************************************************************
@@ -190,28 +110,28 @@ public class Pawn extends ChessPiece {
 	 * @return true if the piece makes a legal forward move.
 	 ***************************************************************/
 	private boolean isMovingForward(final Move m, final IChessBoard board) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();
 
 		/* Ensures the pawn does not attack forward */
 		if (board.pieceAt(tR, tC) != null) { return false; }
 
 		/* Move is valid if the pawn only moves forward one */
-		if (tR == fR + getDirection()) { 
+		if (tR == fR + direction) { 
 			lastMove = m;
 			return true; 
 		}
 
 		/* Ensures the spot in front of the pawn is clear */
-		if (board.pieceAt(fR + getDirection(), fC) != null) { return false; }
+		if (board.pieceAt(fR + direction, fC) != null) { return false; }
 
 		/* Checks if the piece is still in its starting location */
-		if (fR == getStartingRow()) {
+		if (fR == startingRow) {
 
 			/* Checks if the piece is trying to move forward twice */
-			if (tR == fR + getDirection() * 2) {
-				setGamePosition(board.getNumMoves());
-				setMovedTwice(true);
+			if (tR == fR + direction * 2) {
+				gamePosition = board.getNumMoves();
+				movedTwice = true;
 				return true;
 			}
 		}		
@@ -227,7 +147,7 @@ public class Pawn extends ChessPiece {
 	 * @return true if the piece may en Passant, false otehrwise
 	 ***************************************************************/
 	private boolean canEnPassant(final Move m, final IChessBoard b) {
-		int fR = m.getFromRow(), tC = m.getToColumn();
+		int fR = m.fromRow(), tC = m.toColumn();
 		
 		/* Ensures the piece is attacking */
 		if (!isAttacking(m, b)) { return false; }
@@ -245,17 +165,27 @@ public class Pawn extends ChessPiece {
 		if (b.getNumMoves() != victim.getNumMoves() + 1) { return false; }
 		
 		/* If the victim pawn moved two squares at once, this move is valid */
-		return victim.isMovedTwice();
+		return victim.movedTwice;
 	}
 	
 	/****************************************************************
 	 * Returns the number of moves there were on the game board when this
 	 * pawn last moved.
 	 * 
-	 * @return number of moves when this piece last moved
+	 * @return number of moves when this piece last moved.
 	 ***************************************************************/
 	public final int getNumMoves() {
-		return getGamePosition();
+		return gamePosition;
+	}
+	
+	/****************************************************************
+	 * Sets the number of moves there were on the game board when this
+	 * pawn last moved.
+	 * 
+	 * @param num number of moves when this piece last moved.
+	 ***************************************************************/
+	public void setNumMoves(int num) {
+		gamePosition = num;
 	}
 	
 	/****************************************************************
@@ -268,9 +198,19 @@ public class Pawn extends ChessPiece {
 		if (lastMove == null) { return false; }
 		
 		if (player() == Player.WHITE) {
-			return lastMove.getToRow() == 0;
+			return lastMove.toRow() == 0;
 		} else {
-			return lastMove.getToRow() == 7;
+			final int bottomRow = 7;
+			return lastMove.toRow() == bottomRow;
 		}
+	}
+
+	/****************************************************************
+	 * Returns the starting row of this Pawn.
+	 * 
+	 * @return starting row of the Pawn.
+	 ***************************************************************/
+	public final int getStartingRow() {
+		return startingRow;
 	}
 }

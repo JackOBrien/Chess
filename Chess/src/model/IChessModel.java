@@ -11,7 +11,7 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public interface IChessModel {
 
@@ -70,5 +70,4 @@ public interface IChessModel {
     * @return game board used by the model.
     ***************************************************************/
    IChessBoard getBoard();
-
 }

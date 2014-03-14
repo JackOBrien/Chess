@@ -10,7 +10,7 @@ package model;
  * @author Louis Marzorati
  * @author Shane Higgins
  * @author Caleb Woods
- * @version Feb 20, 2014
+ * @version Feb 24, 2014
  *******************************************************************/
 public class Rook extends ChessPiece {
 
@@ -45,7 +45,7 @@ public class Rook extends ChessPiece {
 			return false;
 		}
 		
-		checkifMoved(move.getFromRow(), move.getFromColumn());
+		hasMoved = checkifMoved(move.fromRow(), move.fromColumn());
 		
 		/* Ensures the piece is moving diagonally and isn't jumping 
 		 * over any pieces */
@@ -59,26 +59,21 @@ public class Rook extends ChessPiece {
 	 * 
 	 * @param fR the row location of the Rook.
 	 * @param fC the column location of the Rook.
+	 * @return true if the piece has moved before.
 	 ***************************************************************/
-	private void checkifMoved(final int fR, final int fC) {
-		
-		/* Once the piece has moved, hasMoved will always be true */
-		if (!hasMoved) {
-		
-			/* Checks if the initial location is still -1, as set 
-			 * by the constructor. */
-			if (initialRow == -1 && initialCol == -1) {
-				initialRow = fR;
-				initialCol = fC;
-				hasMoved = false;
-				
+	public final boolean checkifMoved(final int fR, final int fC) {
+
+		/* Checks if the initial location is still -1, as set 
+		 * by the constructor. */
+		if (initialRow == -1) {
+			initialRow = fR;
+			initialCol = fC;
+			return false;
+
 			/* Checks if the initial location is the same as it was 
 			 * when this piece last checked for a valid move*/	
-			} else if (initialRow == fR && initialCol == fC) {
-				hasMoved = false;
-			} else {
-				hasMoved = true;
-			}
+		} else {
+			return !(initialRow == fR && initialCol == fC);
 		}
 	}
 	
@@ -100,8 +95,8 @@ public class Rook extends ChessPiece {
 	 ***************************************************************/
 	protected static boolean movingPerpendicular(final Move m, 
 			final IChessBoard board) {
-		int fR = m.getFromRow(), fC = m.getFromColumn();
-		int tR = m.getToRow(), tC = m.getToColumn();
+		int fR = m.fromRow(), fC = m.fromColumn();
+		int tR = m.toRow(), tC = m.toColumn();
 		
 		/* Ensures that only the row OR the column is changing */
 		if (fR != tR && fC != tC) { return false; }

@@ -1,18 +1,26 @@
 package model;
 
 
-/**
- * A Queen in a game of chess.
- * 
- * @author YOUR NAME(S)
- */
+/********************************************************************
+ * CIS 350 - 01
+ * Chess
+ *
+ * A Queen of a chess game. 
+ *
+ * @author John O'Brien
+ * @author Louis Marzorati
+ * @author Shane Higgins
+ * @author Caleb Woods
+ * @author Zachary Kurmas
+ * @version Feb 24, 2014
+ *******************************************************************/
 public class Queen extends ChessPiece {
 	
-	/**
-	 * Constructs a new Queen object.
+	/****************************************************************
+	 * Constructor for Queen.
 	 * 
-	 * @param color the player that owns this piece
-	 */
+	 * @param color owner of the Queen
+	 ***************************************************************/
 	public Queen(final Player color) {
 		super(color);
 	}
