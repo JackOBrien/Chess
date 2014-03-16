@@ -83,4 +83,11 @@ public interface IChessGUI {
 	 ***************************************************************/
 	void pawnPromotion(int row, int col, boolean white);
 
+	/****************************************************************
+	 * Display warning that the given player is in check.
+	 * 
+	 * @param white tells if the player in check is white or not.
+	 ***************************************************************/
+	void gameInCheck(boolean white);
+
 }

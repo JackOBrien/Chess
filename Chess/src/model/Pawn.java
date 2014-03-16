@@ -189,6 +189,15 @@ public class Pawn extends ChessPiece {
 	}
 	
 	/****************************************************************
+	 * Sets what this pawn's last move was.
+	 * 
+	 * @param m last move made by this pawn.
+	 ***************************************************************/
+	public void setLastMove(Move m) {
+		lastMove = m;
+	}
+	
+	/****************************************************************
 	 * Tells if the pawn may promote.
 	 * 
 	 * @return true if the pawn may promote, false otherwise.

@@ -35,57 +35,16 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public final boolean isComplete() {
-		
-		if (!inCheck()) { return false; }
-
-		// Relative coordinates of all points around a piece
-		int[] rowList = { 0,  1,  1, 1, 0, -1, -1, -1};
-		int[] colList = {-1, -1,  0, 1, 1,  1,  0, -1};
-
-		for (Player p : Player.values()) {
-
-			// King location
-			int kingRow = board.findKing(p)[0];
-			int kingCol = board.findKing(p)[1];
-
-			for (int i = 0; i < rowList.length; i++) {
-
-				int toRow = kingRow + rowList[i];
-				int toCol = kingCol + colList[i]; 
-				
-				// Creates a move from the King to 1 space away
-				// in any direction
-				Move m = new Move(kingRow, kingCol, 
-						toRow, toCol);
-
-				if (pieceAt(kingRow, kingCol).isValidMove(m, board)) {
-					IChessBoard current = saveBoard();
-					move(m);
-
-					/* Checks if the king was able to move out of check */
-					if (!inCheck()) {
-						revertBoard(current);
-						return false;
-					}
-					revertBoard(current);
-				}
-			}
-		}
-		
-		// If the check can be blocked by a friendly piece
-		// then the game is not over 
-		return !canBlock(playerInCheck);
+		return inCheck() && !anyValidMoves(playerInCheck);
 	}
 
 	/****************************************************************
-	 * Helper method for isComplete() to check if the given King
-	 * can be protected by a friendly piece by moving to intercept
-	 * the check.
+	 * Checks if the given player can move any of it's pieces.
 	 * 
 	 * @param plr Player who's King is being protected
 	 * @return true if the King can be protected, false otherwise
 	 ***************************************************************/
-	private boolean canBlock(final Player plr) {
+	private boolean anyValidMoves(final Player plr) {
 		
 		/* Loops through board checking if each piece is
 		 * capable of blocking the check */
@@ -127,16 +86,7 @@ public class ChessModel implements IChessModel {
 				Move m = new Move(r, c, x, y);
 				
 				if (isValidMove(m)) {
-					IChessBoard current = saveBoard();
-					move(m);
-					
-					if (!inCheck()) {
-						revertBoard(current);
-						return true;
-					} else {
-						revertBoard(current);
-						return true;
-					}
+					return true;
 				}
 			}
 		}
@@ -320,6 +270,11 @@ public class ChessModel implements IChessModel {
 		return playerInCheck != null;
 	}
 
+	@Override
+	public final Player getPlayerInCheck() {
+		return playerInCheck;
+	}
+	
 	@Override
 	public final Player currentPlayer() {
 		return board.getCurrentPlayer();

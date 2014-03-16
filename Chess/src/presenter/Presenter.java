@@ -171,11 +171,12 @@ public class Presenter {
 				view.changeImage(fromRow, fromColumn, "", true);
 				view.changeImage(row, col, piece.type(), 
 						piece.player().isWhite());
+				view.deselectAll();
 				
 				// Promotion must be handled after the move
 				handlePromotion(move);
 								
-				view.deselectAll();
+				checkForCheck();
 				isPieceSelected = false;
 			}
 			
@@ -213,7 +214,6 @@ public class Presenter {
 			
 			model.getBoard().set(newPiece, tR, tC);
 			view.changeImage(tR, tC, source, playerPromoting.isWhite());
-			
 		}
 	};
 	
@@ -249,8 +249,11 @@ public class Presenter {
 
 		if (piece == null || !piece.is("Pawn")) { return; }
 		
+		Pawn p = (Pawn) piece;
+		p.setLastMove(m);
+		
 		/* Ensures the pawn has reached the end of the board */
-		if (((Pawn) piece).mayPromote()) {			
+		if (p.mayPromote()) {			
 			playerPromoting = piece.player();
 			promoMove = m;
 			
@@ -289,7 +292,7 @@ public class Presenter {
 	protected void checkForCheck() {
 		if (model.inCheck()) {
 		
-			
+			view.gameInCheck(model.getPlayerInCheck().isWhite());
 			
 			if (model.isComplete()) {
 				

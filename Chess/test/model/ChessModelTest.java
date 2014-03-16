@@ -49,6 +49,7 @@ public class ChessModelTest {
 	
 	@Test
 	public final void inCheckBlack() throws Exception {
+		model.move(new Move(6, 0, 5, 0));
 		model.move(new Move(0, 4, 4, 2));
 		model.move(new Move(7, 7, 4, 7));
 		assertTrue(model.inCheck());
@@ -212,6 +213,7 @@ public class ChessModelTest {
 		model.move(new Move(0, 0, 2, 2));
 		model.move(new Move(1, 0, 2, 0));
 		model.move(new Move(6, 0, 4, 0));
+		model.move(new Move(6, 7, 5, 7));
 		assertTrue(model.inCheck());
 		assertFalse(model.isComplete());
 	}

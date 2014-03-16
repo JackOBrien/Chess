@@ -172,8 +172,12 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		String source = e.getActionCommand();
 		String whenSelected = "Press Here";
 		
-		if (source.equals("Ok") && okButton.getText().equals(whenSelected)) {
-			dispose();
+		if (source.equals("Ok")) {
+			if(okButton.getText().equals(whenSelected)) {
+				dispose();
+			} else {
+				return;
+			}
 		}
 		
 		okButton.setText(whenSelected);		

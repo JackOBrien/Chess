@@ -70,4 +70,11 @@ public interface IChessModel {
     * @return game board used by the model.
     ***************************************************************/
    IChessBoard getBoard();
+
+   /****************************************************************
+    * Return which player is in check
+    * 
+    * @return the player who is in check.
+    ***************************************************************/
+   Player getPlayerInCheck();
 }

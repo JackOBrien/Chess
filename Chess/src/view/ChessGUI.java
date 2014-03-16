@@ -25,10 +25,12 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -48,7 +50,7 @@ public class ChessGUI implements IChessGUI {
 	private final String PATH = "images\\";
 	
 	/** Image for the white game pieces. */
-	private ImageIcon w_bish = loadIcon(PATH + "w_bish.png"),
+	private ImageIcon wBish = loadIcon(PATH + "w_bish.png"),
 	  wKing = loadIcon(PATH + "w_king.png"),
 	  wKnight = loadIcon(PATH + "w_knight.png"),
 	  wPawn = loadIcon(PATH + "w_pawn.png"),
@@ -56,7 +58,7 @@ public class ChessGUI implements IChessGUI {
 	  wRook = loadIcon(PATH + "w_rook.png");
 
 	/** Image for the black game pieces */
-	private ImageIcon b_bish = loadIcon(PATH + "b_bish.png"),
+	private ImageIcon bBish = loadIcon(PATH + "b_bish.png"),
 	 bKing = loadIcon(PATH + "b_king.png"),
 	 bKnight = loadIcon(PATH + "b_knight.png"),
 	 bPawn = loadIcon(PATH + "b_pawn.png"),
@@ -85,6 +87,7 @@ public class ChessGUI implements IChessGUI {
 	
 	private JFrame topWindow;
 	
+	LayerUI<JComponent> layerUI;
 	JLayer<JComponent> jLayer;
 	
 	private BevelOnHover mouseListener;
@@ -111,6 +114,8 @@ public class ChessGUI implements IChessGUI {
 		highlighted = new Color(214, 55, 57);
 		promotion = new Color(160, 160, 155);
 		accent = new Color(53, 28, 28);
+		
+		layerUI = new BlurLayerUI();
 		
 		mouseListener = new BevelOnHover(Color.BLACK);
 		
@@ -159,8 +164,6 @@ public class ChessGUI implements IChessGUI {
 		}
 		
 		topWindow.add(buttonPanel); 
-		topWindow.pack();
-		topWindow.setVisible(true);
 	}
 	
 	private void setupFrame() {
@@ -177,6 +180,7 @@ public class ChessGUI implements IChessGUI {
 		topWindow.pack();
 		topWindow.setResizable(false);
 		topWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		topWindow.setVisible(true);
 	}
 	
 	private void setupMenu() {
@@ -308,7 +312,7 @@ public class ChessGUI implements IChessGUI {
 			/* Assigns proper image */
 			switch(type) {
 			case "Bishop":
-				image = w_bish;
+				image = wBish;
 				break;
 			case "King":
 				image = wKing;
@@ -334,7 +338,7 @@ public class ChessGUI implements IChessGUI {
 			/* Assigns proper image */
 			switch(type) {
 			case "Bishop":
-				image = b_bish;
+				image = bBish;
 				break;
 			case "King":
 				image = bKing;
@@ -412,6 +416,24 @@ public class ChessGUI implements IChessGUI {
 		dialog.setVisible(true);
 	}
 	
+	@Override
+	public void gameInCheck(boolean white) {
+		String message = "White ";
+		ImageIcon icon = wKing;
+		int imageSize = 70;
+		
+		if (!white) {
+			message = "Black ";
+			icon = bKing;
+		}
+		message += "is in check!";
+		String title = "Check";
+		icon = resizeImage(icon, imageSize);
+		
+		JOptionPane.showMessageDialog(buttonPanel, message, title, 
+				JOptionPane.INFORMATION_MESSAGE, icon);
+	}
+	
 	private ActionListener menuListener = new ActionListener() {
 		
 		@Override
@@ -428,10 +450,10 @@ public class ChessGUI implements IChessGUI {
 	private FocusListener focusListener = new FocusListener() {
 		
 		@Override
-		public void focusLost(FocusEvent e) {			
-			LayerUI<JComponent> layerUI = new BlurLayerUI();
-			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
+		public void focusLost(FocusEvent e) {						
 			
+			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
+
 			topWindow.remove(buttonPanel);
 			topWindow.add(jLayer);
 			topWindow.validate();
