@@ -79,6 +79,8 @@ public class King extends ChessPiece {
 	 ***************************************************************/
 	private void checkifMoved(final int fR, final int fC) {
 
+		if (hasMoved) { return; }
+		
 		/* Checks if the initial location is still -1, as set 
 		 * by the constructor. */
 		if (initialRow == -1) {
@@ -173,7 +175,7 @@ public class King extends ChessPiece {
 	 ***************************************************************/
 	public final King clone() {
 		King k = new King(player());
-		k.hasMoved = hasMoved;
+		k.hasMoved = hasMoved ? true : false;
 		k.initialCol = initialCol;
 		k.initialRow = initialRow;
 		

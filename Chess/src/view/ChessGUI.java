@@ -434,6 +434,32 @@ public class ChessGUI implements IChessGUI {
 				JOptionPane.INFORMATION_MESSAGE, icon);
 	}
 	
+	@Override
+	public void gameOver(boolean white) {
+		String message = "Checkmate! ";
+		ImageIcon icon = wKing;
+		int imageSize = 70;
+		
+		if (!white) {
+			message += "Black ";
+			icon = bKing;
+		} else {
+			message += "White ";
+		}
+		message += "won the game!";
+		String title = "Game Over";
+		icon = resizeImage(icon, imageSize);
+		
+		JButton playAgain = new JButton("Play Again");
+		playAgain.setEnabled(false);
+		JButton quit = new JButton("Quit");
+		JButton[] options = {playAgain, quit};
+		
+		JOptionPane.showOptionDialog(buttonPanel, message, title, 
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon, 
+				options, quit);
+	}
+	
 	private ActionListener menuListener = new ActionListener() {
 		
 		@Override
@@ -453,7 +479,7 @@ public class ChessGUI implements IChessGUI {
 		public void focusLost(FocusEvent e) {						
 			
 			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
-
+			
 			topWindow.remove(buttonPanel);
 			topWindow.add(jLayer);
 			topWindow.validate();

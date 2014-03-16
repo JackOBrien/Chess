@@ -63,6 +63,8 @@ public class Rook extends ChessPiece {
 	 ***************************************************************/
 	public final boolean checkifMoved(final int fR, final int fC) {
 
+		if (hasMoved) { return true; }
+		
 		/* Checks if the initial location is still -1, as set 
 		 * by the constructor. */
 		if (initialRow == -1) {
@@ -148,7 +150,7 @@ public class Rook extends ChessPiece {
 	 ***************************************************************/
 	public final Rook clone() {
 		Rook r = new Rook(player());
-		r.hasMoved = hasMoved;
+		r.hasMoved = hasMoved ? true : false;
 		r.initialCol = initialCol;
 		r.initialRow = initialRow;
 		

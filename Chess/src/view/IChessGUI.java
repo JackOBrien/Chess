@@ -90,4 +90,12 @@ public interface IChessGUI {
 	 ***************************************************************/
 	void gameInCheck(boolean white);
 
+	/****************************************************************
+	 * Displays when the game is over. Asks the user if they
+	 * want to play again. If not, the game exits.
+	 * 
+	 * @param white tells if white won or not.
+	 ***************************************************************/
+	void gameOver(boolean white);
+
 }

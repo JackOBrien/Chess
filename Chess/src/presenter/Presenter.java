@@ -291,12 +291,11 @@ public class Presenter {
 	
 	protected void checkForCheck() {
 		if (model.inCheck()) {
-		
-			view.gameInCheck(model.getPlayerInCheck().isWhite());
-			
 			if (model.isComplete()) {
-				
+				view.gameOver(!model.getPlayerInCheck().isWhite());
+				return;
 			}
+			view.gameInCheck(model.getPlayerInCheck().isWhite());
 		}
 	}
 	

@@ -272,6 +272,7 @@ public class ChessModel implements IChessModel {
 
 	@Override
 	public final Player getPlayerInCheck() {
+		inCheck();
 		return playerInCheck;
 	}
 	
