@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import model.IChessPiece;
+
 /********************************************************************
  * CIS 350 - 01
  * Chess
@@ -68,5 +70,13 @@ public interface IChessGUI {
 	 * Set the color of all buttons to their regular background color.
 	 ***************************************************************/
 	void deselectAll();
+
+	/****************************************************************
+	 * @param row
+	 * @param col
+	 * @param white
+	 * @return
+	 ***************************************************************/
+	String pawnPromotion(int row, int col, boolean white);
 
 }

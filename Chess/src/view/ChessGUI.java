@@ -4,35 +4,42 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRootPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.MenuBarUI;
+import javax.swing.plaf.LayerUI;
+
+import org.omg.PortableServer.POA;
 
 import model.IChessPiece;
-import model.Player;
-import presenter.Presenter;
 
 /********************************************************************
  * CIS 350 - 01
@@ -66,34 +73,49 @@ public class ChessGUI implements IChessGUI {
 	
 	private final int IMG_SIZE = 60;
 	
+	/** The amount of extra space between the edge of the button 
+	 * and the edge of the image. Default 5. */
+	private final int BORDER_TOLERANCE = 5;
+	
 	private Color light;
 	private Color dark;
 	private Color selected;
 	private Color highlighted;
+	private Color promotion;
+	private Color accent;
 	
 	private JButton[][] board;
 	
+	private JPanel buttonPanel;
+	
 	private JFrame topWindow;
 	
+	JLayer<JComponent> jLayer;
 	
+	private BevelOnHover mouseListener;
 	
 	/****************************************************************
 	 * TODO 
 	 ***************************************************************/
 	public ChessGUI(int numRows, int numCols) {
 		topWindow = new JFrame();
-		topWindow.setLayout(new GridLayout(numRows, numCols));
 		
 		// Doesn't allow the color to change when pressed
 		UIManager.put("Button.select", Color.TRANSLUCENT);
 		
 		board = new JButton[numRows][numCols];
 		
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(numRows, numCols));
+				
 		light = new Color(196, 177, 143);
 		dark = new Color(49, 46, 40);
-//		selected = new Color(255, 179, 47);
 		selected = new Color(146, 0, 17);
 		highlighted = new Color(214, 55, 57);
+		promotion = new Color(160, 160, 155);
+		accent = new Color(53, 28, 28);
+		
+		mouseListener = new BevelOnHover(Color.BLACK);
 		
 		setupBlankBoard();
 		setupMenu();
@@ -109,16 +131,7 @@ public class ChessGUI implements IChessGUI {
 			for (int c = 0; c < board[0].length; c++) {
 				
 				// Creates the JButton with default style
-				JButton button = new JButton();
-				button.setPreferredSize(new Dimension(IMG_SIZE, IMG_SIZE));
-				button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				button.addMouseListener(mouseListner);
-				button.setOpaque(true);
-				button.setFocusable(false);
-				
-				Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
-				
-				button.setBorder(line);
+				JButton button = createDefaultButton();
 				
 				// Adds an actionCommand for the button with the
 				// coordinates of its location on the board: r,c.
@@ -136,7 +149,7 @@ public class ChessGUI implements IChessGUI {
 				button.setBackground(bg);
 				
 				board[r][c] = button;
-				topWindow.add(button);
+				buttonPanel.add(button);
 								
 				// Switches from dark to light or light to dark to 
 				// prepare for the next column.
@@ -148,6 +161,7 @@ public class ChessGUI implements IChessGUI {
 			lightSquare = !lightSquare;
 		}
 		
+		topWindow.add(buttonPanel); 
 		topWindow.pack();
 		topWindow.setVisible(true);
 	}
@@ -156,6 +170,8 @@ public class ChessGUI implements IChessGUI {
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
 		al.add(kingLogo.getImage());
+		
+		topWindow.addFocusListener(focusListener);
 		
 		topWindow.setTitle("CIS 350: Chess Game");
 		topWindow.setIconImages(al);
@@ -168,7 +184,7 @@ public class ChessGUI implements IChessGUI {
 		JMenu menu = new JMenu("File");
 		JMenuBar menuBar = new JMenuBar();
 		
-		menuBar.setBackground(new Color(53, 28, 28));
+		menuBar.setBackground(accent);
 		
 		JMenuItem item = new JMenuItem("GVSU", gvsu);
 		menu.setForeground(Color.WHITE);
@@ -180,6 +196,25 @@ public class ChessGUI implements IChessGUI {
 		menuBar.add(menu);
 		
 		topWindow.setJMenuBar(menuBar);
+	}
+	
+	private JButton createDefaultButton() {
+		return createDefaultButton(null);
+	}
+	
+	private JButton createDefaultButton(ImageIcon icon) {
+		JButton button = new JButton(icon);
+		button.setPreferredSize(new Dimension(IMG_SIZE, IMG_SIZE));
+		button.setSize(new Dimension(IMG_SIZE, IMG_SIZE));
+		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		button.addMouseListener(mouseListener);
+		button.setOpaque(true);
+		button.setFocusable(false);
+		
+		Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
+		button.setBorder(line);
+		
+		return button;
 	}
 	
 	/****************************************************************
@@ -202,22 +237,16 @@ public class ChessGUI implements IChessGUI {
 		board[row][col].setBackground(selected);
 	}
 	
+	/****************************************************************
+	 * @param row TODO
+	 * @param col
+	 ***************************************************************/
 	private void setDeselected(int row, int col) {
 		Color bg = light;
 		
-		/* Checks for even or odd row. */
-		if (row % 2 == 0) {
-			
-			/* Checks for odd column. */
-			if (col % 2 != 0) {
-				bg = dark;
-			}
-		} else {
-			
-			/* Checks for even column. */
-			if (col % 2 == 0) {
-				bg = dark;
-			}
+		/* Checks for dark square. */
+		if ((row + col) % 2 != 0) {
+			bg = dark;
 		}
 		
 		board[row][col].setBackground(bg);
@@ -241,11 +270,7 @@ public class ChessGUI implements IChessGUI {
 	public void changeImage(int row, int col, String type, boolean white) {
 		ImageIcon img = imageFinder(type, white);
 		
-		// The amount of extra space between the edge of 
-		// the button an the edge of the image. Default 5.
-		final int borderSpace = 5;
-		
-		img = resizeImage(img, IMG_SIZE - borderSpace);
+		img = resizeImage(img, IMG_SIZE);
 		
 		board[row][col].setIcon(img);
 	}
@@ -329,6 +354,8 @@ public class ChessGUI implements IChessGUI {
 	 ***************************************************************/
 	private ImageIcon resizeImage(ImageIcon icon, int size) {
 		
+		size -= BORDER_TOLERANCE;
+		
 		if (icon == null) { return icon; }
 		
 		Image img = icon.getImage();
@@ -338,42 +365,123 @@ public class ChessGUI implements IChessGUI {
 		return new ImageIcon(resized);
 	}
 	
-	/** Adds new outlines to buttons when they're being interacted with. */
-	private MouseListener mouseListner = new MouseListener() {
+	private FocusListener focusListener = new FocusListener() {
 		
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			JButton button = (JButton) e.getComponent();
+		public void focusLost(FocusEvent e) {			
+			Dimension d = topWindow.getSize();
 			
-			Border border = BorderFactory.createRaisedSoftBevelBorder();
-			button.setBorder(border);
+			LayerUI<JComponent> layerUI = new BlurLayerUI();
+			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
+			
+			topWindow.remove(buttonPanel);
+			topWindow.add(jLayer);
+			topWindow.validate();
 		}
 		
 		@Override
-		public void mousePressed(MouseEvent e) {
-			JButton button = (JButton) e.getComponent();	
+		public void focusGained(FocusEvent e) {
+			Dimension d = topWindow.getSize();
 			
-			Border border = BorderFactory.createLoweredSoftBevelBorder();
-			button.setBorder(border);
+			try {
+				topWindow.remove(jLayer);
+			} catch (NullPointerException exc) { }
+			topWindow.add(buttonPanel);
+			topWindow.pack();
+			topWindow.setSize(d);
 		}
-		
-		@Override
-		public void mouseExited(MouseEvent e) {
-			JButton button = (JButton) e.getComponent();
-			
-			Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
-			button.setBorder(line);
-		}
-		
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			JButton button = (JButton) e.getComponent();
-			
-			Border border = BorderFactory.createRaisedSoftBevelBorder();
-			button.setBorder(border);
-		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e) { }
 	};
+
+	@Override
+	public String pawnPromotion(int row, int col, boolean white) {
+		PromotionDialog dialog = new PromotionDialog(white, promotion, accent);
+		
+		// Find all relevant images
+		ImageIcon rookIcon = imageFinder("Rook", white);
+		ImageIcon knightIcon = imageFinder("Knight", white);
+		ImageIcon bishopIcon = imageFinder("Bishop", white);
+		ImageIcon queenIcon = imageFinder("Queen", white);
+		
+		// Re-size all found images
+		rookIcon = resizeImage(rookIcon, PromotionDialog.IMAGE_SIZE);
+		knightIcon = resizeImage(knightIcon, PromotionDialog.IMAGE_SIZE);
+		bishopIcon = resizeImage(bishopIcon, PromotionDialog.IMAGE_SIZE);
+		queenIcon = resizeImage(queenIcon, PromotionDialog.IMAGE_SIZE);
+		
+		// Set all relevant images for the dialog 
+		dialog.setRookImage(rookIcon);
+		dialog.setKnightImage(knightIcon);
+		dialog.setBishopImage(bishopIcon);
+		dialog.setQueenImage(queenIcon);
+						
+		int direction = white ? 1 : -1;
+		int offset = IMG_SIZE + 4;
+		
+		dialog.setLocationRelativeTo(board[row][col]);
+		int x = (int) dialog.getLocation().getX();
+		int y = (int) dialog.getLocation().getY();
+		y += offset * direction;
+		dialog.setLocation(x, y);
+		
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.setVisible(true);
+		
+		String type = dialog.getSelectedPiece();
+		
+		return type;
+	}
 }
+
+/********************************************************************
+ * CIS 350 - 01
+ * Chess
+ *
+ * Will blur the panel it is applied to.
+ *
+ * @author http://docs.oracle.com/javase/tutorial/uiswing/misc/jlayer.html
+ * @version Mar 15, 2014
+ *******************************************************************/
+class BlurLayerUI extends LayerUI<JComponent> {
+	private static final long serialVersionUID = 1L;
+	private BufferedImage mOffscreenImage;
+	private BufferedImageOp mOperation;
+
+	public BlurLayerUI() {
+		float amount = 0.4f / 11.0f;
+		float[] blurKernel = {
+				amount, amount, amount,
+				amount, amount, amount,
+				amount, amount, amount
+		};
+		mOperation = new ConvolveOp(
+				new Kernel(3, 3, blurKernel),
+				ConvolveOp.EDGE_NO_OP, null);
+	}
+
+	@Override
+	public void paint (Graphics g, JComponent c) {
+		int w = c.getWidth();
+		int h = c.getHeight();
+
+		if (w == 0 || h == 0) {
+			return;
+		}
+
+		// Only create the offscreen image if the one we have
+		// is the wrong size.
+		if (mOffscreenImage == null ||
+				mOffscreenImage.getWidth() != w ||
+				mOffscreenImage.getHeight() != h) {
+			mOffscreenImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		}
+
+		Graphics2D ig2 = mOffscreenImage.createGraphics();
+		ig2.setClip(g.getClip());
+		super.paint(ig2, c);
+		ig2.dispose();
+
+		Graphics2D g2 = (Graphics2D)g;
+		g2.drawImage(mOffscreenImage, mOperation, 0, 0);
+	}
+}
+

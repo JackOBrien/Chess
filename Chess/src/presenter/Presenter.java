@@ -5,11 +5,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import view.IChessGUI;
+import model.Bishop;
 import model.IChessModel;
 import model.IChessPiece;
+import model.Knight;
 import model.Move;
 import model.Pawn;
 import model.Player;
+import model.Queen;
+import model.Rook;
 
 /********************************************************************
  * CIS 350 - 01
@@ -66,12 +70,13 @@ public class Presenter {
 				// The ChessPiece at the current location and its descriptors.
 				IChessPiece piece = model.pieceAt(r, c);
 				String type = "";
-				Boolean white = true;
+				
+				boolean white = false;
 				
 				/* Null check */
 				if (piece != null) {
 					type = piece.type();
-					white = piece.player() == Player.WHITE;
+					white = piece.player().isWhite();
 				}
 				
 				view.changeImage(r, c, type, white);
@@ -110,6 +115,7 @@ public class Presenter {
 			
 			IChessPiece piece = model.pieceAt(row, col);
 			
+
 			/* Checks if the player is choosing a piece or its destination. */
 			if (!isPieceSelected) {
 				
@@ -126,6 +132,7 @@ public class Presenter {
 				isPieceSelected = true;
 				highlightValidMoves(row, col);
 				
+//				view.pawnPromotion(row, col, true); // TODO: Remove this
 
 				return;
 				
@@ -150,15 +157,18 @@ public class Presenter {
 				
 				/* There is no action if the move is not valid */
 				if (!model.isValidMove(move)) { return; }
-				
-				boolean white = piece.player() == Player.WHITE;
-								
+												
+				// Handles special moves
 				handleEnPassant(move);
 				handleCastle(move);
+				boolean promoted = handlePromotion(move);
 				
-				model.move(move);
+				if (!promoted) {
+					model.move(move);
+				}
 				view.changeImage(fromRow, fromColumn, "", true);
-				view.changeImage(row, col, piece.type(), white);
+				view.changeImage(row, col, piece.type(), 
+						piece.player().isWhite());
 								
 				view.deselectAll();
 				isPieceSelected = false;
@@ -188,6 +198,51 @@ public class Presenter {
 	}
 	
 	/****************************************************************
+	 * If a pawn reaches the end of the board, they much choose 
+	 * a new piece to promote the pawn to.
+	 * 
+	 * @param m the move being attempted.
+	 * @return 
+	 ***************************************************************/
+	protected boolean handlePromotion(Move m) {
+		IChessPiece piece = model.pieceAt(m.fromRow(), m.fromColumn());
+
+		if (piece == null || !piece.is("Pawn")) { return false; }
+		
+		Player plr = piece.player();
+		
+		/* Ensures the pawn has reached the end of the board */
+		if (((Pawn) piece).mayPromote()) {
+			IChessPiece newPiece;
+			String type = view.pawnPromotion(m.toRow(), m.toColumn(), 
+					plr.isWhite());
+			
+			switch (type) {
+			case "Rook":
+				newPiece = new Rook(plr);
+				break;
+			case "Knight":
+				newPiece = new Knight(plr);
+				break;
+			case "Bishop":
+				newPiece = new Bishop(plr);
+				break;
+			case "Queen":
+				newPiece = new Queen(plr);
+				break;
+			default:
+				newPiece = null;
+				break;
+			}
+			
+			model.move(m);
+			model.getBoard().set(newPiece, m.toRow(), m.toColumn());
+			return true;
+		}
+		return false;
+	}
+
+	/****************************************************************
 	 * If a piece performs a Castle, it will remove the piece
 	 * that was attacked from the board.
 	 * 
@@ -208,12 +263,10 @@ public class Presenter {
 		if (direction == 1) {
 			rookColumn = model.getBoard().numColumns() - 1;
 		} 
-		
-		boolean white = piece.player() == Player.WHITE;
-		
+				
 		view.changeImage(move.fromRow(), rookColumn, "", false);
 		view.changeImage(move.fromRow(), move.fromColumn() + direction, 
-				"Rook", white);
+				"Rook", piece.player().isWhite());
 	}
 	
 }

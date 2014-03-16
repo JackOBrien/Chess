@@ -29,4 +29,8 @@ public enum Player {
 	public Player next() {
 		return this == BLACK ? WHITE : BLACK;
 	}
+	
+	public boolean isWhite() {
+		return this == WHITE;
+	}
 }
