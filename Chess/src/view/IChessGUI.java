@@ -1,12 +1,8 @@
 package view;
 
-import java.awt.Color;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-
-import model.IChessPiece;
 
 /********************************************************************
  * CIS 350 - 01
@@ -47,6 +43,14 @@ public interface IChessGUI {
 	 * @param mh the ActionListner to handle moves.
 	 ***************************************************************/
 	void setMoveHandler(ActionListener mh);
+	
+	/****************************************************************
+	 * Adds an ActionListner to the different promotion options
+	 * used when a pawn promotes.
+	 * 
+	 * @param ph the ActionListner to handle promotion.
+	 ***************************************************************/
+	void setPromotionHandler(ActionListener ph);
 
 	/****************************************************************
 	 * Changes the background color of the piece at the given location
@@ -73,10 +77,10 @@ public interface IChessGUI {
 
 	/****************************************************************
 	 * @param row
-	 * @param col
+	 * @param col TODO
 	 * @param white
 	 * @return
 	 ***************************************************************/
-	String pawnPromotion(int row, int col, boolean white);
+	void pawnPromotion(int row, int col, boolean white);
 
 }

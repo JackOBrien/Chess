@@ -48,19 +48,10 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	
 	private boolean white;
 	
-	private boolean pieceSelected;
-	
-	private String selectedPiece;
-	
-	private int row;
-	private int col;
-	
 	public PromotionDialog(boolean w, Color promo, Color acc) {		
 		mouseListener = new BevelOnHover(Color.WHITE);
 		
 		white = w;
-		pieceSelected = false;
-		selectedPiece = "";
 		
 		rook = createDefaultButton(promo);
 		knight = createDefaultButton(promo);
@@ -71,6 +62,12 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		okButton.setText("Choose a piece for promotion");
 		okButton.setPreferredSize(new Dimension(20, 22));
 		okButton.setForeground(Color.WHITE);
+		
+		rook.addActionListener(this);
+		knight.addActionListener(this);
+		bishop.addActionListener(this);
+		queen.addActionListener(this);
+		okButton.addActionListener(this);
 		
 		setLayout(new BorderLayout());
 		
@@ -97,6 +94,13 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	private void setUpPanel() {
 		optionsPanel = new JPanel(new GridLayout(1, NUM_OPTIONS));
 		
+		// SetActionCommand for all buttons
+		rook.setActionCommand("Rook");
+		knight.setActionCommand("Knight");
+		bishop.setActionCommand("Bishop");
+		queen.setActionCommand("Queen");
+		okButton.setActionCommand("Ok");
+		
 		// Add all found images to the panel
 		optionsPanel.add(rook);
 		optionsPanel.add(knight);
@@ -109,7 +113,6 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		JButton button = new JButton();
 		button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		button.addActionListener(this);
 		button.addMouseListener(mouseListener);
 		button.setBackground(bg);
 		button.setOpaque(true);
@@ -157,45 +160,22 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		queen.setIcon(q);
 	}
 	
-	public void setPieceLocation(int row, int col) {
-		this.row = row;
-		this.col = col;
+	public void setActionListener(ActionListener al) {
+		rook.addActionListener(al);
+		knight.addActionListener(al);
+		bishop.addActionListener(al);
+		queen.addActionListener(al);
 	}
-	
-	public String getSelectedPiece() {
-		return selectedPiece;
-	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton source = (JButton) e.getSource();
-				
-		if (source == okButton) {
-			if (pieceSelected) {
-				dispose();
-			}
-			
-			else return;
+		String source = e.getActionCommand();
+		String whenSelected = "Press Here";
+		
+		if (source.equals("Ok") && okButton.getText().equals(whenSelected)) {
+			dispose();
 		}
 		
-		if (source == rook) {
-			selectedPiece = "Rook";
-		}
-
-		if (source == knight) {
-			selectedPiece = "Knight";
-		}
-
-		if (source == bishop) {
-			selectedPiece = "Bishop";
-		}
-
-		if (source == queen) {
-			selectedPiece = "Queen";
-		}
-		
-		pieceSelected = true;
-		okButton.setText("Press Here");
+		okButton.setText(whenSelected);		
 	}
-
 }

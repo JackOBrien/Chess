@@ -1,6 +1,5 @@
 package presenter;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -32,6 +31,12 @@ public class Presenter {
 	/** Location of the last selected piece: "r,c" */
 	private String selectedPiece;
 	
+	/** The player who is promoting a piece */
+	private Player playerPromoting;
+	
+	/** The most recent move to promote a piece */
+	private Move promoMove;
+	
 	private IChessModel model;
 	private IChessGUI view;
 	
@@ -50,6 +55,7 @@ public class Presenter {
 		
 		convertBoardIntoButtons();
 		view.setMoveHandler(moveHandler);
+		view.setPromotionHandler(promotionHandler);
 	}
 	
 	/****************************************************************
@@ -132,8 +138,6 @@ public class Presenter {
 				isPieceSelected = true;
 				highlightValidMoves(row, col);
 				
-//				view.pawnPromotion(row, col, true); // TODO: Remove this
-
 				return;
 				
 			} else {
@@ -161,14 +165,15 @@ public class Presenter {
 				// Handles special moves
 				handleEnPassant(move);
 				handleCastle(move);
-				boolean promoted = handlePromotion(move);
 				
-				if (!promoted) {
-					model.move(move);
-				}
+				model.move(move);
+				
 				view.changeImage(fromRow, fromColumn, "", true);
 				view.changeImage(row, col, piece.type(), 
 						piece.player().isWhite());
+				
+				// Promotion must be handled after the move
+				handlePromotion(move);
 								
 				view.deselectAll();
 				isPieceSelected = false;
@@ -177,6 +182,41 @@ public class Presenter {
 		}
 	};
 
+	private ActionListener promotionHandler = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String source = e.getActionCommand();
+			
+			IChessPiece newPiece;
+			
+			switch (source) {
+			case "Rook":
+				newPiece = new Rook(playerPromoting);
+				break;
+			case "Knight":
+				newPiece = new Knight(playerPromoting);
+				break;
+			case "Bishop":
+				newPiece = new Bishop(playerPromoting);
+				break;
+			case "Queen":
+				newPiece = new Queen(playerPromoting);
+				break;
+			default:
+				newPiece = null;
+				break;
+			}
+			
+			int tR = promoMove.toRow();
+			int tC = promoMove.toColumn();
+			
+			model.getBoard().set(newPiece, tR, tC);
+			view.changeImage(tR, tC, source, playerPromoting.isWhite());
+			
+		}
+	};
+	
 	/****************************************************************
 	 * If a piece performs enPassant, it will remove the piece
 	 * that was attacked from the board.
@@ -204,42 +244,19 @@ public class Presenter {
 	 * @param m the move being attempted.
 	 * @return 
 	 ***************************************************************/
-	protected boolean handlePromotion(Move m) {
-		IChessPiece piece = model.pieceAt(m.fromRow(), m.fromColumn());
+	protected void handlePromotion(Move m) {
+		IChessPiece piece = model.pieceAt(m.toRow(), m.toColumn());
 
-		if (piece == null || !piece.is("Pawn")) { return false; }
-		
-		Player plr = piece.player();
+		if (piece == null || !piece.is("Pawn")) { return; }
 		
 		/* Ensures the pawn has reached the end of the board */
-		if (((Pawn) piece).mayPromote()) {
-			IChessPiece newPiece;
-			String type = view.pawnPromotion(m.toRow(), m.toColumn(), 
-					plr.isWhite());
+		if (((Pawn) piece).mayPromote()) {			
+			playerPromoting = piece.player();
+			promoMove = m;
 			
-			switch (type) {
-			case "Rook":
-				newPiece = new Rook(plr);
-				break;
-			case "Knight":
-				newPiece = new Knight(plr);
-				break;
-			case "Bishop":
-				newPiece = new Bishop(plr);
-				break;
-			case "Queen":
-				newPiece = new Queen(plr);
-				break;
-			default:
-				newPiece = null;
-				break;
-			}
-			
-			model.move(m);
-			model.getBoard().set(newPiece, m.toRow(), m.toColumn());
-			return true;
+			view.pawnPromotion(m.toRow(), m.toColumn(), 
+					playerPromoting.isWhite());
 		}
-		return false;
 	}
 
 	/****************************************************************
@@ -267,6 +284,17 @@ public class Presenter {
 		view.changeImage(move.fromRow(), rookColumn, "", false);
 		view.changeImage(move.fromRow(), move.fromColumn() + direction, 
 				"Rook", piece.player().isWhite());
+	}
+	
+	protected void checkForCheck() {
+		if (model.inCheck()) {
+		
+			
+			
+			if (model.isComplete()) {
+				
+			}
+		}
 	}
 	
 }

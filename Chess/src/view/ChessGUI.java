@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
@@ -27,7 +25,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -36,10 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
-
-import org.omg.PortableServer.POA;
-
-import model.IChessPiece;
 
 /********************************************************************
  * CIS 350 - 01
@@ -70,6 +63,7 @@ public class ChessGUI implements IChessGUI {
 	
 	private ImageIcon gvsu = loadIcon("images\\GVSUlogoSmall.png");
 	private ImageIcon kingLogo = loadIcon("images\\kingIconLarge.png");
+	private ImageIcon exit = loadIcon("images\\exit.png");
 	
 	private final int IMG_SIZE = 60;
 	
@@ -93,6 +87,8 @@ public class ChessGUI implements IChessGUI {
 	JLayer<JComponent> jLayer;
 	
 	private BevelOnHover mouseListener;
+	
+	private ActionListener promotionListener;
 	
 	/****************************************************************
 	 * TODO 
@@ -181,19 +177,23 @@ public class ChessGUI implements IChessGUI {
 	}
 	
 	private void setupMenu() {
-		JMenu menu = new JMenu("File");
+		JMenu fileMenu = new JMenu("File");
 		JMenuBar menuBar = new JMenuBar();
 		
 		menuBar.setBackground(accent);
 		
-		JMenuItem item = new JMenuItem("GVSU", gvsu);
-		menu.setForeground(Color.WHITE);
+		JMenuItem exitItem = new JMenuItem("Exit");
+		exitItem.setIcon(resizeImage(exit, 20));
+		exitItem.addActionListener(menuListener);
+		exitItem.setActionCommand("Exit");
+		
+		fileMenu.setForeground(Color.WHITE);
 		
 		menuBar.setLayout(new BorderLayout());
 		menuBar.setBorderPainted(false);
 		
-		menu.add(item);
-		menuBar.add(menu);
+		fileMenu.add(exitItem);
+		menuBar.add(fileMenu);
 		
 		topWindow.setJMenuBar(menuBar);
 	}
@@ -223,13 +223,34 @@ public class ChessGUI implements IChessGUI {
 	 * @param name Name of the file.
 	 * @return the requested image.
 	 ***************************************************************/
-	public static  ImageIcon loadIcon(String name) {
+	private static  ImageIcon loadIcon(String name) {
 		java.net.URL imgURL = ChessGUI.class.getResource(name);
 		if (imgURL == null) {
 			throw new RuntimeException("Icon resource not found.");
 		}  
 
 		return new ImageIcon(imgURL);
+	}
+	
+
+	/****************************************************************
+	 * Takes an ImageIcon and changes its size.
+	 * 
+	 * @param icon the ImageIcon to be changed.
+	 * @param size the new width and height of the image.
+	 * @return the resized ImageIcon.
+	 ***************************************************************/
+	private ImageIcon resizeImage(ImageIcon icon, int size) {
+		
+		size -= BORDER_TOLERANCE;
+		
+		if (icon == null) { return icon; }
+		
+		Image img = icon.getImage();
+				
+		Image resized = img.getScaledInstance(size, size, 
+				Image.SCALE_AREA_AVERAGING);
+		return new ImageIcon(resized);
 	}
 
 	@Override
@@ -345,32 +366,66 @@ public class ChessGUI implements IChessGUI {
 		}
 	}
 	
-	/****************************************************************
-	 * Takes an ImageIcon and changes its size.
-	 * 
-	 * @param icon the ImageIcon to be changed.
-	 * @param size the new width and height of the image.
-	 * @return the resized ImageIcon.
-	 ***************************************************************/
-	private ImageIcon resizeImage(ImageIcon icon, int size) {
-		
-		size -= BORDER_TOLERANCE;
-		
-		if (icon == null) { return icon; }
-		
-		Image img = icon.getImage();
-				
-		Image resized = img.getScaledInstance(size, size, 
-				Image.SCALE_AREA_AVERAGING);
-		return new ImageIcon(resized);
+	@Override
+	public void setPromotionHandler(ActionListener ph) {
+		promotionListener = ph;
 	}
+	
+	@Override
+	public void pawnPromotion(int row, int col, boolean white) {
+		PromotionDialog dialog = new PromotionDialog(white, promotion, accent);
+		
+		// Find all relevant images
+		ImageIcon rookIcon = imageFinder("Rook", white);
+		ImageIcon knightIcon = imageFinder("Knight", white);
+		ImageIcon bishopIcon = imageFinder("Bishop", white);
+		ImageIcon queenIcon = imageFinder("Queen", white);
+		
+		// Re-size all found images
+		rookIcon = resizeImage(rookIcon, PromotionDialog.IMAGE_SIZE);
+		knightIcon = resizeImage(knightIcon, PromotionDialog.IMAGE_SIZE);
+		bishopIcon = resizeImage(bishopIcon, PromotionDialog.IMAGE_SIZE);
+		queenIcon = resizeImage(queenIcon, PromotionDialog.IMAGE_SIZE);
+		
+		// Set all relevant images for the dialog 
+		dialog.setRookImage(rookIcon);
+		dialog.setKnightImage(knightIcon);
+		dialog.setBishopImage(bishopIcon);
+		dialog.setQueenImage(queenIcon);
+		
+		// Add the ActionListener to the dialog's buttons
+		dialog.setActionListener(promotionListener);
+						
+		int direction = white ? 1 : -1;
+		int offset = IMG_SIZE + 4;
+		
+		dialog.setLocationRelativeTo(board[row][col]);
+		int x = (int) dialog.getLocation().getX();
+		int y = (int) dialog.getLocation().getY();
+		y += offset * direction;
+		dialog.setLocation(x, y);
+		
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.setVisible(true);
+	}
+	
+	private ActionListener menuListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String source = e.getActionCommand();
+			
+			if (source.equals("Exit")) {
+				System.exit(0);
+			}
+			
+		}
+	};
 	
 	private FocusListener focusListener = new FocusListener() {
 		
 		@Override
 		public void focusLost(FocusEvent e) {			
-			Dimension d = topWindow.getSize();
-			
 			LayerUI<JComponent> layerUI = new BlurLayerUI();
 			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
 			
@@ -391,45 +446,6 @@ public class ChessGUI implements IChessGUI {
 			topWindow.setSize(d);
 		}
 	};
-
-	@Override
-	public String pawnPromotion(int row, int col, boolean white) {
-		PromotionDialog dialog = new PromotionDialog(white, promotion, accent);
-		
-		// Find all relevant images
-		ImageIcon rookIcon = imageFinder("Rook", white);
-		ImageIcon knightIcon = imageFinder("Knight", white);
-		ImageIcon bishopIcon = imageFinder("Bishop", white);
-		ImageIcon queenIcon = imageFinder("Queen", white);
-		
-		// Re-size all found images
-		rookIcon = resizeImage(rookIcon, PromotionDialog.IMAGE_SIZE);
-		knightIcon = resizeImage(knightIcon, PromotionDialog.IMAGE_SIZE);
-		bishopIcon = resizeImage(bishopIcon, PromotionDialog.IMAGE_SIZE);
-		queenIcon = resizeImage(queenIcon, PromotionDialog.IMAGE_SIZE);
-		
-		// Set all relevant images for the dialog 
-		dialog.setRookImage(rookIcon);
-		dialog.setKnightImage(knightIcon);
-		dialog.setBishopImage(bishopIcon);
-		dialog.setQueenImage(queenIcon);
-						
-		int direction = white ? 1 : -1;
-		int offset = IMG_SIZE + 4;
-		
-		dialog.setLocationRelativeTo(board[row][col]);
-		int x = (int) dialog.getLocation().getX();
-		int y = (int) dialog.getLocation().getY();
-		y += offset * direction;
-		dialog.setLocation(x, y);
-		
-		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		dialog.setVisible(true);
-		
-		String type = dialog.getSelectedPiece();
-		
-		return type;
-	}
 }
 
 /********************************************************************
