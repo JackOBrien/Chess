@@ -213,4 +213,23 @@ public class Pawn extends ChessPiece {
 	public final int getStartingRow() {
 		return startingRow;
 	}
+	
+	/****************************************************************
+	 * Clones this Pawn.
+	 * 
+	 * @return a deep copy of this Pawn.
+	 ***************************************************************/
+	public final Pawn clone() {
+		Pawn p = new Pawn(player());
+		p.gamePosition = gamePosition;
+		p.movedTwice = movedTwice;
+		
+		if (lastMove == null) {
+			p.lastMove = null;
+		} else {
+			p.lastMove = lastMove.clone();
+		}
+		
+		return p;
+	}
 }

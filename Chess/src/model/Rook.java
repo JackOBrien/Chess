@@ -140,4 +140,18 @@ public class Rook extends ChessPiece {
 		
 		return true;
 	}
+	
+	/****************************************************************
+	 * Clones this Rook.
+	 * 
+	 * @return a deep copy of this Rook.
+	 ***************************************************************/
+	public final Rook clone() {
+		Rook r = new Rook(player());
+		r.hasMoved = hasMoved;
+		r.initialCol = initialCol;
+		r.initialRow = initialRow;
+		
+		return r;
+	}
 }

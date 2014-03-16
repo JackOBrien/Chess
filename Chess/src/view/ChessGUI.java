@@ -45,25 +45,26 @@ import javax.swing.plaf.LayerUI;
  *******************************************************************/
 public class ChessGUI implements IChessGUI {
 
+	private final String PATH = "images\\";
+	
 	/** Image for the white game pieces. */
-	private ImageIcon w_bish = loadIcon("images\\w_bish.png"),
-	  wKing = loadIcon("images\\w_king.png"),
-	  wKnight = loadIcon("images\\w_knight.png"),
-	  wPawn = loadIcon("images\\w_pawn.png"),
-	  wQueen = loadIcon("images\\w_queen.png"),
-	  wRook = loadIcon("images\\w_rook.png");
+	private ImageIcon w_bish = loadIcon(PATH + "w_bish.png"),
+	  wKing = loadIcon(PATH + "w_king.png"),
+	  wKnight = loadIcon(PATH + "w_knight.png"),
+	  wPawn = loadIcon(PATH + "w_pawn.png"),
+	  wQueen = loadIcon(PATH + "w_queen.png"),
+	  wRook = loadIcon(PATH + "w_rook.png");
 
 	/** Image for the black game pieces */
-	private ImageIcon b_bish = loadIcon("images\\b_bish.png"),
-	 bKing = loadIcon("images\\b_king.png"),
-	 bKnight = loadIcon("images\\b_knight.png"),
-	 bPawn = loadIcon("images\\b_pawn.png"),
-	 bQueen = loadIcon("images\\b_queen.png"),
-	 bRook = loadIcon("images\\b_rook.png");
+	private ImageIcon b_bish = loadIcon(PATH + "b_bish.png"),
+	 bKing = loadIcon(PATH + "b_king.png"),
+	 bKnight = loadIcon(PATH + "b_knight.png"),
+	 bPawn = loadIcon(PATH + "b_pawn.png"),
+	 bQueen = loadIcon(PATH + "b_queen.png"),
+	 bRook = loadIcon(PATH + "b_rook.png");
 	
-	private ImageIcon gvsu = loadIcon("images\\GVSUlogoSmall.png");
-	private ImageIcon kingLogo = loadIcon("images\\kingIconLarge.png");
-	private ImageIcon exit = loadIcon("images\\exit.png");
+	private ImageIcon gvsu = loadIcon(PATH + "GVSUlogoSmall.png");
+	private ImageIcon exit = loadIcon(PATH + "exit.png");
 	
 	private final int IMG_SIZE = 60;
 	
@@ -163,9 +164,11 @@ public class ChessGUI implements IChessGUI {
 	}
 	
 	private void setupFrame() {
+		int kingLogoSize = 50;
+		
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
-		al.add(kingLogo.getImage());
+		al.add(resizeImage(wKing, kingLogoSize).getImage());
 		
 		topWindow.addFocusListener(focusListener);
 		

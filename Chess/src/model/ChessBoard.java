@@ -313,11 +313,11 @@ public class ChessBoard implements IChessBoard {
 		String type = p.type();
 		
 		if (type.equals("Pawn")) {
-			b[r][c] = (Pawn)p;
+			b[r][c] = ((Pawn)p).clone();
 		}
 
 		if (type.equals("Rook")) {
-			b[r][c] = (Rook)p;
+			b[r][c] = ((Rook)p).clone();
 		}
 
 		if (type.equals("Bishop")) {
@@ -334,7 +334,7 @@ public class ChessBoard implements IChessBoard {
 
 		/* The king also records the location of the kings */
 		if (type.equals("King")) {
-			b[r][c] = (King)p;
+			b[r][c] = ((King)p).clone();
 			int [] location = {r, c};
 			setKing(plr, location);
 		}

@@ -69,4 +69,16 @@ public class Move {
 	public final int toColumn() {
 		return toColumn;
 	}
+	
+	/****************************************************************
+	 * @return a deep copy of this Move object.
+	 ***************************************************************/
+	public final Move clone() {
+		Move m = new Move(fromRow, 
+				fromColumn, 
+				toRow, 
+				toColumn);
+		
+		return m;
+	}
 }

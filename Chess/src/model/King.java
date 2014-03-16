@@ -165,4 +165,18 @@ public class King extends ChessPiece {
 			
 		} else { return null; }
 	}
+	
+	/****************************************************************
+	 * Clones this King.
+	 * 
+	 * @return a deep copy of this King.
+	 ***************************************************************/
+	public final King clone() {
+		King k = new King(player());
+		k.hasMoved = hasMoved;
+		k.initialCol = initialCol;
+		k.initialRow = initialRow;
+		
+		return k;
+	}
 }
