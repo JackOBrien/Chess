@@ -30,22 +30,44 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	/** Default serial version UID. */
 	private static final long serialVersionUID = 1L;
 
+	/** Button for the Rook option. */
 	private JButton rook;
+	
+	/** Button for the Knight option. */
 	private JButton knight;
+	
+	/** Button for the Bishop option. */
 	private JButton bishop;
+	
+	/** Button for the Queen option. */
 	private JButton queen;
+	
+	/** Button to confirm selection. */
 	private JButton okButton;
 	
+	/** MouseListener that will bevel buttons when interacted with. */
 	private BevelOnHover mouseListener;
 
-	private final int NUM_OPTIONS = 4;
+	/** Number of pieces that the pawn can be promoted to. */
+	private final int numOptions = 4;
 	
+	/** Panel with the pieces (options) on it. */
 	private JPanel optionsPanel;
 	
+	/** Tells if the player promoting is white. */
 	private boolean white;
 	
+	/** The size of the buttons. */
 	private int size;
 	
+	/****************************************************************
+	 * Constructor for the promotion dialog.
+	 * 
+	 * @param w tells is the piece is white.
+	 * @param size the size of the images.
+	 * @param promo the background color for the pieces.
+	 * @param acc the color for the ok button.
+	 ***************************************************************/
 	public PromotionDialog(boolean w, int size, Color promo, Color acc) {		
 		mouseListener = new BevelOnHover(Color.WHITE);
 		
@@ -101,7 +123,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * TODO
 	 ***************************************************************/
 	private void setUpPanel() {
-		optionsPanel = new JPanel(new GridLayout(1, NUM_OPTIONS));
+		optionsPanel = new JPanel(new GridLayout(1, numOptions));
 		
 		// SetActionCommand for all buttons
 		rook.setActionCommand("Rook");
@@ -118,6 +140,12 @@ public class PromotionDialog extends JDialog implements ActionListener {
 
 	}
 
+	/****************************************************************
+	 * Creates and returns a default with the given background color.
+	 * 
+	 * @param bg the background color of the button.
+	 * @return a default with the given background color.
+	 ***************************************************************/
 	private JButton createDefaultButton(Color bg) {
 		JButton button = new JButton();
 		button.setPreferredSize(new Dimension(size, size));
@@ -169,6 +197,12 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		queen.setIcon(q);
 	}
 	
+	/****************************************************************
+	 * Sets the ActionListener for all of the options (all buttons
+	 * except for the ok button).
+	 * 
+	 * @param al the ActionListener to set.
+	 ***************************************************************/
 	public void setActionListener(ActionListener al) {
 		rook.addActionListener(al);
 		knight.addActionListener(al);
@@ -182,7 +216,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		String whenSelected = "Press Here";
 		
 		if (source.equals("Ok")) {
-			if(okButton.getText().equals(whenSelected)) {
+			if (okButton.getText().equals(whenSelected)) {
 				dispose();
 			} else {
 				return;

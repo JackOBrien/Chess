@@ -611,7 +611,7 @@ class BlurLayerUI extends LayerUI<JComponent> {
 			return;
 		}
 
-		// Only create the offscreen image if the one we have
+		// Only create the off-screen image if the one we have
 		// is the wrong size.
 		if (mOffscreenImage == null 
 				|| mOffscreenImage.getWidth() != w 

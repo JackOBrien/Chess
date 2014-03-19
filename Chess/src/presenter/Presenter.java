@@ -37,7 +37,10 @@ public class Presenter {
 	/** The most recent move to promote a piece */
 	private Move promoMove;
 	
+	/** The Model containing and operating the game logic. */
 	private IChessModel model;
+	
+	/** The View displaying the game and accepting user interaction. */
 	private IChessGUI view;
 	
 	/****************************************************************
@@ -90,17 +93,20 @@ public class Presenter {
 		}
 	}
 	
+	/****************************************************************
+	 * Highlights all valid moves on the board that the piece at the
+	 * given location can make.
+	 * 
+	 * @param row row location of the piece.
+	 * @param col column location of the piece.
+	 ***************************************************************/
 	private void highlightValidMoves(int row, int col) {
 		int size = model.numRows();
 		
 		for (int r = 0; r < size; r++) {
 			for (int c = 0; c < size; c++) {
 				Move m = new Move(row, col, r, c);
-				
-				if (r == 5 && c == 4) {
-					model.isValidMove(m);
-				}
-				
+
 				if (model.isValidMove(m)) {
 					view.setHighlighted(r, c);
 				}
@@ -183,6 +189,8 @@ public class Presenter {
 		}
 	};
 
+	/** Updated the model and view each time a new piece is selected for
+	 * promotion. */
 	private ActionListener promotionHandler = new ActionListener() {
 		
 		@Override
@@ -286,6 +294,9 @@ public class Presenter {
 				"Rook", piece.player().isWhite());
 	}
 	
+	/****************************************************************
+	 * Will check the game to see if it is in check or checkmate.
+	 ***************************************************************/
 	protected void checkForCheck() {
 		if (model.inCheck()) {
 			if (model.isComplete()) {
