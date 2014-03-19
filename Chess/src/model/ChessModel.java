@@ -23,6 +23,7 @@ public class ChessModel implements IChessModel {
 	/** Tells which player is in check. */
 	private Player playerInCheck;
 	
+	/** Tells if the attempted move put both players in check. */
 	private boolean bothPlayersInCheck;
 
 	/****************************************************************
@@ -307,7 +308,17 @@ public class ChessModel implements IChessModel {
 	}
 	
 	@Override
-	public final IChessBoard getBoard() {
-		return board;
+	public final int numRows() {
+		return board.numRows();
+	}
+	
+	@Override
+	public final int numColumns() {
+		return board.numColumns();
+	}
+
+	@Override
+	public final void set(final IChessPiece p, final int row, final int col) {
+		board.set(p, row, col);
 	}
 }

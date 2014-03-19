@@ -65,8 +65,8 @@ public class Presenter {
 	 * @return array of JButtons representing the game board.
 	 ***************************************************************/
 	public void convertBoardIntoButtons() {
-		int rows = model.getBoard().numRows();
-		int cols = model.getBoard().numColumns();
+		int rows = model.numRows();
+		int cols = model.numColumns();
 
 		/* Creates every button with the appropriate image, color
 		 * and location. Button default look is handled here.  */
@@ -91,7 +91,7 @@ public class Presenter {
 	}
 	
 	private void highlightValidMoves(int row, int col) {
-		int size = model.getBoard().numRows();
+		int size = model.numRows();
 		
 		for (int r = 0; r < size; r++) {
 			for (int c = 0; c < size; c++) {
@@ -212,7 +212,7 @@ public class Presenter {
 			int tR = promoMove.toRow();
 			int tC = promoMove.toColumn();
 			
-			model.getBoard().set(newPiece, tR, tC);
+			model.set(newPiece, tR, tC);
 			view.changeImage(tR, tC, source, playerPromoting.isWhite());
 		}
 	};
@@ -227,13 +227,10 @@ public class Presenter {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null || !piece.is("Pawn")) { return; }
-		
-		Pawn pawn = (Pawn) piece;
-		
-		if (pawn.isAttacking(move, model.getBoard()) && 
+				
+		if (move.toColumn() != move.fromColumn() && 
 				model.pieceAt(move.toRow(), move.toColumn()) == null) {
 			view.changeImage(move.fromRow(), move.toColumn(), "", true);
-			
 		}
 	}
 	
@@ -281,7 +278,7 @@ public class Presenter {
 		int rookColumn = 0;
 
 		if (direction == 1) {
-			rookColumn = model.getBoard().numColumns() - 1;
+			rookColumn = model.numColumns() - 1;
 		} 
 				
 		view.changeImage(move.fromRow(), rookColumn, "", false);

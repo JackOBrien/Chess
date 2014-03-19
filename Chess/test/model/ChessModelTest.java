@@ -276,6 +276,8 @@ public class ChessModelTest {
 	
 	@Test
 	public final void checkSize() throws Exception {
-		assertEquals(model.getBoard().numRows(), 8);
+		assertEquals(model.numRows(), 8);
+		assertEquals(model.numColumns(), 8);
+
 	}
 }
