@@ -83,7 +83,6 @@ public class PromotionDialog extends JDialog implements ActionListener {
 		
 		final double fontMultiplier = .2667;
 		final int fontSize = (int) (this.size * fontMultiplier);
-		System.out.println(fontSize);
 		Font f = new Font("Dialog", Font.BOLD, fontSize);
 		
 		okButton = createDefaultButton(acc);

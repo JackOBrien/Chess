@@ -366,59 +366,86 @@ public class ChessGUI implements IChessUI {
 		ImageIcon image = null;
 				
 		if (white) {
-			
-			/* Assigns proper image */
-			switch(type) {
-			case "Bishop":
-				image = wBish;
-				break;
-			case "King":
-				image = wKing;
-				break;
-			case "Knight":
-				image = wKnight;
-				break;
-			case "Pawn":
-				image = wPawn;
-				break;
-			case "Queen":
-				image = wQueen;
-				break;
-			case "Rook":
-				image = wRook;
-				break;
-			default:
-				image = null;
-				break;
-			}
+			image = assignWhiteImage(type);
 		} else {
-			
-			/* Assigns proper image */
-			switch(type) {
-			case "Bishop":
-				image = bBish;
-				break;
-			case "King":
-				image = bKing;
-				break;
-			case "Knight":
-				image = bKnight;
-				break;
-			case "Pawn":
-				image = bPawn;
-				break;
-			case "Queen":
-				image = bQueen;
-				break;
-			case "Rook":
-				image = bRook;
-				break;
-			default:
-				image = null;
-				break;
-			}
+			image = assignBlackImage(type);
 		}
 		
+		return image;
+	}
+	
+	/****************************************************************
+	 * Finds the proper white piece for the given type.
+	 * 
+	 * TODO: Remove this for Release 3.
+	 * 
+	 * @param type name of the piece's type.
+	 * @return the proper image of the described piece.
+	 ***************************************************************/
+	private ImageIcon assignWhiteImage(String type) {
+		ImageIcon image;
+		
+		switch(type) {
+		case "Bishop":
+			image = wBish;
+			break;
+		case "King":
+			image = wKing;
+			break;
+		case "Knight":
+			image = wKnight;
+			break;
+		case "Pawn":
+			image = wPawn;
+			break;
+		case "Queen":
+			image = wQueen;
+			break;
+		case "Rook":
+			image = wRook;
+			break;
+		default:
+			image = null;
+			break;
+		}
+		
+		return image;
+	}
+	
+	/****************************************************************
+	 * Finds the proper black piece for the given type.
+	 * 
+	 * TODO: Remove this for Release 3.
+	 * 
+	 * @param type name of the piece's type.
+	 * @return the proper image of the described piece.
+	 ***************************************************************/
+	private ImageIcon assignBlackImage(String type) {
+		ImageIcon image;
+
+		switch(type) {
+		case "Bishop":
+			image = bBish;
+			break;
+		case "King":
+			image = bKing;
+			break;
+		case "Knight":
+			image = bKnight;
+			break;
+		case "Pawn":
+			image = bPawn;
+			break;
+		case "Queen":
+			image = bQueen;
+			break;
+		case "Rook":
+			image = bRook;
+			break;
+		default:
+			image = null;
+			break;
+		}
 		return image;
 	}
 	
@@ -556,8 +583,7 @@ public class ChessGUI implements IChessUI {
 			try {
 				topWindow.remove(jLayer);
 			} catch (NullPointerException exc) {
-				System.err.println("Tried to remove a null JLayer. "
-						+ "That's ok, though.");
+				return;
 			}
 			topWindow.add(buttonPanel);
 			topWindow.pack();
