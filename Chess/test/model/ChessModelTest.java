@@ -278,6 +278,14 @@ public class ChessModelTest {
 	public final void checkSize() throws Exception {
 		assertEquals(model.numRows(), 8);
 		assertEquals(model.numColumns(), 8);
-
+	}
+	
+	@Test
+	public final void testFromChecktoCheck() throws Exception {
+		model.move(new Move(7, 4, 4, 0));
+		model.move(new Move(0, 4, 3, 5));
+		model.move(new Move(7, 0, 4, 1));
+		model.move(new Move(1, 1, 3, 1));
+		assertTrue(model.isValidMove(new Move(4, 1, 3, 1)));
 	}
 }

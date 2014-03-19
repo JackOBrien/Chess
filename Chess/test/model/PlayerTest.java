@@ -1,5 +1,7 @@
 package model;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 /********************************************************************
@@ -18,4 +20,9 @@ public class PlayerTest {
 		Player.valueOf(Player.WHITE.toString());
 	}
 
+	@Test
+	public final void testBoolean() throws Throwable {
+		assertTrue(Player.WHITE.isWhite());
+		assertFalse(Player.BLACK.isWhite());
+	}
 }
