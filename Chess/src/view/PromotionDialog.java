@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +27,7 @@ import javax.swing.border.Border;
  *******************************************************************/
 public class PromotionDialog extends JDialog implements ActionListener {
 
-	/** Default serial version UID */
+	/** Default serial version UID. */
 	private static final long serialVersionUID = 1L;
 
 	private JButton rook;
@@ -34,11 +35,6 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	private JButton bishop;
 	private JButton queen;
 	private JButton okButton;
-	
-	/**  */
-	public static final int IMAGE_SIZE = 40;
-	
-	private final int BUTTON_SIZE = 45;
 	
 	private BevelOnHover mouseListener;
 
@@ -48,19 +44,32 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	
 	private boolean white;
 	
-	public PromotionDialog(boolean w, Color promo, Color acc) {		
+	private int size;
+	
+	public PromotionDialog(boolean w, int size, Color promo, Color acc) {		
 		mouseListener = new BevelOnHover(Color.WHITE);
 		
+		final int border = 5;
+		
 		white = w;
+		this.size = size + border;
 		
 		rook = createDefaultButton(promo);
 		knight = createDefaultButton(promo);
 		bishop = createDefaultButton(promo);
 		queen = createDefaultButton(promo);
 		
+		final double fontMultiplier = .2667;
+		final int fontSize = (int) (this.size * fontMultiplier);
+		System.out.println(fontSize);
+		Font f = new Font("Dialog", Font.BOLD, fontSize);
+		
 		okButton = createDefaultButton(acc);
 		okButton.setText("Choose a piece for promotion");
-		okButton.setPreferredSize(new Dimension(20, 22));
+		okButton.setFont(f);
+		final double dimMultiplier = .4889;
+		final int lableSize = (int) (this.size * dimMultiplier);
+		okButton.setPreferredSize(new Dimension(lableSize, lableSize));
 		okButton.setForeground(Color.WHITE);
 		
 		rook.addActionListener(this);
@@ -111,7 +120,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 
 	private JButton createDefaultButton(Color bg) {
 		JButton button = new JButton();
-		button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
+		button.setPreferredSize(new Dimension(size, size));
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		button.addMouseListener(mouseListener);
 		button.setBackground(bg);

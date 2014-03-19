@@ -16,16 +16,6 @@ import javax.swing.ImageIcon;
 public interface IChessGUI {
 
 	/****************************************************************
-	 * Helper method to return the image that matches the
-	 * described chess piece.
-	 * 
-	 * @param type the name of the piece, i.e. "King".
-	 * @param white tells if the piece is white or not.
-	 * @return  image corresponding to the piece described.
-	 ***************************************************************/
-	ImageIcon imageFinder(String type, boolean white);
-
-	/****************************************************************
 	 * Changes the image of the given cell to the image of the
 	 * piece described
 	 * 

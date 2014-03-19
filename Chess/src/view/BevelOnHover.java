@@ -19,14 +19,21 @@ import javax.swing.border.Border;
  *******************************************************************/
 public class BevelOnHover implements MouseListener {
 
+	/** The color of the default border. */
 	private Color borderColor;
 	
-	public BevelOnHover(Color border) {
+	/****************************************************************
+	 * Mouse Listener that manipulates the border of a button when
+	 * hovered over or pressed.
+	 * 
+	 * @param border the initial color of the border.
+	 ***************************************************************/
+	public BevelOnHover(final Color border) {
 		borderColor = border;
 	}
 	
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public final void mouseReleased(final MouseEvent e) {
 		JButton button = (JButton) e.getComponent();
 		
 		Border border = BorderFactory.createRaisedSoftBevelBorder();
@@ -34,7 +41,7 @@ public class BevelOnHover implements MouseListener {
 	}
 	
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public final void mousePressed(final MouseEvent e) {
 		JButton button = (JButton) e.getComponent();	
 		
 		Border border = BorderFactory.createLoweredSoftBevelBorder();

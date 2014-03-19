@@ -46,55 +46,82 @@ import javax.swing.plaf.LayerUI;
  *******************************************************************/
 public class ChessGUI implements IChessGUI {
 
-	private final String PATH = "images\\";
+	/** Name of the folder containing the images of the game pieces. */
+	private final String path = "images\\";
 	
 	/** Image for the white game pieces. */
-	private ImageIcon wBish = loadIcon(PATH + "w_bish.png"),
-	  wKing = loadIcon(PATH + "w_king.png"),
-	  wKnight = loadIcon(PATH + "w_knight.png"),
-	  wPawn = loadIcon(PATH + "w_pawn.png"),
-	  wQueen = loadIcon(PATH + "w_queen.png"),
-	  wRook = loadIcon(PATH + "w_rook.png");
+	private ImageIcon wBish = loadIcon(path + "w_bish.png"),
+	  wKing = loadIcon(path + "w_king.png"),
+	  wKnight = loadIcon(path + "w_knight.png"),
+	  wPawn = loadIcon(path + "w_pawn.png"),
+	  wQueen = loadIcon(path + "w_queen.png"),
+	  wRook = loadIcon(path + "w_rook.png");
 
-	/** Image for the black game pieces */
-	private ImageIcon bBish = loadIcon(PATH + "b_bish.png"),
-	 bKing = loadIcon(PATH + "b_king.png"),
-	 bKnight = loadIcon(PATH + "b_knight.png"),
-	 bPawn = loadIcon(PATH + "b_pawn.png"),
-	 bQueen = loadIcon(PATH + "b_queen.png"),
-	 bRook = loadIcon(PATH + "b_rook.png");
+	/** Image for the black game pieces. */
+	private ImageIcon bBish = loadIcon(path + "b_bish.png"),
+	 bKing = loadIcon(path + "b_king.png"),
+	 bKnight = loadIcon(path + "b_knight.png"),
+	 bPawn = loadIcon(path + "b_pawn.png"),
+	 bQueen = loadIcon(path + "b_queen.png"),
+	 bRook = loadIcon(path + "b_rook.png");
 	
-	private ImageIcon gvsu = loadIcon(PATH + "GVSUlogoSmall.png");
-	private ImageIcon exit = loadIcon(PATH + "exit.png");
+	/** Image of a very small GVSU logo. */
+	private ImageIcon gvsu = loadIcon(path + "GVSUlogoSmall.png");
 	
-	private final int IMG_SIZE = 60;
+	/** Image of a small exit sign. */
+	private ImageIcon exit = loadIcon(path + "exit.png");
+	
+	/** The size of the images and buttons on the board. Default 60. */
+	private static final int IMG_SIZE = 60;
 	
 	/** The amount of extra space between the edge of the button 
 	 * and the edge of the image. Default 5. */
-	private final int BORDER_TOLERANCE = 5;
+	private final int borderBuffer = 5;
 	
+	/** The color for the light spaces on the board. */
 	private Color light;
+	
+	/** The color for the dark spaces on the board. */
 	private Color dark;
+	
+	/** The color used for pieces that are selected. */
 	private Color selected;
+	
+	/** The color for highlighted squares such as valid moves. */
 	private Color highlighted;
+	
+	/** The background color for the promotion options. */
 	private Color promotion;
+	
+	/** An accent color used for the menu bar and promotion dialog. */
 	private Color accent;
 	
+	/** The game board represented as buttons. */
 	private JButton[][] board;
 	
+	/** The panel that contains the board. */
 	private JPanel buttonPanel;
 	
+	/** The frame containing the entire game. */
 	private JFrame topWindow;
 	
-	LayerUI<JComponent> layerUI;
-	JLayer<JComponent> jLayer;
+	/** LayerUI to blur the board. */
+	private LayerUI<JComponent> layerUI;
 	
+	/** JLayer to blur the board. */
+	private JLayer<JComponent> jLayer;
+	
+	/** MouseListener that will bevel buttons when interacted with. */
 	private BevelOnHover mouseListener;
 	
+	/** ActionListiner for the promotion options. */
 	private ActionListener promotionListener;
 	
 	/****************************************************************
-	 * TODO 
+	 * The graphical user interface for Chess made up of JButtons. 
+	 * 
+	 * @param numRows the number of rows on the board.
+	 * @param numCols the number of columns on the board.
 	 ***************************************************************/
 	public ChessGUI(int numRows, int numCols) {
 		topWindow = new JFrame();
@@ -107,12 +134,13 @@ public class ChessGUI implements IChessGUI {
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 				
-		light = new Color(196, 177, 143);
-		dark = new Color(49, 46, 40);
-		selected = new Color(146, 0, 17);
-		highlighted = new Color(214, 55, 57);
-		promotion = new Color(160, 160, 155);
-		accent = new Color(53, 28, 28);
+		// Define default colors.
+		light = BoardColors.LIGHT;
+		dark = BoardColors.DARK;
+		selected = BoardColors.SELECTED;
+		highlighted = BoardColors.HIGHLIGHTED;
+		promotion = BoardColors.PROMOTION;
+		accent = BoardColors.ACCENT;
 		
 		layerUI = new BlurLayerUI();
 		
@@ -123,6 +151,9 @@ public class ChessGUI implements IChessGUI {
 		setupFrame();
 	}
 
+	/****************************************************************
+	 * Sets up the board for the start of a game.
+	 ***************************************************************/
 	private void setupBlankBoard() {
 		
 		// First square is light.
@@ -165,8 +196,11 @@ public class ChessGUI implements IChessGUI {
 		topWindow.add(buttonPanel); 
 	}
 	
+	/****************************************************************
+	 * Sets up the JFrame.
+	 ***************************************************************/
 	private void setupFrame() {
-		int kingLogoSize = 50;
+		final int kingLogoSize = 50;
 		
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
@@ -182,14 +216,18 @@ public class ChessGUI implements IChessGUI {
 		topWindow.setVisible(true);
 	}
 	
+	/****************************************************************
+	 * Sets up the frame's menus.
+	 ***************************************************************/
 	private void setupMenu() {
 		JMenu fileMenu = new JMenu("File");
 		JMenuBar menuBar = new JMenuBar();
 		
 		menuBar.setBackground(accent);
+		final int iconSize = 20;
 		
 		JMenuItem exitItem = new JMenuItem("Exit");
-		exitItem.setIcon(resizeImage(exit, 20));
+		exitItem.setIcon(resizeImage(exit, iconSize));
 		exitItem.addActionListener(menuListener);
 		exitItem.setActionCommand("Exit");
 		
@@ -204,10 +242,21 @@ public class ChessGUI implements IChessGUI {
 		topWindow.setJMenuBar(menuBar);
 	}
 	
+	/****************************************************************
+	 * Creates a default button with no image.
+	 * 
+	 * @return a fully setup JButton with no image.
+	 ***************************************************************/
 	private JButton createDefaultButton() {
 		return createDefaultButton(null);
 	}
 	
+	/****************************************************************
+	 * Creates a default button with the given image.
+	 * 
+	 * @param icon image to be displayed on the button.
+	 * @return a fully setup JButton with the given image.
+	 ***************************************************************/
 	private JButton createDefaultButton(ImageIcon icon) {
 		JButton button = new JButton(icon);
 		button.setPreferredSize(new Dimension(IMG_SIZE, IMG_SIZE));
@@ -248,7 +297,7 @@ public class ChessGUI implements IChessGUI {
 	 ***************************************************************/
 	private ImageIcon resizeImage(ImageIcon icon, int size) {
 		
-		size -= BORDER_TOLERANCE;
+		size -= borderBuffer;
 		
 		if (icon == null) { return icon; }
 		
@@ -265,8 +314,11 @@ public class ChessGUI implements IChessGUI {
 	}
 	
 	/****************************************************************
-	 * @param row TODO
-	 * @param col
+	 * Changes the background of the button at the given location
+	 * back to its default color.
+	 * 
+	 * @param row row location of the button.
+	 * @param col column location of the button.
 	 ***************************************************************/
 	private void setDeselected(int row, int col) {
 		Color bg = light;
@@ -302,8 +354,15 @@ public class ChessGUI implements IChessGUI {
 		board[row][col].setIcon(img);
 	}
 	
-	@Override
-	public ImageIcon imageFinder(String type, boolean white) {		
+	/****************************************************************
+	 * Helper method to return the image that matches the
+	 * described chess piece.
+	 * 
+	 * @param type the name of the piece, i.e. "King".
+	 * @param white tells if the piece is white or not.
+	 * @return  image corresponding to the piece described.
+	 ***************************************************************/
+	private ImageIcon imageFinder(String type, boolean white) {		
 		ImageIcon image = null;
 				
 		if (white) {
@@ -379,7 +438,11 @@ public class ChessGUI implements IChessGUI {
 	
 	@Override
 	public void pawnPromotion(int row, int col, boolean white) {
-		PromotionDialog dialog = new PromotionDialog(white, promotion, accent);
+		final double sizeModifier = .667;
+		final int size = (int) (IMG_SIZE * sizeModifier);
+		
+		PromotionDialog dialog = new PromotionDialog(white, size, 
+				promotion, accent);
 		
 		// Find all relevant images
 		ImageIcon rookIcon = imageFinder("Rook", white);
@@ -388,10 +451,10 @@ public class ChessGUI implements IChessGUI {
 		ImageIcon queenIcon = imageFinder("Queen", white);
 		
 		// Re-size all found images
-		rookIcon = resizeImage(rookIcon, PromotionDialog.IMAGE_SIZE);
-		knightIcon = resizeImage(knightIcon, PromotionDialog.IMAGE_SIZE);
-		bishopIcon = resizeImage(bishopIcon, PromotionDialog.IMAGE_SIZE);
-		queenIcon = resizeImage(queenIcon, PromotionDialog.IMAGE_SIZE);
+		rookIcon = resizeImage(rookIcon, size);
+		knightIcon = resizeImage(knightIcon, size);
+		bishopIcon = resizeImage(bishopIcon, size);
+		queenIcon = resizeImage(queenIcon, size);
 		
 		// Set all relevant images for the dialog 
 		dialog.setRookImage(rookIcon);
@@ -403,12 +466,12 @@ public class ChessGUI implements IChessGUI {
 		dialog.setActionListener(promotionListener);
 						
 		int direction = white ? 1 : -1;
-		int offset = IMG_SIZE + 4;
+		final int offset = 4;
 		
 		dialog.setLocationRelativeTo(board[row][col]);
 		int x = (int) dialog.getLocation().getX();
 		int y = (int) dialog.getLocation().getY();
-		y += offset * direction;
+		y += (IMG_SIZE + offset) * direction;
 		dialog.setLocation(x, y);
 		
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -419,7 +482,7 @@ public class ChessGUI implements IChessGUI {
 	public void gameInCheck(boolean white) {
 		String message = "White ";
 		ImageIcon icon = wKing;
-		int imageSize = 70;
+		final int extraSize = 10;
 		
 		if (!white) {
 			message = "Black ";
@@ -427,7 +490,7 @@ public class ChessGUI implements IChessGUI {
 		}
 		message += "is in check!";
 		String title = "Check";
-		icon = resizeImage(icon, imageSize);
+		icon = resizeImage(icon, IMG_SIZE + extraSize);
 		
 		JOptionPane.showMessageDialog(buttonPanel, message, title, 
 				JOptionPane.INFORMATION_MESSAGE, icon);
@@ -437,7 +500,7 @@ public class ChessGUI implements IChessGUI {
 	public void gameOver(boolean white) {
 		String message = "Checkmate! ";
 		ImageIcon icon = wKing;
-		int imageSize = 70;
+		final int extraSize = 10;
 		
 		if (!white) {
 			message += "Black ";
@@ -447,7 +510,7 @@ public class ChessGUI implements IChessGUI {
 		}
 		message += "won the game!";
 		String title = "Game Over";
-		icon = resizeImage(icon, imageSize);
+		icon = resizeImage(icon, IMG_SIZE + extraSize);
 		
 		JButton playAgain = new JButton("Play Again");
 		playAgain.setEnabled(false);
@@ -459,6 +522,7 @@ public class ChessGUI implements IChessGUI {
 				options, quit);
 	}
 	
+	/** Listener for the menu items. */
 	private ActionListener menuListener = new ActionListener() {
 		
 		@Override
@@ -472,6 +536,7 @@ public class ChessGUI implements IChessGUI {
 		}
 	};
 	
+	/** Blurs the board when it goes out of focus. */
 	private FocusListener focusListener = new FocusListener() {
 		
 		@Override
@@ -490,7 +555,10 @@ public class ChessGUI implements IChessGUI {
 			
 			try {
 				topWindow.remove(jLayer);
-			} catch (NullPointerException exc) { }
+			} catch (NullPointerException exc) {
+				System.err.println("Tried to remove a null JLayer. "
+						+ "That's ok, though.");
+			}
 			topWindow.add(buttonPanel);
 			topWindow.pack();
 			topWindow.setSize(d);
@@ -508,10 +576,19 @@ public class ChessGUI implements IChessGUI {
  * @version Mar 15, 2014
  *******************************************************************/
 class BlurLayerUI extends LayerUI<JComponent> {
+	
+	/** Default version UID. */
 	private static final long serialVersionUID = 1L;
+	
+	/** Off-screen image. */
 	private BufferedImage mOffscreenImage;
+	
+	/** Operation Buffered Image. */
 	private BufferedImageOp mOperation;
 
+	/****************************************************************
+	 * Constructor for the LayerUI.
+	 ***************************************************************/
 	public BlurLayerUI() {
 		float amount = 0.4f / 11.0f;
 		float[] blurKernel = {
@@ -519,8 +596,9 @@ class BlurLayerUI extends LayerUI<JComponent> {
 				amount, amount, amount,
 				amount, amount, amount
 		};
+		final int kernal = 3;
 		mOperation = new ConvolveOp(
-				new Kernel(3, 3, blurKernel),
+				new Kernel(kernal, kernal, blurKernel),
 				ConvolveOp.EDGE_NO_OP, null);
 	}
 
@@ -535,10 +613,11 @@ class BlurLayerUI extends LayerUI<JComponent> {
 
 		// Only create the offscreen image if the one we have
 		// is the wrong size.
-		if (mOffscreenImage == null ||
-				mOffscreenImage.getWidth() != w ||
-				mOffscreenImage.getHeight() != h) {
-			mOffscreenImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		if (mOffscreenImage == null 
+				|| mOffscreenImage.getWidth() != w 
+				|| mOffscreenImage.getHeight() != h) {
+			mOffscreenImage = new BufferedImage(w, h, 
+					BufferedImage.TYPE_INT_RGB);
 		}
 
 		Graphics2D ig2 = mOffscreenImage.createGraphics();
@@ -546,7 +625,7 @@ class BlurLayerUI extends LayerUI<JComponent> {
 		super.paint(ig2, c);
 		ig2.dispose();
 
-		Graphics2D g2 = (Graphics2D)g;
+		Graphics2D g2 = (Graphics2D) g;
 		g2.drawImage(mOffscreenImage, mOperation, 0, 0);
 	}
 }
