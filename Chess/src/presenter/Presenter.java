@@ -3,7 +3,7 @@ package presenter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import view.IChessGUI;
+import view.IChessUI;
 import model.Bishop;
 import model.IChessModel;
 import model.IChessPiece;
@@ -41,7 +41,7 @@ public class Presenter {
 	private IChessModel model;
 	
 	/** The View displaying the game and accepting user interaction. */
-	private IChessGUI view;
+	private IChessUI view;
 	
 	/****************************************************************
 	 * Constructor for the Presenter. 
@@ -49,7 +49,7 @@ public class Presenter {
 	 * @param pModel the model with the chess logic.
 	 * @param pView the view with the chess GUI.
 	 ***************************************************************/
-	public Presenter(IChessModel pModel, IChessGUI pView) {
+	public Presenter(IChessModel pModel, IChessUI pView) {
 		model = pModel;
 		view = pView;
 		

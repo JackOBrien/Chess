@@ -2,22 +2,20 @@ package view;
 
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-
 /********************************************************************
  * CIS 350 - 01
  * Chess
  *
- * 
+ * Interface for the user interface of the chess game.
  *
  * @author John O'Brien
  * @version Mar 10, 2014
  *******************************************************************/
-public interface IChessGUI {
+public interface IChessUI {
 
 	/****************************************************************
 	 * Changes the image of the given cell to the image of the
-	 * piece described
+	 * piece described.
 	 * 
 	 * @param row row location of the piece.
 	 * @param col column location of the piece.
@@ -66,10 +64,11 @@ public interface IChessGUI {
 	void deselectAll();
 
 	/****************************************************************
-	 * @param row
-	 * @param col TODO
-	 * @param white
-	 * @return
+	 * Promotes the pawn at the given location.
+	 * 
+	 * @param row row location.
+	 * @param col column location.
+	 * @param white tells if the piece is white.
 	 ***************************************************************/
 	void pawnPromotion(int row, int col, boolean white);
 

@@ -44,7 +44,7 @@ import javax.swing.plaf.LayerUI;
  * @author John O'Brien
  * @version Mar 10, 2014
  *******************************************************************/
-public class ChessGUI implements IChessGUI {
+public class ChessGUI implements IChessUI {
 
 	/** Name of the folder containing the images of the game pieces. */
 	private final String path = "images\\";

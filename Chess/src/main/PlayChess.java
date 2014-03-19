@@ -4,7 +4,7 @@ import presenter.Presenter;
 import model.ChessModel;
 import model.IChessModel;
 import view.ChessGUI;
-import view.IChessGUI;
+import view.IChessUI;
 
 /********************************************************************
  * CIS 350 - 01
@@ -35,7 +35,7 @@ final class PlayChess {
 		int numRows = model.numRows();
 		int numCols = model.numColumns();
 		
-		IChessGUI view = new ChessGUI(numRows, numCols);
+		IChessUI view = new ChessGUI(numRows, numCols);
 		new Presenter(model, view);
 	}
 
