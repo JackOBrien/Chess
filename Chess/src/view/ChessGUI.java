@@ -542,6 +542,8 @@ public class ChessGUI implements IChessUI {
 		JButton playAgain = new JButton("Play Again");
 		playAgain.setEnabled(false);
 		JButton quit = new JButton("Quit");
+		quit.addActionListener(menuListener);
+		quit.setActionCommand("Exit");
 		JButton[] options = {playAgain, quit};
 		
 		JOptionPane.showOptionDialog(buttonPanel, message, title, 
@@ -558,8 +560,7 @@ public class ChessGUI implements IChessUI {
 			
 			if (source.equals("Exit")) {
 				System.exit(0);
-			}
-			
+			}			
 		}
 	};
 	
