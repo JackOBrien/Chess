@@ -4,7 +4,8 @@ Chess
 Chess project for CIS 350-01  
 
 **NOTES FOR THE TEAM:**  
-Please, do not add setters and getter for *every* instance variable!
+Please, do not add setters and getter for *every* instance variable!  
+Source, EclEmma, Metrics, and UML Diagrams are all done.
 
 
 ![Now with warm colors!](http://i.imgur.com/dRK5ZAG.png)
