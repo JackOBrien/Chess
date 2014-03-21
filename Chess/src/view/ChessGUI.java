@@ -46,23 +46,23 @@ import presenter.Presenter;
 public class ChessGUI implements IChessGUI {
 
 	/** Image for the white game pieces. */
-	private ImageIcon w_bish = loadIcon("images\\w_bish.png"),
-	  wKing = loadIcon("images\\w_king.png"),
-	  wKnight = loadIcon("images\\w_knight.png"),
-	  wPawn = loadIcon("images\\w_pawn.png"),
-	  wQueen = loadIcon("images\\w_queen.png"),
-	  wRook = loadIcon("images\\w_rook.png");
+	private ImageIcon w_bish = loadIcon("images/w_bish.png"),
+	  wKing = loadIcon("images/w_king.png"),
+	  wKnight = loadIcon("images/w_knight.png"),
+	  wPawn = loadIcon("images/w_pawn.png"),
+	  wQueen = loadIcon("images/w_queen.png"),
+	  wRook = loadIcon("images/w_rook.png");
 
 	/** Image for the black game pieces */
-	private ImageIcon b_bish = loadIcon("images\\b_bish.png"),
-	 bKing = loadIcon("images\\b_king.png"),
-	 bKnight = loadIcon("images\\b_knight.png"),
-	 bPawn = loadIcon("images\\b_pawn.png"),
-	 bQueen = loadIcon("images\\b_queen.png"),
-	 bRook = loadIcon("images\\b_rook.png");
+	private ImageIcon b_bish = loadIcon("images/b_bish.png"),
+	 bKing = loadIcon("images/b_king.png"),
+	 bKnight = loadIcon("images/b_knight.png"),
+	 bPawn = loadIcon("images/b_pawn.png"),
+	 bQueen = loadIcon("images/b_queen.png"),
+	 bRook = loadIcon("images/b_rook.png");
 	
-	private ImageIcon gvsu = loadIcon("images\\GVSUlogoSmall.png");
-	private ImageIcon kingLogo = loadIcon("images\\kingIconLarge.png");
+	private ImageIcon gvsu = loadIcon("images/GVSUlogoSmall.png");
+	private ImageIcon kingLogo = loadIcon("images/kingIconLarge.png");
 	
 	private final int IMG_SIZE = 60;
 	
