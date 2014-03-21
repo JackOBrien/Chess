@@ -84,18 +84,29 @@ public class RookTest extends ChessPieceTest {
 	   }
    }
    
-   @Test
-   public final void checkIfMoved() throws Throwable {
-	   IChessBoard board = getBoard();
-	   Rook r = new Rook(Player.WHITE);
-	   board.set(r, 7, 7);
-	   assertFalse(r.checkifMoved(7, 7));
-	   r.isValidMove(new Move(7, 7, 7, 6), board);
-	   assertFalse(r.checkifMoved(7, 7));
-	   r.isValidMove(new Move(7, 7, 7, 6), board);
-	   board.move(new Move(7, 7, 7, 6));
-	   assertTrue(r.checkifMoved(7, 6));
-
-   }
+//   @Test
+//   public final void checkIfMoved() throws Throwable {
+//	   IChessBoard board = getBoard();
+//	   Rook r = new Rook(Player.WHITE);
+//	   board.set(r, 7, 7);
+//	   assertFalse(r.checkifMoved(7, 7));
+//	   r.isValidMove(new Move(7, 7, 7, 6), board);
+//	   assertFalse(r.checkifMoved(7, 7));
+//	   r.isValidMove(new Move(7, 7, 7, 6), board);
+//	   board.move(new Move(7, 7, 7, 6));
+//	   assertTrue(r.checkifMoved(7, 6));
+//   }
+//   
+//   @Test
+//   public final void checkIfMoved2() throws Throwable {
+//	   IChessBoard board = getBoard();
+//	   Rook r = new Rook(Player.WHITE);
+//	   board.set(r, 7, 0);
+//	   assertFalse(r.checkifMoved(7, 0));
+//	   r.isValidMove(new Move(7, 0, 7, 3), board);
+//	   board.move(new Move(7, 0, 7, 3));
+//	   assertTrue(r.checkifMoved(7, 3));
+//	   assertTrue(r.checkifMoved(7, 3));
+//   }
 
 }

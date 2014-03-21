@@ -64,10 +64,28 @@ public interface IChessModel {
    IChessPiece pieceAt(int row, int column);
 
    /****************************************************************
-    * Returns the board used by the model.
-    * Used for testing
+    * Return which player is in check.
     * 
-    * @return game board used by the model.
+    * @return the player who is in check.
     ***************************************************************/
-   IChessBoard getBoard();
+   Player getPlayerInCheck();
+
+   /****************************************************************
+    * @return the number of rows on the board.
+    ***************************************************************/
+   int numRows();
+
+   /****************************************************************
+    * @return the number of columns on the board.
+    ***************************************************************/
+   int numColumns();
+
+   /****************************************************************
+    * Places the given piece on the chess board used by the model.
+    * 
+    * @param piece the piece to place
+    * @param row the row location for the piece to be placed.
+    * @param col the column location for the piece to be placed.
+    ***************************************************************/
+   void set(IChessPiece piece, int row, int col);
 }

@@ -29,4 +29,13 @@ public enum Player {
 	public Player next() {
 		return this == BLACK ? WHITE : BLACK;
 	}
+	
+	/****************************************************************
+	 * Tells if this player is white or not.
+	 * 
+	 * @return true if the player is white, false otherwise.
+	 ***************************************************************/
+	public boolean isWhite() {
+		return this == WHITE;
+	}
 }

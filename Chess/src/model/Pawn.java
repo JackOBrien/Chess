@@ -184,8 +184,17 @@ public class Pawn extends ChessPiece {
 	 * 
 	 * @param num number of moves when this piece last moved.
 	 ***************************************************************/
-	public void setNumMoves(int num) {
+	public final void setNumMoves(final int num) {
 		gamePosition = num;
+	}
+	
+	/****************************************************************
+	 * Sets what this pawn's last move was.
+	 * 
+	 * @param m last move made by this pawn.
+	 ***************************************************************/
+	public final void setLastMove(final Move m) {
+		lastMove = m;
 	}
 	
 	/****************************************************************
@@ -212,5 +221,24 @@ public class Pawn extends ChessPiece {
 	 ***************************************************************/
 	public final int getStartingRow() {
 		return startingRow;
+	}
+	
+	/****************************************************************
+	 * Clones this Pawn.
+	 * 
+	 * @return a deep copy of this Pawn.
+	 ***************************************************************/
+	public final Pawn clone() {
+		Pawn p = new Pawn(player());
+		p.gamePosition = gamePosition;
+		p.movedTwice = movedTwice;
+		
+		if (lastMove == null) {
+			p.lastMove = null;
+		} else {
+			p.lastMove = lastMove.clone();
+		}
+		
+		return p;
 	}
 }

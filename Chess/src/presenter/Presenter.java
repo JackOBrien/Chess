@@ -1,15 +1,18 @@
 package presenter;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import view.IChessGUI;
+import view.IChessUI;
+import model.Bishop;
 import model.IChessModel;
 import model.IChessPiece;
+import model.Knight;
 import model.Move;
 import model.Pawn;
 import model.Player;
+import model.Queen;
+import model.Rook;
 
 /********************************************************************
  * CIS 350 - 01
@@ -22,14 +25,23 @@ import model.Player;
  *******************************************************************/
 public class Presenter {
 	
-	/** Tells if a piece is currently selected */
+	/** Tells if a piece is currently selected. */
 	private boolean isPieceSelected;
 	
-	/** Location of the last selected piece: "r,c" */
+	/** Location of the last selected piece: "r,c". */
 	private String selectedPiece;
 	
+	/** The player who is promoting a piece. */
+	private Player playerPromoting;
+	
+	/** The most recent move to promote a piece. */
+	private Move promoMove;
+	
+	/** The Model containing and operating the game logic. */
 	private IChessModel model;
-	private IChessGUI view;
+	
+	/** The View displaying the game and accepting user interaction. */
+	private IChessUI view;
 	
 	/****************************************************************
 	 * Constructor for the Presenter. 
@@ -37,7 +49,7 @@ public class Presenter {
 	 * @param pModel the model with the chess logic.
 	 * @param pView the view with the chess GUI.
 	 ***************************************************************/
-	public Presenter(IChessModel pModel, IChessGUI pView) {
+	public Presenter(final IChessModel pModel, final IChessUI pView) {
 		model = pModel;
 		view = pView;
 		
@@ -46,17 +58,17 @@ public class Presenter {
 		
 		convertBoardIntoButtons();
 		view.setMoveHandler(moveHandler);
+		view.setPromotionHandler(promotionHandler);
 	}
 	
 	/****************************************************************
 	 * Converts the board used in the model into buttons for use
 	 * in the view. Used to initially set up the board.
-	 * 
-	 * @return array of JButtons representing the game board.
+	 *
 	 ***************************************************************/
-	public void convertBoardIntoButtons() {
-		int rows = model.getBoard().numRows();
-		int cols = model.getBoard().numColumns();
+	public final void convertBoardIntoButtons() {
+		int rows = model.numRows();
+		int cols = model.numColumns();
 
 		/* Creates every button with the appropriate image, color
 		 * and location. Button default look is handled here.  */
@@ -66,12 +78,13 @@ public class Presenter {
 				// The ChessPiece at the current location and its descriptors.
 				IChessPiece piece = model.pieceAt(r, c);
 				String type = "";
-				Boolean white = true;
+				
+				boolean white = false;
 				
 				/* Null check */
 				if (piece != null) {
 					type = piece.type();
-					white = piece.player() == Player.WHITE;
+					white = piece.player().isWhite();
 				}
 				
 				view.changeImage(r, c, type, white);
@@ -79,17 +92,20 @@ public class Presenter {
 		}
 	}
 	
-	private void highlightValidMoves(int row, int col) {
-		int size = model.getBoard().numRows();
+	/****************************************************************
+	 * Highlights all valid moves on the board that the piece at the
+	 * given location can make.
+	 * 
+	 * @param row row location of the piece.
+	 * @param col column location of the piece.
+	 ***************************************************************/
+	private void highlightValidMoves(final int row, final int col) {
+		int size = model.numRows();
 		
 		for (int r = 0; r < size; r++) {
 			for (int c = 0; c < size; c++) {
 				Move m = new Move(row, col, r, c);
-				
-				if (r == 5 && c == 4) {
-					model.isValidMove(m);
-				}
-				
+
 				if (model.isValidMove(m)) {
 					view.setHighlighted(r, c);
 				}
@@ -97,11 +113,11 @@ public class Presenter {
 		}
 	}
 	
-	/** ActionListener to handle selecting and moving game pieces */
+	/** ActionListener to handle selecting and moving game pieces. */
 	private ActionListener moveHandler = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			
 			// Splits and parses the actionCommand into two integers.
 			String[] location = e.getActionCommand().split(",");
@@ -110,6 +126,7 @@ public class Presenter {
 			
 			IChessPiece piece = model.pieceAt(row, col);
 			
+
 			/* Checks if the player is choosing a piece or its destination. */
 			if (!isPieceSelected) {
 				
@@ -126,7 +143,6 @@ public class Presenter {
 				isPieceSelected = true;
 				highlightValidMoves(row, col);
 				
-
 				return;
 				
 			} else {
@@ -150,50 +166,113 @@ public class Presenter {
 				
 				/* There is no action if the move is not valid */
 				if (!model.isValidMove(move)) { return; }
-				
-				boolean white = piece.player() == Player.WHITE;
-								
+												
+				// Handles special moves
 				handleEnPassant(move);
 				handleCastle(move);
 				
 				model.move(move);
+				
 				view.changeImage(fromRow, fromColumn, "", true);
-				view.changeImage(row, col, piece.type(), white);
-								
+				view.changeImage(row, col, piece.type(), 
+						piece.player().isWhite());
 				view.deselectAll();
+				
+				// Promotion must be handled after the move
+				handlePromotion(move);
+								
+				checkForCheck();
 				isPieceSelected = false;
 			}
 			
 		}
 	};
 
+	/** Updated the model and view each time a new piece is selected for
+	 * promotion. */
+	private ActionListener promotionHandler = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			String source = e.getActionCommand();
+			
+			IChessPiece newPiece;
+			
+			switch (source) {
+			case "Rook":
+				newPiece = new Rook(playerPromoting);
+				break;
+			case "Knight":
+				newPiece = new Knight(playerPromoting);
+				break;
+			case "Bishop":
+				newPiece = new Bishop(playerPromoting);
+				break;
+			case "Queen":
+				newPiece = new Queen(playerPromoting);
+				break;
+			default:
+				newPiece = null;
+				break;
+			}
+			
+			int tR = promoMove.toRow();
+			int tC = promoMove.toColumn();
+			
+			model.set(newPiece, tR, tC);
+			view.changeImage(tR, tC, source, playerPromoting.isWhite());
+		}
+	};
+	
 	/****************************************************************
 	 * If a piece performs enPassant, it will remove the piece
 	 * that was attacked from the board.
 	 * 
 	 * @param move the move being attempted.
 	 ***************************************************************/
-	protected void handleEnPassant(Move move) {
+	protected final void handleEnPassant(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null || !piece.is("Pawn")) { return; }
-		
-		Pawn pawn = (Pawn) piece;
-		
-		if (pawn.isAttacking(move, model.getBoard()) && 
-				model.pieceAt(move.toRow(), move.toColumn()) == null) {
+				
+		if (move.toColumn() != move.fromColumn() 
+				&& model.pieceAt(move.toRow(), move.toColumn()) == null) {
 			view.changeImage(move.fromRow(), move.toColumn(), "", true);
-			
 		}
 	}
 	
+	/****************************************************************
+	 * If a pawn reaches the end of the board, they much choose 
+	 * a new piece to promote the pawn to.
+	 * 
+	 * @param m the move being attempted.
+	 * @return 
+	 ***************************************************************/
+	protected final void handlePromotion(final Move m) {
+		IChessPiece piece = model.pieceAt(m.toRow(), m.toColumn());
+
+		if (piece == null || !piece.is("Pawn")) { return; }
+		
+		Pawn p = (Pawn) piece;
+		p.setLastMove(m);
+		
+		/* Ensures the pawn has reached the end of the board */
+		if (p.mayPromote()) {			
+			playerPromoting = piece.player();
+			promoMove = m;
+			
+			view.pawnPromotion(m.toRow(), m.toColumn(), 
+					playerPromoting.isWhite());
+		}
+	}
+
 	/****************************************************************
 	 * If a piece performs a Castle, it will remove the piece
 	 * that was attacked from the board.
 	 * 
 	 * @param move the move being attempted.
 	 ***************************************************************/
-	protected void handleCastle(Move move) {
+	protected final void handleCastle(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null || !piece.is("King")) { return; }
@@ -206,14 +285,25 @@ public class Presenter {
 		int rookColumn = 0;
 
 		if (direction == 1) {
-			rookColumn = model.getBoard().numColumns() - 1;
+			rookColumn = model.numColumns() - 1;
 		} 
-		
-		boolean white = piece.player() == Player.WHITE;
-		
+				
 		view.changeImage(move.fromRow(), rookColumn, "", false);
 		view.changeImage(move.fromRow(), move.fromColumn() + direction, 
-				"Rook", white);
+				"Rook", piece.player().isWhite());
+	}
+	
+	/****************************************************************
+	 * Will check the game to see if it is in check or checkmate.
+	 ***************************************************************/
+	protected final void checkForCheck() {
+		if (model.inCheck()) {
+			if (model.isComplete()) {
+				view.gameOver(!model.getPlayerInCheck().isWhite());
+				return;
+			}
+			view.gameInCheck(model.getPlayerInCheck().isWhite());
+		}
 	}
 	
 }

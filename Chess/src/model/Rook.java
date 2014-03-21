@@ -45,7 +45,9 @@ public class Rook extends ChessPiece {
 			return false;
 		}
 		
-		hasMoved = checkifMoved(move.fromRow(), move.fromColumn());
+		if (!hasMoved) {
+			hasMoved = checkifMoved(move.fromRow(), move.fromColumn());
+		}
 		
 		/* Ensures the piece is moving diagonally and isn't jumping 
 		 * over any pieces */
@@ -62,7 +64,7 @@ public class Rook extends ChessPiece {
 	 * @return true if the piece has moved before.
 	 ***************************************************************/
 	public final boolean checkifMoved(final int fR, final int fC) {
-
+		
 		/* Checks if the initial location is still -1, as set 
 		 * by the constructor. */
 		if (initialRow == -1) {
@@ -139,5 +141,19 @@ public class Rook extends ChessPiece {
 		}
 		
 		return true;
+	}
+	
+	/****************************************************************
+	 * Clones this Rook.
+	 * 
+	 * @return a deep copy of this Rook.
+	 ***************************************************************/
+	public final Rook clone() {
+		Rook r = new Rook(player());
+		r.hasMoved = hasMoved ? true : false;
+		r.initialCol = initialCol;
+		r.initialRow = initialRow;
+		
+		return r;
 	}
 }

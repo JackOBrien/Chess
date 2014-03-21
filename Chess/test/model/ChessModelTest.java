@@ -49,6 +49,7 @@ public class ChessModelTest {
 	
 	@Test
 	public final void inCheckBlack() throws Exception {
+		model.move(new Move(6, 0, 5, 0));
 		model.move(new Move(0, 4, 4, 2));
 		model.move(new Move(7, 7, 4, 7));
 		assertTrue(model.inCheck());
@@ -212,6 +213,7 @@ public class ChessModelTest {
 		model.move(new Move(0, 0, 2, 2));
 		model.move(new Move(1, 0, 2, 0));
 		model.move(new Move(6, 0, 4, 0));
+		model.move(new Move(6, 7, 5, 7));
 		assertTrue(model.inCheck());
 		assertFalse(model.isComplete());
 	}
@@ -274,6 +276,16 @@ public class ChessModelTest {
 	
 	@Test
 	public final void checkSize() throws Exception {
-		assertEquals(model.getBoard().numRows(), 8);
+		assertEquals(model.numRows(), 8);
+		assertEquals(model.numColumns(), 8);
+	}
+	
+	@Test
+	public final void testFromChecktoCheck() throws Exception {
+		model.move(new Move(7, 4, 4, 0));
+		model.move(new Move(0, 4, 3, 5));
+		model.move(new Move(7, 0, 4, 1));
+		model.move(new Move(1, 1, 3, 1));
+		assertTrue(model.isValidMove(new Move(4, 1, 3, 1)));
 	}
 }

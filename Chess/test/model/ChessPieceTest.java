@@ -9,6 +9,7 @@ import org.junit.Test;
  * Test the {@code ChessPiece} class.
  *
  * @author Zachary Kurmas
+ * @author Jack O'Brien
  *******************************************************************/
 // Created  12/8/12 at 9:28 PM
 // (C) Zachary Kurmas 2012
@@ -63,6 +64,11 @@ public abstract class ChessPieceTest {
 	public final void complainsIfImproperFromLocation() throws Throwable {
 		Move m = new Move(4, 4, 4, 5);
 		piece.isValidMove(m, board);
+	}
+	
+	@Test 
+	public final void invalidIfOutOfBounds() throws Throwable {
+		piece.isValidMove(new Move(-2, 2, -2, 3), board);
 	}
 
 }
