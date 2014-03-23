@@ -72,7 +72,7 @@ public class ChessGUI implements IChessUI {
 	private ImageIcon exit = loadIcon(path + "exit.png");
 	
 	/** The size of the images and buttons on the board. Default 60. */
-	private static final int IMG_SIZE = 60;
+	private static final int IMG_SIZE = 80;
 	
 	/** The amount of extra space between the edge of the button 
 	 * and the edge of the image. Default 5. */
