@@ -184,7 +184,7 @@ public class Pawn extends ChessPiece {
 	 * 
 	 * @param num number of moves when this piece last moved.
 	 ***************************************************************/
-	public void setNumMoves(int num) {
+	public final void setNumMoves(final int num) {
 		gamePosition = num;
 	}
 	
@@ -193,7 +193,7 @@ public class Pawn extends ChessPiece {
 	 * 
 	 * @param m last move made by this pawn.
 	 ***************************************************************/
-	public void setLastMove(Move m) {
+	public final void setLastMove(final Move m) {
 		lastMove = m;
 	}
 	

@@ -47,7 +47,7 @@ import javax.swing.plaf.LayerUI;
 public class ChessGUI implements IChessUI {
 
 	/** Name of the folder containing the images of the game pieces. */
-	private final String path = "images\\";
+	private final String path = "images/";
 	
 	/** Image for the white game pieces. */
 	private ImageIcon wBish = loadIcon(path + "w_bish.png"),
@@ -57,6 +57,7 @@ public class ChessGUI implements IChessUI {
 	  wQueen = loadIcon(path + "w_queen.png"),
 	  wRook = loadIcon(path + "w_rook.png");
 
+
 	/** Image for the black game pieces. */
 	private ImageIcon bBish = loadIcon(path + "b_bish.png"),
 	 bKing = loadIcon(path + "b_king.png"),
@@ -65,6 +66,8 @@ public class ChessGUI implements IChessUI {
 	 bQueen = loadIcon(path + "b_queen.png"),
 	 bRook = loadIcon(path + "b_rook.png");
 	
+	private ImageIcon kingLogo = loadIcon("images/kingIconLarge.png");
+
 	/** Image of a very small GVSU logo. */
 	private ImageIcon gvsu = loadIcon(path + "GVSUlogoSmall.png");
 	

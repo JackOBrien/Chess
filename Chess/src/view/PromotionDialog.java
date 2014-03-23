@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 /********************************************************************
- * CIS 350 - 01
+ * CIS 350 - 01.
  * Chess
  *
  * 
@@ -64,11 +64,12 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * Constructor for the promotion dialog.
 	 * 
 	 * @param w tells is the piece is white.
-	 * @param size the size of the images.
+	 * @param sSize the size of the images.
 	 * @param promo the background color for the pieces.
 	 * @param acc the color for the ok button.
 	 ***************************************************************/
-	public PromotionDialog(boolean w, int size, Color promo, Color acc) {		
+	public PromotionDialog(final boolean w, final int sSize, final Color promo,
+			final Color acc) {		
 		mouseListener = new BevelOnHover(Color.WHITE);
 		
 		final int border = 5;
@@ -119,7 +120,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	}
 	
 	/****************************************************************
-	 * TODO
+	 * TODO.
 	 ***************************************************************/
 	private void setUpPanel() {
 		optionsPanel = new JPanel(new GridLayout(1, numOptions));
@@ -145,7 +146,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * @param bg the background color of the button.
 	 * @return a default with the given background color.
 	 ***************************************************************/
-	private JButton createDefaultButton(Color bg) {
+	private JButton createDefaultButton(final Color bg) {
 		JButton button = new JButton();
 		button.setPreferredSize(new Dimension(size, size));
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -165,7 +166,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * 
 	 * @param r icon for the Rook.
 	 ***************************************************************/
-	public void setRookImage(ImageIcon r) {
+	public final void setRookImage(final ImageIcon r) {
 		rook.setIcon(r);
 	}
 
@@ -174,7 +175,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * 
 	 * @param k icon for the Knight.
 	 ***************************************************************/
-	public void setKnightImage(ImageIcon k) {
+	public final void setKnightImage(final ImageIcon k) {
 		knight.setIcon(k);
 	}
 
@@ -183,7 +184,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * 
 	 * @param b icon for the Bishop.
 	 ***************************************************************/
-	public void setBishopImage(ImageIcon b) {
+	public final void setBishopImage(final ImageIcon b) {
 		bishop.setIcon(b);
 	}
 
@@ -192,7 +193,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * 
 	 * @param q icon for the Queen.
 	 ***************************************************************/
-	public void setQueenImage(ImageIcon q) {
+	public final void setQueenImage(final ImageIcon q) {
 		queen.setIcon(q);
 	}
 	
@@ -202,7 +203,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * 
 	 * @param al the ActionListener to set.
 	 ***************************************************************/
-	public void setActionListener(ActionListener al) {
+	public final void setActionListener(final ActionListener al) {
 		rook.addActionListener(al);
 		knight.addActionListener(al);
 		bishop.addActionListener(al);
@@ -210,7 +211,7 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public final void actionPerformed(final ActionEvent e) {
 		String source = e.getActionCommand();
 		String whenSelected = "Press Here";
 		

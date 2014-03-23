@@ -10,7 +10,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="2" language="java" name="view.IChessUI" project="Chess" file="/Chess/src/view/IChessUI.java" 
+  <interface id="2" language="java" name="view.IChessGUI" project="Chess" file="/Chess/src/view/IChessGUI.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="972" y="352"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 

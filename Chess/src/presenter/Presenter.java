@@ -25,16 +25,16 @@ import model.Rook;
  *******************************************************************/
 public class Presenter {
 	
-	/** Tells if a piece is currently selected */
+	/** Tells if a piece is currently selected. */
 	private boolean isPieceSelected;
 	
-	/** Location of the last selected piece: "r,c" */
+	/** Location of the last selected piece: "r,c". */
 	private String selectedPiece;
 	
-	/** The player who is promoting a piece */
+	/** The player who is promoting a piece. */
 	private Player playerPromoting;
 	
-	/** The most recent move to promote a piece */
+	/** The most recent move to promote a piece. */
 	private Move promoMove;
 	
 	/** The Model containing and operating the game logic. */
@@ -49,7 +49,7 @@ public class Presenter {
 	 * @param pModel the model with the chess logic.
 	 * @param pView the view with the chess GUI.
 	 ***************************************************************/
-	public Presenter(IChessModel pModel, IChessUI pView) {
+	public Presenter(final IChessModel pModel, final IChessUI pView) {
 		model = pModel;
 		view = pView;
 		
@@ -64,10 +64,9 @@ public class Presenter {
 	/****************************************************************
 	 * Converts the board used in the model into buttons for use
 	 * in the view. Used to initially set up the board.
-	 * 
-	 * @return array of JButtons representing the game board.
+	 *
 	 ***************************************************************/
-	public void convertBoardIntoButtons() {
+	public final void convertBoardIntoButtons() {
 		int rows = model.numRows();
 		int cols = model.numColumns();
 
@@ -100,7 +99,7 @@ public class Presenter {
 	 * @param row row location of the piece.
 	 * @param col column location of the piece.
 	 ***************************************************************/
-	private void highlightValidMoves(int row, int col) {
+	private void highlightValidMoves(final int row, final int col) {
 		int size = model.numRows();
 		
 		for (int r = 0; r < size; r++) {
@@ -114,11 +113,11 @@ public class Presenter {
 		}
 	}
 	
-	/** ActionListener to handle selecting and moving game pieces */
+	/** ActionListener to handle selecting and moving game pieces. */
 	private ActionListener moveHandler = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			
 			// Splits and parses the actionCommand into two integers.
 			String[] location = e.getActionCommand().split(",");
@@ -194,7 +193,7 @@ public class Presenter {
 	private ActionListener promotionHandler = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			String source = e.getActionCommand();
 			
 			IChessPiece newPiece;
@@ -231,13 +230,13 @@ public class Presenter {
 	 * 
 	 * @param move the move being attempted.
 	 ***************************************************************/
-	protected void handleEnPassant(Move move) {
+	protected final void handleEnPassant(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null || !piece.is("Pawn")) { return; }
 				
-		if (move.toColumn() != move.fromColumn() && 
-				model.pieceAt(move.toRow(), move.toColumn()) == null) {
+		if (move.toColumn() != move.fromColumn() 
+				&& model.pieceAt(move.toRow(), move.toColumn()) == null) {
 			view.changeImage(move.fromRow(), move.toColumn(), "", true);
 		}
 	}
@@ -249,7 +248,7 @@ public class Presenter {
 	 * @param m the move being attempted.
 	 * @return 
 	 ***************************************************************/
-	protected void handlePromotion(Move m) {
+	protected final void handlePromotion(final Move m) {
 		IChessPiece piece = model.pieceAt(m.toRow(), m.toColumn());
 
 		if (piece == null || !piece.is("Pawn")) { return; }
@@ -273,7 +272,7 @@ public class Presenter {
 	 * 
 	 * @param move the move being attempted.
 	 ***************************************************************/
-	protected void handleCastle(Move move) {
+	protected final void handleCastle(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
 		
 		if (piece == null || !piece.is("King")) { return; }
@@ -297,7 +296,7 @@ public class Presenter {
 	/****************************************************************
 	 * Will check the game to see if it is in check or checkmate.
 	 ***************************************************************/
-	protected void checkForCheck() {
+	protected final void checkForCheck() {
 		if (model.inCheck()) {
 			if (model.isComplete()) {
 				view.gameOver(!model.getPlayerInCheck().isWhite());

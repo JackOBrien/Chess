@@ -49,7 +49,7 @@ public class BevelOnHover implements MouseListener {
 	}
 	
 	@Override
-	public void mouseExited(MouseEvent e) {
+	public final void mouseExited(final MouseEvent e) {
 		JButton button = (JButton) e.getComponent();
 		
 		Border line = BorderFactory.createLineBorder(borderColor, 1);
@@ -57,7 +57,7 @@ public class BevelOnHover implements MouseListener {
 	}
 	
 	@Override
-	public void mouseEntered(MouseEvent e) {
+	public final void mouseEntered(final MouseEvent e) {
 		JButton button = (JButton) e.getComponent();
 		
 		Border border = BorderFactory.createRaisedSoftBevelBorder();
@@ -65,5 +65,5 @@ public class BevelOnHover implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) { }
+	public void mouseClicked(final MouseEvent e) { }
 }
