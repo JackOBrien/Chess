@@ -215,6 +215,7 @@ public class ChessModelTest {
 		model.move(new Move(6, 0, 4, 0));
 		model.move(new Move(6, 7, 5, 7));
 		assertTrue(model.inCheck());
+		assertEquals(Player.BLACK, model.getPlayerInCheck());
 		assertFalse(model.isComplete());
 	}
 	

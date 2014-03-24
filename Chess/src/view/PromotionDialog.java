@@ -64,18 +64,18 @@ public class PromotionDialog extends JDialog implements ActionListener {
 	 * Constructor for the promotion dialog.
 	 * 
 	 * @param w tells is the piece is white.
-	 * @param sSize the size of the images.
+	 * @param pSize the size of the images.
 	 * @param promo the background color for the pieces.
 	 * @param acc the color for the ok button.
 	 ***************************************************************/
-	public PromotionDialog(final boolean w, final int sSize, final Color promo,
+	public PromotionDialog(final boolean w, final int pSize, final Color promo,
 			final Color acc) {		
 		mouseListener = new BevelOnHover(Color.WHITE);
 		
 		final int border = 5;
 		
 		white = w;
-		this.size = size + border;
+		size = pSize + border;
 		
 		rook = createDefaultButton(promo);
 		knight = createDefaultButton(promo);

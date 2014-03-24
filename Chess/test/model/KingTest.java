@@ -164,4 +164,20 @@ public class KingTest extends ChessPieceTest {
 		   getBoard().set(new Rook(plr), 0, 0);
 		   assertTrue(getPiece().isValidMove(new Move(0, 4, 0, 2), getBoard()));
 	   }
+	   
+	   @Test
+	   public final void cantCastleToNull_Queen() throws Exception {
+		   getBoard().set(getPiece(), 0, 4);
+		   getBoard().set(new Pawn(Player.WHITE), 0, 0);
+		   assertFalse(getPiece().isValidMove(new Move(0, 4, 0, 2), 
+				   getBoard()));
+	   }
+	   
+	   @Test
+	   public final void cantCastleToNull_King() throws Exception {
+		   getBoard().set(getPiece(), 0, 4);
+		   getBoard().set(new Pawn(Player.WHITE), 0, 7);
+		   assertFalse(getPiece().isValidMove(new Move(0, 4, 0, 6), 
+				   getBoard()));
+	   }
 }

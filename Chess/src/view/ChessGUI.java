@@ -66,8 +66,6 @@ public class ChessGUI implements IChessUI {
 	 bQueen = loadIcon(path + "b_queen.png"),
 	 bRook = loadIcon(path + "b_rook.png");
 	
-	private ImageIcon kingLogo = loadIcon("images/kingIconLarge.png");
-
 	/** Image of a very small GVSU logo. */
 	private ImageIcon gvsu = loadIcon(path + "GVSUlogoSmall.png");
 	
@@ -75,7 +73,7 @@ public class ChessGUI implements IChessUI {
 	private ImageIcon exit = loadIcon(path + "exit.png");
 	
 	/** The size of the images and buttons on the board. Default 60. */
-	private static final int IMG_SIZE = 80;
+	private static final int IMG_SIZE = 60;
 	
 	/** The amount of extra space between the edge of the button 
 	 * and the edge of the image. Default 5. */

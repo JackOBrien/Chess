@@ -152,6 +152,11 @@ public class King extends ChessPiece {
 			/* Ensure the side is clear */
 			if (b.pieceAt(fR, fC + 1) != null) { return null; }
 			
+			/* Ensure there is a rook in the proper location */
+			if (b.pieceAt(tR, tC + 1) == null) { return null; }
+			
+			if (!b.pieceAt(tR, tC + 1).is("Rook"))  { return null; }
+			
 			return (Rook) b.pieceAt(tR, tC + 1);
 		
 		/* Castling on the Queen's side */
@@ -162,6 +167,11 @@ public class King extends ChessPiece {
 					|| b.pieceAt(fR, tC - 1) != null) { 
 				return null; 
 			}
+			
+			/* Ensure there is a rook in the proper location */
+			if (b.pieceAt(tR, tC - 2) == null) { return null; }
+			
+			if (!b.pieceAt(tR, tC - 2).is("Rook"))  { return null; }
 			
 			return (Rook) b.pieceAt(tR, tC - 2);
 			
