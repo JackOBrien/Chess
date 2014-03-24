@@ -166,7 +166,7 @@ public class KingTest extends ChessPieceTest {
 	   }
 	   
 	   @Test
-	   public final void cantCastleToNull_Queen() throws Exception {
+	   public final void cantCastleToNullQueen() throws Exception {
 		   getBoard().set(getPiece(), 0, 4);
 		   getBoard().set(new Pawn(Player.WHITE), 0, 0);
 		   assertFalse(getPiece().isValidMove(new Move(0, 4, 0, 2), 
@@ -174,7 +174,7 @@ public class KingTest extends ChessPieceTest {
 	   }
 	   
 	   @Test
-	   public final void cantCastleToNull_King() throws Exception {
+	   public final void cantCastleToNullKing() throws Exception {
 		   getBoard().set(getPiece(), 0, 4);
 		   getBoard().set(new Pawn(Player.WHITE), 0, 7);
 		   assertFalse(getPiece().isValidMove(new Move(0, 4, 0, 6), 

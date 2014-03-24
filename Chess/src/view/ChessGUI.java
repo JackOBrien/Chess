@@ -124,7 +124,7 @@ public class ChessGUI implements IChessUI {
 	 * @param numRows the number of rows on the board.
 	 * @param numCols the number of columns on the board.
 	 ***************************************************************/
-	public ChessGUI(int numRows, int numCols) {
+	public ChessGUI(final int numRows, final int numCols) {
 		topWindow = new JFrame();
 		
 		// Doesn't allow the color to change when pressed
@@ -258,7 +258,7 @@ public class ChessGUI implements IChessUI {
 	 * @param icon image to be displayed on the button.
 	 * @return a fully setup JButton with the given image.
 	 ***************************************************************/
-	private JButton createDefaultButton(ImageIcon icon) {
+	private JButton createDefaultButton(final ImageIcon icon) {
 		JButton button = new JButton(icon);
 		button.setPreferredSize(new Dimension(IMG_SIZE, IMG_SIZE));
 		button.setSize(new Dimension(IMG_SIZE, IMG_SIZE));
@@ -279,7 +279,7 @@ public class ChessGUI implements IChessUI {
 	 * @param name Name of the file.
 	 * @return the requested image.
 	 ***************************************************************/
-	private static  ImageIcon loadIcon(String name) {
+	private static  ImageIcon loadIcon(final String name) {
 		java.net.URL imgURL = ChessGUI.class.getResource(name);
 		if (imgURL == null) {
 			throw new RuntimeException("Icon resource not found.");
@@ -293,10 +293,12 @@ public class ChessGUI implements IChessUI {
 	 * Takes an ImageIcon and changes its size.
 	 * 
 	 * @param icon the ImageIcon to be changed.
-	 * @param size the new width and height of the image.
+	 * @param pSize the new width and height of the image.
 	 * @return the resized ImageIcon.
 	 ***************************************************************/
-	private ImageIcon resizeImage(ImageIcon icon, int size) {
+	private ImageIcon resizeImage(final ImageIcon icon, final int pSize) {
+		
+		int size = pSize;
 		
 		size -= borderBuffer;
 		
@@ -310,7 +312,7 @@ public class ChessGUI implements IChessUI {
 	}
 
 	@Override
-	public void setSelected(int row, int col) {
+	public final void setSelected(final int row, final int col) {
 		board[row][col].setBackground(selected);
 	}
 	
@@ -321,7 +323,7 @@ public class ChessGUI implements IChessUI {
 	 * @param row row location of the button.
 	 * @param col column location of the button.
 	 ***************************************************************/
-	private void setDeselected(int row, int col) {
+	private void setDeselected(final int row, final int col) {
 		Color bg = light;
 		
 		/* Checks for dark square. */
@@ -333,7 +335,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void deselectAll() {
+	public final void deselectAll() {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board[0].length; c++) {
 				setDeselected(r, c);
@@ -342,12 +344,13 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void setHighlighted(int row, int col) {
+	public final void setHighlighted(final int row, final int col) {
 		board[row][col].setBackground(highlighted);
 	}
 	
 	@Override
-	public void changeImage(int row, int col, String type, boolean white) {
+	public final void changeImage(final int row, final int col, 
+			final String type, final boolean white) {
 		ImageIcon img = imageFinder(type, white);
 		
 		img = resizeImage(img, IMG_SIZE);
@@ -363,7 +366,7 @@ public class ChessGUI implements IChessUI {
 	 * @param white tells if the piece is white or not.
 	 * @return  image corresponding to the piece described.
 	 ***************************************************************/
-	private ImageIcon imageFinder(String type, boolean white) {		
+	private ImageIcon imageFinder(final String type, final boolean white) {		
 		ImageIcon image = null;
 				
 		if (white) {
@@ -383,7 +386,7 @@ public class ChessGUI implements IChessUI {
 	 * @param type name of the piece's type.
 	 * @return the proper image of the described piece.
 	 ***************************************************************/
-	private ImageIcon assignWhiteImage(String type) {
+	private ImageIcon assignWhiteImage(final String type) {
 		ImageIcon image;
 		
 		switch(type) {
@@ -421,7 +424,7 @@ public class ChessGUI implements IChessUI {
 	 * @param type name of the piece's type.
 	 * @return the proper image of the described piece.
 	 ***************************************************************/
-	private ImageIcon assignBlackImage(String type) {
+	private ImageIcon assignBlackImage(final String type) {
 		ImageIcon image;
 
 		switch(type) {
@@ -451,7 +454,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void setMoveHandler(ActionListener mh) {
+	public final void setMoveHandler(final ActionListener mh) {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board[0].length; c++) {
 				board[r][c].addActionListener(mh);
@@ -460,12 +463,13 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void setPromotionHandler(ActionListener ph) {
+	public final void setPromotionHandler(final ActionListener ph) {
 		promotionListener = ph;
 	}
 	
 	@Override
-	public void pawnPromotion(int row, int col, boolean white) {
+	public final void pawnPromotion(final int row, final int col, 
+			final boolean white) {
 		final double sizeModifier = .667;
 		final int size = (int) (IMG_SIZE * sizeModifier);
 		
@@ -507,7 +511,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void gameInCheck(boolean white) {
+	public final void gameInCheck(final boolean white) {
 		String message = "White ";
 		ImageIcon icon = wKing;
 		final int extraSize = 10;
@@ -525,7 +529,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void gameOver(boolean white) {
+	public final void gameOver(final boolean white) {
 		String message = "Checkmate! ";
 		ImageIcon icon = wKing;
 		final int extraSize = 10;
@@ -556,7 +560,7 @@ public class ChessGUI implements IChessUI {
 	private ActionListener menuListener = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			String source = e.getActionCommand();
 			
 			if (source.equals("Exit")) {
@@ -569,7 +573,7 @@ public class ChessGUI implements IChessUI {
 	private FocusListener focusListener = new FocusListener() {
 		
 		@Override
-		public void focusLost(FocusEvent e) {						
+		public void focusLost(final FocusEvent e) {						
 			
 			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
 			
@@ -579,7 +583,7 @@ public class ChessGUI implements IChessUI {
 		}
 		
 		@Override
-		public void focusGained(FocusEvent e) {
+		public void focusGained(final FocusEvent e) {
 			Dimension d = topWindow.getSize();
 			
 			try {
@@ -631,7 +635,7 @@ class BlurLayerUI extends LayerUI<JComponent> {
 	}
 
 	@Override
-	public void paint (Graphics g, JComponent c) {
+	public void paint(final Graphics g, final JComponent c) {
 		int w = c.getWidth();
 		int h = c.getHeight();
 
