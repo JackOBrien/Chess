@@ -203,9 +203,7 @@ public class ChessGUI implements IChessUI {
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
 		al.add(resizeImage(wKing, kingLogoSize).getImage());
-		
-		topWindow.addFocusListener(focusListener);
-		
+				
 		topWindow.setTitle("CIS 350: Chess Game");
 		topWindow.setIconImages(al);
 		topWindow.pack();
@@ -486,6 +484,7 @@ public class ChessGUI implements IChessUI {
 		
 		PromotionDialog dialog = new PromotionDialog(white, size, 
 				promotion, accent);
+		dialog.addFocusListener(focusListener);
 		
 		// Find all relevant images
 		ImageIcon rookIcon = imageFinder("Rook", white);
@@ -580,31 +579,38 @@ public class ChessGUI implements IChessUI {
 		}
 	};
 	
+	public void blurBoard() {
+		jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
+		
+		topWindow.remove(buttonPanel);
+		topWindow.add(jLayer);
+		topWindow.validate();
+	}
+	
+	public void unBlurBoard() {
+		Dimension d = topWindow.getSize();
+		
+		try {
+			topWindow.remove(jLayer);
+		} catch (NullPointerException exc) {
+			return;
+		}
+		topWindow.add(buttonPanel);
+		topWindow.pack();
+		topWindow.setSize(d);
+	}
+	
 	/** Blurs the board when it goes out of focus. */
 	private FocusListener focusListener = new FocusListener() {
 		
 		@Override
 		public void focusLost(final FocusEvent e) {						
-			
-			jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
-			
-			topWindow.remove(buttonPanel);
-			topWindow.add(jLayer);
-			topWindow.validate();
+			unBlurBoard();
 		}
 		
 		@Override
 		public void focusGained(final FocusEvent e) {
-			Dimension d = topWindow.getSize();
-			
-			try {
-				topWindow.remove(jLayer);
-			} catch (NullPointerException exc) {
-				return;
-			}
-			topWindow.add(buttonPanel);
-			topWindow.pack();
-			topWindow.setSize(d);
+			blurBoard();
 		}
 	};
 }
