@@ -64,8 +64,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="view.BoardColors" project="Chess" file="/Chess/src/view/BoardColors.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <class id="8" language="java" name="view.colors.RedPalette" project="Chess" 
+    file="/Chess/src/view/colors/RedPalette.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="189" width="123" x="98" y="883"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

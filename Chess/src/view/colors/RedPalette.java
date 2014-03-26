@@ -1,4 +1,4 @@
-package view;
+package view.colors;
 
 import java.awt.Color;
 
@@ -6,12 +6,12 @@ import java.awt.Color;
  * CIS 350 - 01
  * Chess
  *
- * Color palate for the chess GUI.
+ * Red color palate for the chess GUI.
  *
  * @author John O'Brien
  * @version Mar 19, 2014
  *******************************************************************/
-public final class BoardColors {
+public final class RedPalette {
 	
 	/** The color for the light spaces on the board. */
 	public static final Color LIGHT = new Color(196, 177, 143);
@@ -34,5 +34,5 @@ public final class BoardColors {
 	/****************************************************************
 	 * Constructor for BoardColors.
 	 ***************************************************************/
-	private BoardColors() {	}
+	private RedPalette() {	}
 }

@@ -35,6 +35,8 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
+import view.colors.RedPalette;
+
 /********************************************************************
  * CIS 350 - 01
  * Chess
@@ -134,14 +136,9 @@ public class ChessGUI implements IChessUI {
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
-				
-		// Define default colors.
-		light = BoardColors.LIGHT;
-		dark = BoardColors.DARK;
-		selected = BoardColors.SELECTED;
-		highlighted = BoardColors.HIGHLIGHTED;
-		promotion = BoardColors.PROMOTION;
-		accent = BoardColors.ACCENT;
+		
+		// Starting board color
+		setBoardColors(ColorController.BLUE);
 		
 		layerUI = new BlurLayerUI();
 		
@@ -271,6 +268,20 @@ public class ChessGUI implements IChessUI {
 		button.setBorder(line);
 		
 		return button;
+	}
+	
+	private void setBoardColors(int color) {
+		
+		// Default color palette
+		ColorController palette = new ColorController(color);
+
+		// Define default colors.
+		light = palette.getLight();
+		dark = palette.getDark();
+		selected = palette.getSelected();
+		highlighted = palette.getHighlighted();
+		promotion = palette.getPromotion();
+		accent = palette.getAccent();
 	}
 	
 	/****************************************************************
