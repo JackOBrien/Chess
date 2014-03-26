@@ -36,7 +36,6 @@ import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
 import view.colors.ColorController;
-import view.colors.RedPalette;
 
 /********************************************************************
  * CIS 350 - 01
@@ -58,7 +57,8 @@ public class ChessGUI implements IChessUI {
 	  wKnight = loadIcon(path + "w_knight.png"),
 	  wPawn = loadIcon(path + "w_pawn.png"),
 	  wQueen = loadIcon(path + "w_queen.png"),
-	  wRook = loadIcon(path + "w_rook.png");
+	  //wRook = loadIcon(path + "w_rook.png"); TODO
+			  wRook = ChessIcon.W_ROOK.getIcon();
 
 
 	/** Image for the black game pieces. */
@@ -139,7 +139,7 @@ public class ChessGUI implements IChessUI {
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 		
 		// Starting board color
-		setBoardColors(ColorController.RAINBOW);
+		setBoardColors(ColorController.RED);
 		
 		layerUI = new BlurLayerUI();
 		
@@ -162,7 +162,8 @@ public class ChessGUI implements IChessUI {
 			for (int c = 0; c < board[0].length; c++) {
 				
 				// Creates the JButton with default style
-				JButton button = createDefaultButton();
+				//JButton button = createDefaultButton(); TODO
+				ChessTile button = new ChessTile(IMG_SIZE);
 				
 				// Adds an actionCommand for the button with the
 				// coordinates of its location on the board: r,c.
