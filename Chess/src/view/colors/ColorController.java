@@ -1,9 +1,6 @@
-package view;
+package view.colors;
 
 import java.awt.Color;
-
-import view.colors.BluePalette;
-import view.colors.RedPalette;
 
 /********************************************************************
  * CIS 350 - 01
@@ -38,6 +35,10 @@ public class ColorController {
 	
 	public static final int BLUE = 2;
 	
+	public static final int RAINBOW = 3;
+	
+	public static final int GRAY = 4;
+	
 	public ColorController() {
 		switchPalette(RED);
 	}
@@ -49,14 +50,6 @@ public class ColorController {
 	public void switchPalette(int color) {
 		
 		switch (color) {
-		case RED:
-			light = RedPalette.LIGHT;
-			dark = RedPalette.DARK;
-			selected = RedPalette.SELECTED;
-			highlighted = RedPalette.HIGHLIGHTED;
-			promotion = RedPalette.PROMOTION;
-			accent = RedPalette.ACCENT;
-			break;
 		case BLUE:
 			light = BluePalette.LIGHT;
 			dark = BluePalette.DARK;
@@ -64,8 +57,30 @@ public class ColorController {
 			highlighted = BluePalette.HIGHLIGHTED;
 			promotion = BluePalette.PROMOTION;
 			accent = BluePalette.ACCENT;
-
+			break;
+		case RAINBOW:
+			light = RainbowPalette.LIGHT;
+			dark = RainbowPalette.DARK;
+			selected = RainbowPalette.SELECTED;
+			highlighted = RainbowPalette.HIGHLIGHTED;
+			promotion = RainbowPalette.PROMOTION;
+			accent = RainbowPalette.ACCENT;
+			break;
+		case GRAY:
+			light = GrayPalette.LIGHT;
+			dark = GrayPalette.DARK;
+			selected = GrayPalette.SELECTED;
+			highlighted = GrayPalette.HIGHLIGHTED;
+			promotion = GrayPalette.PROMOTION;
+			accent = GrayPalette.ACCENT;
+			break;
 		default:
+			light = RedPalette.LIGHT;
+			dark = RedPalette.DARK;
+			selected = RedPalette.SELECTED;
+			highlighted = RedPalette.HIGHLIGHTED;
+			promotion = RedPalette.PROMOTION;
+			accent = RedPalette.ACCENT;
 			break;
 		}
 	}

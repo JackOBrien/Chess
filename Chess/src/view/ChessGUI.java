@@ -35,6 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
+import view.colors.ColorController;
 import view.colors.RedPalette;
 
 /********************************************************************
@@ -138,7 +139,7 @@ public class ChessGUI implements IChessUI {
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 		
 		// Starting board color
-		setBoardColors(ColorController.BLUE);
+		setBoardColors(ColorController.RED);
 		
 		layerUI = new BlurLayerUI();
 		
