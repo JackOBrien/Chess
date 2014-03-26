@@ -139,7 +139,7 @@ public class ChessGUI implements IChessUI {
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 		
 		// Starting board color
-		setBoardColors(ColorController.RED);
+		setBoardColors(ColorController.RAINBOW);
 		
 		layerUI = new BlurLayerUI();
 		

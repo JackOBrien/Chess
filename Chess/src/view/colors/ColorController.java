@@ -39,6 +39,8 @@ public class ColorController {
 	
 	public static final int GRAY = 4;
 	
+	public static final int GREEN = 5;
+	
 	public ColorController() {
 		switchPalette(RED);
 	}
@@ -73,6 +75,14 @@ public class ColorController {
 			highlighted = GrayPalette.HIGHLIGHTED;
 			promotion = GrayPalette.PROMOTION;
 			accent = GrayPalette.ACCENT;
+			break;
+		case GREEN:
+			light = GreenPalette.LIGHT;
+			dark = GreenPalette.DARK;
+			selected = GreenPalette.SELECTED;
+			highlighted = GreenPalette.HIGHLIGHTED;
+			promotion = GreenPalette.PROMOTION;
+			accent = GreenPalette.ACCENT;
 			break;
 		default:
 			light = RedPalette.LIGHT;
