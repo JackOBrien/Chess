@@ -13,10 +13,13 @@ import javax.swing.ImageIcon;
  *******************************************************************/
 public enum ChessIcon {
 
-	W_ROOK ("w_rook"), W_KNIGHT ("w_knight"), W_BISH ("w_bish"), 
-	W_QUEEN ("w_queen"), W_KING ("w_king"), W_PAWN ("w_king"),
-	B_ROOK ("b_rook"), B_KNIGHT ("b_knight"), B_BISH ("b_bish"), 
-	B_QUEEN ("b_queen"), B_KING ("b_king"), B_PAWN ("b_king");
+	W_ROOK ("w_rook", "Rook", true), W_KNIGHT ("w_knight", "Knight", true), 
+	W_BISH ("w_bish", "Bishop", true), W_QUEEN ("w_queen", "Queen", true), 
+	W_KING ("w_king", "King", true), W_PAWN ("w_pawn", "Pawn", true),
+	
+	B_ROOK ("b_rook", "Rook", false), B_KNIGHT ("b_knight", "Knight", false), 
+	B_BISH ("b_bish", "Bishop", false),	B_QUEEN ("b_queen", "Queen", false), 
+	B_KING ("b_king", "King", false), B_PAWN ("b_pawn", "Pawn", false);
 	
 	/** Name of the folder containing the images of the game pieces. */
 	private final String path = "images/";
@@ -25,26 +28,36 @@ public enum ChessIcon {
 	
 	private ImageIcon icon;
 	
-	private ChessIcon(String name) {
-		icon = loadIcon(path + name + fileType);
+	private String filename;
+	
+	private String pieceType;
+	
+	private boolean isWhite;
+	
+	private ChessIcon(String name, String type, boolean white) {
+		
+		filename = name;
+		pieceType = type;
+		isWhite = white;
+				
+		icon = ImageLoader.loadIcon(path + filename + fileType);
 	}
 	
 	public ImageIcon getIcon() {
 		return icon;
 	}
 	
-	/****************************************************************
-	 * Static method to load the ImageIcon from the given location.
-	 * 
-	 * @param name Name of the file.
-	 * @return the requested image.
-	 ***************************************************************/
-	private static  ImageIcon loadIcon(final String name) {
-		java.net.URL imgURL = ChessGUI.class.getResource(name);
-		if (imgURL == null) {
-			throw new RuntimeException("Icon resource not found.");
-		}  
-
-		return new ImageIcon(imgURL);
+	public static ImageIcon findIcon(String type, boolean white) {
+		
+		/* Loop through all values searching for a match */
+		for (ChessIcon i : ChessIcon.values()) {
+			if (i.isWhite == white) {
+				if (i.pieceType.equals(type)) {
+					return i.getIcon();
+				}
+			}
+		}
+		
+		return null;
 	}
 }

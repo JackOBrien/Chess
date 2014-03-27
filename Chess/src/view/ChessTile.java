@@ -45,6 +45,7 @@ public class ChessTile extends JButton {
 	
 	public void setDefaultBackground(Color bg) {
 		defaultBG = bg;
+		setBackground(bg);
 	}
 	
 	public void resetColor() {

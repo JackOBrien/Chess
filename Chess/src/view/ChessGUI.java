@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,7 +18,6 @@ import java.awt.image.Kernel;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -32,7 +30,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
 import view.colors.ColorController;
@@ -48,39 +45,17 @@ import view.colors.ColorController;
  *******************************************************************/
 public class ChessGUI implements IChessUI {
 
-	/** Name of the folder containing the images of the game pieces. */
+	/** Name of the folder containing the images of GUI icons. */
 	private final String path = "images/";
 	
-	/** Image for the white game pieces. */
-	private ImageIcon wBish = loadIcon(path + "w_bish.png"),
-	  wKing = loadIcon(path + "w_king.png"),
-	  wKnight = loadIcon(path + "w_knight.png"),
-	  wPawn = loadIcon(path + "w_pawn.png"),
-	  wQueen = loadIcon(path + "w_queen.png"),
-	  //wRook = loadIcon(path + "w_rook.png"); TODO
-			  wRook = ChessIcon.W_ROOK.getIcon();
-
-
-	/** Image for the black game pieces. */
-	private ImageIcon bBish = loadIcon(path + "b_bish.png"),
-	 bKing = loadIcon(path + "b_king.png"),
-	 bKnight = loadIcon(path + "b_knight.png"),
-	 bPawn = loadIcon(path + "b_pawn.png"),
-	 bQueen = loadIcon(path + "b_queen.png"),
-	 bRook = loadIcon(path + "b_rook.png");
-	
 	/** Image of a very small GVSU logo. */
-	private ImageIcon gvsu = loadIcon(path + "GVSUlogoSmall.png");
+	private ImageIcon gvsu = ImageLoader.loadIcon(path + "GVSUlogoSmall.png");
 	
 	/** Image of a small exit sign. */
-	private ImageIcon exit = loadIcon(path + "exit.png");
+	private ImageIcon exit = ImageLoader.loadIcon(path + "exit.png");
 	
 	/** The size of the images and buttons on the board. Default 60. */
 	private static final int IMG_SIZE = 60;
-	
-	/** The amount of extra space between the edge of the button 
-	 * and the edge of the image. Default 5. */
-	private final int borderBuffer = 5;
 	
 	/** The color for the light spaces on the board. */
 	private Color light;
@@ -115,9 +90,6 @@ public class ChessGUI implements IChessUI {
 	/** JLayer to blur the board. */
 	private JLayer<JComponent> jLayer;
 	
-	/** MouseListener that will bevel buttons when interacted with. */
-	private BevelOnHover mouseListener;
-	
 	/** ActionListiner for the promotion options. */
 	private ActionListener promotionListener;
 	
@@ -143,8 +115,6 @@ public class ChessGUI implements IChessUI {
 		
 		layerUI = new BlurLayerUI();
 		
-		mouseListener = new BevelOnHover(Color.BLACK);
-		
 		setupBlankBoard();
 		setupMenu();
 		setupFrame();
@@ -161,8 +131,7 @@ public class ChessGUI implements IChessUI {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board[0].length; c++) {
 				
-				// Creates the JButton with default style
-				//JButton button = createDefaultButton(); TODO
+				// Creates the chess tile with default style
 				ChessTile button = new ChessTile(IMG_SIZE);
 				
 				// Adds an actionCommand for the button with the
@@ -178,7 +147,7 @@ public class ChessGUI implements IChessUI {
 					bg = light;
 				}
 				
-				button.setBackground(bg);
+				button.setDefaultBackground(bg);
 				
 				board[r][c] = button;
 				buttonPanel.add(button);
@@ -204,7 +173,8 @@ public class ChessGUI implements IChessUI {
 		
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
-		al.add(resizeImage(wKing, kingLogoSize).getImage());
+		ImageIcon icon = ChessIcon.W_KING.getIcon();
+		al.add(ImageLoader.resizeImage(icon, kingLogoSize).getImage());
 				
 		topWindow.setTitle("CIS 350: Chess Game");
 		topWindow.setIconImages(al);
@@ -225,7 +195,7 @@ public class ChessGUI implements IChessUI {
 		final int iconSize = 20;
 		
 		JMenuItem exitItem = new JMenuItem("Exit");
-		exitItem.setIcon(resizeImage(exit, iconSize));
+		exitItem.setIcon(ImageLoader.resizeImage(exit, iconSize));
 		exitItem.addActionListener(menuListener);
 		exitItem.setActionCommand("Exit");
 		
@@ -240,39 +210,7 @@ public class ChessGUI implements IChessUI {
 		topWindow.setJMenuBar(menuBar);
 	}
 	
-	/****************************************************************
-	 * Creates a default button with no image.
-	 * 
-	 * @return a fully setup JButton with no image.
-	 ***************************************************************/
-	private JButton createDefaultButton() {
-		return createDefaultButton(null);
-	}
-	
-	/****************************************************************
-	 * Creates a default button with the given image.
-	 * 
-	 * @param icon image to be displayed on the button.
-	 * @return a fully setup JButton with the given image.
-	 ***************************************************************/
-	private JButton createDefaultButton(final ImageIcon icon) {
-		JButton button = new JButton(icon);
-		button.setPreferredSize(new Dimension(IMG_SIZE, IMG_SIZE));
-		button.setSize(new Dimension(IMG_SIZE, IMG_SIZE));
-		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		button.addMouseListener(mouseListener);
-		button.setOpaque(true);
-		button.setFocusable(false);
-		
-		Border line = BorderFactory.createLineBorder(Color.BLACK, 1);
-		button.setBorder(line);
-		
-		return button;
-	}
-	
 	private void setBoardColors(int color) {
-		
-		// Default color palette
 		ColorController palette = new ColorController(color);
 
 		// Define default colors.
@@ -282,45 +220,7 @@ public class ChessGUI implements IChessUI {
 		highlighted = palette.getHighlighted();
 		promotion = palette.getPromotion();
 		accent = palette.getAccent();
-	}
-	
-	/****************************************************************
-	 * Static method to load the ImageIcon from the given location.
-	 * 
-	 * @param name Name of the file.
-	 * @return the requested image.
-	 ***************************************************************/
-	private static  ImageIcon loadIcon(final String name) {
-		java.net.URL imgURL = ChessGUI.class.getResource(name);
-		if (imgURL == null) {
-			throw new RuntimeException("Icon resource not found.");
-		}  
-
-		return new ImageIcon(imgURL);
-	}
-	
-
-	/****************************************************************
-	 * Takes an ImageIcon and changes its size.
-	 * 
-	 * @param icon the ImageIcon to be changed.
-	 * @param pSize the new width and height of the image.
-	 * @return the resized ImageIcon.
-	 ***************************************************************/
-	private ImageIcon resizeImage(final ImageIcon icon, final int pSize) {
-		
-		int size = pSize;
-		
-		size -= borderBuffer;
-		
-		if (icon == null) { return icon; }
-		
-		Image img = icon.getImage();
-				
-		Image resized = img.getScaledInstance(size, size, 
-				Image.SCALE_AREA_AVERAGING);
-		return new ImageIcon(resized);
-	}
+	}	
 
 	@Override
 	public final void setSelected(final int row, final int col) {
@@ -362,106 +262,11 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void changeImage(final int row, final int col, 
 			final String type, final boolean white) {
-		ImageIcon img = imageFinder(type, white);
+		ImageIcon img = ChessIcon.findIcon(type, white);
 		
-		img = resizeImage(img, IMG_SIZE);
+		img = ImageLoader.resizeImage(img, IMG_SIZE);
 		
 		board[row][col].setIcon(img);
-	}
-	
-	/****************************************************************
-	 * Helper method to return the image that matches the
-	 * described chess piece.
-	 * 
-	 * @param type the name of the piece, i.e. "King".
-	 * @param white tells if the piece is white or not.
-	 * @return  image corresponding to the piece described.
-	 ***************************************************************/
-	private ImageIcon imageFinder(final String type, final boolean white) {		
-		ImageIcon image = null;
-				
-		if (white) {
-			image = assignWhiteImage(type);
-		} else {
-			image = assignBlackImage(type);
-		}
-		
-		return image;
-	}
-	
-	/****************************************************************
-	 * Finds the proper white piece for the given type.
-	 * 
-	 * TODO: Remove this for Release 3.
-	 * 
-	 * @param type name of the piece's type.
-	 * @return the proper image of the described piece.
-	 ***************************************************************/
-	private ImageIcon assignWhiteImage(final String type) {
-		ImageIcon image;
-		
-		switch(type) {
-		case "Bishop":
-			image = wBish;
-			break;
-		case "King":
-			image = wKing;
-			break;
-		case "Knight":
-			image = wKnight;
-			break;
-		case "Pawn":
-			image = wPawn;
-			break;
-		case "Queen":
-			image = wQueen;
-			break;
-		case "Rook":
-			image = wRook;
-			break;
-		default:
-			image = null;
-			break;
-		}
-		
-		return image;
-	}
-	
-	/****************************************************************
-	 * Finds the proper black piece for the given type.
-	 * 
-	 * TODO: Remove this for Release 3.
-	 * 
-	 * @param type name of the piece's type.
-	 * @return the proper image of the described piece.
-	 ***************************************************************/
-	private ImageIcon assignBlackImage(final String type) {
-		ImageIcon image;
-
-		switch(type) {
-		case "Bishop":
-			image = bBish;
-			break;
-		case "King":
-			image = bKing;
-			break;
-		case "Knight":
-			image = bKnight;
-			break;
-		case "Pawn":
-			image = bPawn;
-			break;
-		case "Queen":
-			image = bQueen;
-			break;
-		case "Rook":
-			image = bRook;
-			break;
-		default:
-			image = null;
-			break;
-		}
-		return image;
 	}
 	
 	@Override
@@ -489,16 +294,16 @@ public class ChessGUI implements IChessUI {
 		dialog.addFocusListener(focusListener);
 		
 		// Find all relevant images
-		ImageIcon rookIcon = imageFinder("Rook", white);
-		ImageIcon knightIcon = imageFinder("Knight", white);
-		ImageIcon bishopIcon = imageFinder("Bishop", white);
-		ImageIcon queenIcon = imageFinder("Queen", white);
+		ImageIcon rookIcon = ChessIcon.findIcon("Rook", white);
+		ImageIcon knightIcon = ChessIcon.findIcon("Knight", white);
+		ImageIcon bishopIcon = ChessIcon.findIcon("Bishop", white);
+		ImageIcon queenIcon = ChessIcon.findIcon("Queen", white);
 		
 		// Re-size all found images
-		rookIcon = resizeImage(rookIcon, size);
-		knightIcon = resizeImage(knightIcon, size);
-		bishopIcon = resizeImage(bishopIcon, size);
-		queenIcon = resizeImage(queenIcon, size);
+		rookIcon = ImageLoader.resizeImage(rookIcon, size);
+		knightIcon = ImageLoader.resizeImage(knightIcon, size);
+		bishopIcon = ImageLoader.resizeImage(bishopIcon, size);
+		queenIcon = ImageLoader.resizeImage(queenIcon, size);
 		
 		// Set all relevant images for the dialog 
 		dialog.setRookImage(rookIcon);
@@ -525,16 +330,16 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void gameInCheck(final boolean white) {
 		String message = "White ";
-		ImageIcon icon = wKing;
+		ImageIcon icon = ChessIcon.W_KING.getIcon();
 		final int extraSize = 10;
 		
 		if (!white) {
 			message = "Black ";
-			icon = bKing;
+			icon = ChessIcon.B_KING.getIcon();
 		}
 		message += "is in check!";
 		String title = "Check";
-		icon = resizeImage(icon, IMG_SIZE + extraSize);
+		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
 		
 		JOptionPane.showMessageDialog(buttonPanel, message, title, 
 				JOptionPane.INFORMATION_MESSAGE, icon);
@@ -543,18 +348,18 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void gameOver(final boolean white) {
 		String message = "Checkmate! ";
-		ImageIcon icon = wKing;
+		ImageIcon icon = ChessIcon.W_KING.getIcon();
 		final int extraSize = 10;
 		
 		if (!white) {
 			message += "Black ";
-			icon = bKing;
+			icon = ChessIcon.B_KING.getIcon();
 		} else {
 			message += "White ";
 		}
 		message += "won the game!";
 		String title = "Game Over";
-		icon = resizeImage(icon, IMG_SIZE + extraSize);
+		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
 		
 		JButton playAgain = new JButton("Play Again");
 		playAgain.setEnabled(false);
