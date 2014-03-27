@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -18,11 +19,14 @@ import java.awt.image.Kernel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -30,6 +34,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
 import view.colors.ColorController;
@@ -81,6 +87,9 @@ public class ChessGUI implements IChessUI {
 	/** The panel that contains the board. */
 	private JPanel buttonPanel;
 	
+	/** The panel that contains captured pieces. */
+	private JPanel capturedPanel;
+	
 	/** The frame containing the entire game. */
 	private JFrame topWindow;
 	
@@ -101,6 +110,7 @@ public class ChessGUI implements IChessUI {
 	 ***************************************************************/
 	public ChessGUI(final int numRows, final int numCols) {
 		topWindow = new JFrame();
+		topWindow.setLayout(new BorderLayout());
 		
 		// Doesn't allow the color to change when pressed
 		UIManager.put("Button.select", Color.TRANSLUCENT);
@@ -116,6 +126,7 @@ public class ChessGUI implements IChessUI {
 		layerUI = new BlurLayerUI();
 		
 		setupBlankBoard();
+		setupCapturedPanel();
 		setupMenu();
 		setupFrame();
 	}
@@ -163,7 +174,7 @@ public class ChessGUI implements IChessUI {
 			lightSquare = !lightSquare;
 		}
 		
-		topWindow.add(buttonPanel); 
+		topWindow.add(buttonPanel, BorderLayout.LINE_START); 
 	}
 	
 	/****************************************************************
@@ -211,6 +222,16 @@ public class ChessGUI implements IChessUI {
 		topWindow.setJMenuBar(menuBar);
 	}
 	
+	private void setupCapturedPanel() {
+		capturedPanel = new JPanel();
+		capturedPanel.setLayout(new GridLayout(10, 0));
+		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+		capturedPanel.setBorder(border);
+		capturedPanel.setBackground(promotion);
+		
+		topWindow.add(capturedPanel, BorderLayout.CENTER);
+	}
+	
 	private void setBoardColors(int color) {
 		ColorController palette = new ColorController(color);
 
@@ -226,6 +247,18 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void setSelected(final int row, final int col) {
 		board[row][col].setBackground(selected);
+		
+		JButton b = new JButton();
+		ImageIcon ico = ImageLoader.resizeImage(
+				ChessIcon.B_BISH.getIcon(), 45);
+		b.setDisabledIcon(ico);
+		b.setIcon(ico);
+		b.setEnabled(false);
+		b.setBackground(promotion);
+		b.setFocusable(false);
+		b.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		capturedPanel.add(b);
+		topWindow.pack();
 	}
 	
 	/****************************************************************
@@ -380,7 +413,7 @@ public class ChessGUI implements IChessUI {
 		}
 	};
 	
-	public void blurBoard() {
+	private void blurBoard() {
 		jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
 		
 		topWindow.remove(buttonPanel);
@@ -388,7 +421,7 @@ public class ChessGUI implements IChessUI {
 		topWindow.validate();
 	}
 	
-	public void unBlurBoard() {
+	private void unBlurBoard() {
 		Dimension d = topWindow.getSize();
 		
 		try {
