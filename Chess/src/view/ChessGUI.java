@@ -76,7 +76,7 @@ public class ChessGUI implements IChessUI {
 	private Color accent;
 	
 	/** The game board represented as buttons. */
-	private JButton[][] board;
+	private ChessTile[][] board;
 	
 	/** The panel that contains the board. */
 	private JPanel buttonPanel;
@@ -105,7 +105,7 @@ public class ChessGUI implements IChessUI {
 		// Doesn't allow the color to change when pressed
 		UIManager.put("Button.select", Color.TRANSLUCENT);
 		
-		board = new JButton[numRows][numCols];
+		board = new ChessTile[numRows][numCols];
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
@@ -235,14 +235,7 @@ public class ChessGUI implements IChessUI {
 	 * @param col column location of the button.
 	 ***************************************************************/
 	private void setDeselected(final int row, final int col) {
-		Color bg = light;
-		
-		/* Checks for dark square. */
-		if ((row + col) % 2 != 0) {
-			bg = dark;
-		}
-		
-		board[row][col].setBackground(bg);
+		board[row][col].resetColor();
 	}
 	
 	@Override

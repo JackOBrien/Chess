@@ -49,7 +49,7 @@ public class ChessTile extends JButton {
 	}
 	
 	public void resetColor() {
-		if (specialHighlight) {
+		if (!specialHighlight) {
 			setBackground(defaultBG);
 		}
 	}

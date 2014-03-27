@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  * @version Mar 26, 2014
  *******************************************************************/
 public enum ChessIcon {
-
+	
 	W_ROOK ("w_rook", "Rook", true), W_KNIGHT ("w_knight", "Knight", true), 
 	W_BISH ("w_bish", "Bishop", true), W_QUEEN ("w_queen", "Queen", true), 
 	W_KING ("w_king", "King", true), W_PAWN ("w_pawn", "Pawn", true),
