@@ -31,11 +31,14 @@ public class ChessTile extends JButton {
 	
 	private boolean specialHighlight;
 	
+	private Color highlight;
+	
 	public ChessTile(int pSize) {
 		size = pSize;
 		
-		// Filler color.
+		// Filler colors.
 		defaultBG = Color.GRAY;
+		highlight = Color.LIGHT_GRAY;
 		
 		mouseListener = new BevelOnHover(Color.BLACK);
 		specialHighlight = false;
@@ -48,9 +51,15 @@ public class ChessTile extends JButton {
 		setBackground(bg);
 	}
 	
+	public void setSpecialBackground(Color c) {
+		highlight = c;
+	}
+	
 	public void resetColor() {
 		if (!specialHighlight) {
 			setBackground(defaultBG);
+		} else {
+			setBackground(highlight);
 		}
 	}
 	

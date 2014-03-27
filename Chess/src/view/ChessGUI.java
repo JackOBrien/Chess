@@ -148,6 +148,7 @@ public class ChessGUI implements IChessUI {
 				}
 				
 				button.setDefaultBackground(bg);
+//				button.setSpecialBackground(accent); TODO
 				
 				board[r][c] = button;
 				buttonPanel.add(button);
