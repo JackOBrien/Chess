@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -19,19 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
@@ -45,6 +48,15 @@ import view.colors.ColorController;
  *
  * @author John O'Brien
  * @version Mar 10, 2014
+ *******************************************************************/
+/********************************************************************
+ * CIS 350 - 01
+ * Chess
+ *
+ * 
+ *
+ * @author John O'Brien
+ * @version Mar 27, 2014
  *******************************************************************/
 public class ChessGUI implements IChessUI {
 
@@ -87,8 +99,29 @@ public class ChessGUI implements IChessUI {
 	/** The panel that contains captured pieces. */
 	private JPanel capturedPanel;
 	
+	/** JFrames menu bar */
+	private JMenuBar menuBar;
+	
 	/** The frame containing the entire game. */
 	private JFrame topWindow;
+	
+	/** Timer to count 1/10 of a second for white. */
+	private Timer wTimer;
+	
+	/** Timer to count 1/10 of a second for black. */
+	private Timer bTimer;
+	
+	/** Tells how long it has been white's turn. */
+	private JLabel whiteTime;
+	
+	/** Tells how long it has been black's turn. */
+	private JLabel blackTime;
+	
+	/** Clock to handle white's time. */
+	private Clock wClock;
+	
+	/** Clock to handle black's time. */
+	private Clock bClock;
 	
 	/** LayerUI to blur the board. */
 	private LayerUI<JComponent> layerUI;
@@ -99,6 +132,8 @@ public class ChessGUI implements IChessUI {
 	/** ActionListiner for the promotion options. */
 	private ActionListener promotionListener;
 	
+	private Font dynFont;
+	
 	/****************************************************************
 	 * The graphical user interface for Chess made up of JButtons. 
 	 * 
@@ -107,7 +142,6 @@ public class ChessGUI implements IChessUI {
 	 ***************************************************************/
 	public ChessGUI(final int numRows, final int numCols) {
 		topWindow = new JFrame();
-		topWindow.setLayout(new BorderLayout());
 		
 		// Doesn't allow the color to change when pressed
 		UIManager.put("Button.select", Color.TRANSLUCENT);
@@ -118,13 +152,19 @@ public class ChessGUI implements IChessUI {
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 		
 		// Starting board color
-		setBoardColors(ColorController.RED);
+		setBoardColors(ColorController.GREEN);
 		
+		// Dynamic font size
+		final double multi = .25;
+		final int fontSize = (int) (IMG_SIZE * multi);
+		dynFont = new Font("Calibri", Font.BOLD, fontSize);
+				
 		layerUI = new BlurLayerUI();
 		
 		setupBlankBoard();
 		setupCapturedPanel();
 		setupMenu();
+		setupTimers();
 		setupFrame();
 	}
 
@@ -171,7 +211,7 @@ public class ChessGUI implements IChessUI {
 			lightSquare = !lightSquare;
 		}
 		
-		topWindow.add(buttonPanel, BorderLayout.LINE_START); 
+		topWindow.add(buttonPanel); 
 	}
 	
 	/****************************************************************
@@ -198,7 +238,9 @@ public class ChessGUI implements IChessUI {
 	 ***************************************************************/
 	private void setupMenu() {
 		JMenu fileMenu = new JMenu("File");
-		JMenuBar menuBar = new JMenuBar();
+		fileMenu.setFont(dynFont);
+		menuBar = new JMenuBar();
+		menuBar.setLayout(new BorderLayout());
 		
 		menuBar.setBackground(accent);
 		final int iconSize = 20;
@@ -214,7 +256,7 @@ public class ChessGUI implements IChessUI {
 		menuBar.setBorderPainted(false);
 		
 		fileMenu.add(exitItem);
-		menuBar.add(fileMenu);
+		menuBar.add(fileMenu, BorderLayout.LINE_START);
 		
 		topWindow.setJMenuBar(menuBar);
 	}
@@ -226,7 +268,40 @@ public class ChessGUI implements IChessUI {
 		capturedPanel.setBorder(border);
 		capturedPanel.setBackground(promotion);
 		
-		topWindow.add(capturedPanel, BorderLayout.CENTER);
+//		topWindow.add(capturedPanel, BorderLayout.CENTER); TODO
+	}
+	
+	private void setupTimers() {
+		final int delay = 100; // 1/10th second
+		wTimer = new Timer(delay, timeListener);
+		bTimer = new Timer(delay, timeListener);
+		
+		JPanel labelPanel = new JPanel();
+		labelPanel.setBackground(accent);
+		final float panelMultiplier = 4.166f;
+		final int panelWidth = (int) (panelMultiplier * IMG_SIZE);
+		labelPanel.setPreferredSize(new Dimension(panelWidth, 0));
+		
+		wClock = new Clock();
+		whiteTime = new JLabel("White:  " + wClock.toString());
+		whiteTime.setForeground(Color.LIGHT_GRAY);
+		whiteTime.setFont(dynFont);
+		
+		bClock = new Clock();
+		blackTime = new JLabel("Black:  " + bClock.toString());
+		blackTime.setForeground(Color.LIGHT_GRAY);		
+		blackTime.setFont(dynFont);
+		
+		labelPanel.add(whiteTime);
+		
+		// Filler space
+		final int divisor = 6;
+		final int fillerSize = (panelWidth / divisor) - 12;
+		labelPanel.add(Box.createRigidArea(new Dimension(fillerSize, 0))); 
+		
+		labelPanel.add(blackTime);
+		
+		menuBar.add(labelPanel, BorderLayout.LINE_END);
 	}
 	
 	private void setBoardColors(int color) {
@@ -244,18 +319,6 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void setSelected(final int row, final int col) {
 		board[row][col].setBackground(selected);
-		
-		JButton b = new JButton();
-		ImageIcon ico = ImageLoader.resizeImage(
-				ChessIcon.B_BISH.getIcon(), 45);
-		b.setDisabledIcon(ico);
-		b.setIcon(ico);
-		b.setEnabled(false);
-		b.setBackground(promotion);
-		b.setFocusable(false);
-		b.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		capturedPanel.add(b);
-		topWindow.pack();
 	}
 	
 	/****************************************************************
@@ -303,6 +366,11 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
+	public final void setFocusHandler(final FocusListener fh) {
+		topWindow.addFocusListener(fh);
+	}
+	
+	@Override
 	public final void setPromotionHandler(final ActionListener ph) {
 		promotionListener = ph;
 	}
@@ -315,7 +383,7 @@ public class ChessGUI implements IChessUI {
 		
 		PromotionDialog dialog = new PromotionDialog(white, size, 
 				promotion, accent);
-		dialog.addFocusListener(focusListener);
+		dialog.addFocusListener(blurListener);
 		
 		// Find all relevant images
 		ImageIcon rookIcon = ChessIcon.findIcon("Rook", white);
@@ -397,6 +465,23 @@ public class ChessGUI implements IChessUI {
 				options, quit);
 	}
 	
+	@Override
+	public void startTimer(boolean white) {
+		if (white) {
+			wTimer.start();
+			bTimer.stop();
+		} else {
+			wTimer.stop();
+			bTimer.start();
+		}
+	}
+	
+	@Override
+	public void stopTimers() {
+		wTimer.stop();
+		bTimer.stop();
+	}
+	
 	/** Listener for the menu items. */
 	private ActionListener menuListener = new ActionListener() {
 		
@@ -432,7 +517,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	/** Blurs the board when it goes out of focus. */
-	private FocusListener focusListener = new FocusListener() {
+	private FocusListener blurListener = new FocusListener() {
 		
 		@Override
 		public void focusLost(final FocusEvent e) {						
@@ -442,6 +527,24 @@ public class ChessGUI implements IChessUI {
 		@Override
 		public void focusGained(final FocusEvent e) {
 			blurBoard();
+		}
+	};
+	
+	private ActionListener timeListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == wTimer) {
+				wClock.count();
+				whiteTime.setText("White:  " + wClock.toString());
+				whiteTime.setForeground(Color.LIGHT_GRAY);
+				blackTime.setForeground(Color.DARK_GRAY);
+			} else {
+				bClock.count();
+				blackTime.setText("Black:  " + bClock.toString());
+				blackTime.setForeground(Color.LIGHT_GRAY);
+				whiteTime.setForeground(Color.DARK_GRAY);
+			}
 		}
 	};
 }

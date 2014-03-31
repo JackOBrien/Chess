@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 
 /********************************************************************
  * CIS 350 - 01
@@ -86,5 +87,26 @@ public interface IChessUI {
 	 * @param white tells if white won or not.
 	 ***************************************************************/
 	void gameOver(boolean white);
+
+	/****************************************************************
+	 * Starts the clock of the describes player and stops the clock
+	 * of the other player.
+	 * 
+	 * @param white describes if the player is white or not.
+	 ***************************************************************/
+	void startTimer(boolean white);
+
+	/****************************************************************
+	 * Stops both player's game timers.
+	 ***************************************************************/
+	void stopTimers();
+
+	/****************************************************************
+	 * Adds focus listener to the frame to stop all timers when out
+	 * of focus.
+	 * 
+	 * @param fh focus listener to stop timers when lost.
+	 ***************************************************************/
+	void setFocusHandler(FocusListener fh);
 
 }

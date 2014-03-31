@@ -2,6 +2,8 @@ package presenter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import view.IChessUI;
 import model.Bishop;
@@ -42,7 +44,7 @@ public class Presenter {
 	
 	/** The View displaying the game and accepting user interaction. */
 	private IChessUI view;
-	
+		
 	/****************************************************************
 	 * Constructor for the Presenter. 
 	 * 
@@ -58,6 +60,7 @@ public class Presenter {
 		
 		convertBoardIntoButtons();
 		view.setMoveHandler(moveHandler);
+		view.setFocusHandler(focusHandler);
 		view.setPromotionHandler(promotionHandler);
 	}
 	
@@ -126,7 +129,6 @@ public class Presenter {
 			
 			IChessPiece piece = model.pieceAt(row, col);
 			
-
 			/* Checks if the player is choosing a piece or its destination. */
 			if (!isPieceSelected) {
 				
@@ -136,6 +138,9 @@ public class Presenter {
 				/* There is no action if you select a piece from the 
 				 * wrong player. */
 				if (model.currentPlayer() != piece.player()) { return; }
+				
+				// Cycle Timers
+				view.startTimer(model.currentPlayer().isWhite());
 				
 				/* Recolors the selected piece. */
 				view.setSelected(row, col);
@@ -166,12 +171,15 @@ public class Presenter {
 				
 				/* There is no action if the move is not valid */
 				if (!model.isValidMove(move)) { return; }
-												
+				
 				// Handles special moves
 				handleEnPassant(move);
 				handleCastle(move);
 				
 				model.move(move);
+				
+				// Cycle Timers
+				view.startTimer(model.currentPlayer().isWhite());
 				
 				view.changeImage(fromRow, fromColumn, "", true);
 				view.changeImage(row, col, piece.type(), 
@@ -185,6 +193,19 @@ public class Presenter {
 				isPieceSelected = false;
 			}
 			
+		}
+	};
+	
+	private FocusListener focusHandler = new FocusListener() {
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+			view.stopTimers();
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+			view.startTimer(model.currentPlayer().isWhite());
 		}
 	};
 
