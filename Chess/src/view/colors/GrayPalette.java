@@ -23,7 +23,7 @@ public final class GrayPalette {
 	public static final Color SELECTED = new Color(255, 255, 255);
 	
 	/** The color for highlighted squares such as valid moves. */
-	public static final Color HIGHLIGHTED = new Color(141, 141, 141);
+	public static final Color HIGHLIGHTED = new Color(110, 110, 110);
 	
 	/** The background color for the promotion options. */
 	public static final Color PROMOTION = new Color(160, 160, 160);
