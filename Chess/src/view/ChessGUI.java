@@ -360,6 +360,12 @@ public class ChessGUI implements IChessUI {
 					tile.setDefaultBackground(dark);
 				}
 				
+				if (tile.isState(ChessTile.SELECTED)) {
+					tile.setBackground(selected);
+				} else if (tile.isState(ChessTile.HIGHLIGHTED)) {
+					tile.setBackground(highlighted);
+				}
+				
 				tile.validate();
 			}
 		}
@@ -368,6 +374,7 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void setSelected(final int row, final int col) {
 		board[row][col].setBackground(selected);
+		board[row][col].setState(ChessTile.SELECTED);
 		
 		started = true;
 	}
@@ -395,6 +402,7 @@ public class ChessGUI implements IChessUI {
 	@Override
 	public final void setHighlighted(final int row, final int col) {
 		board[row][col].setBackground(highlighted);
+		board[row][col].setState(ChessTile.HIGHLIGHTED);
 	}
 	
 	@Override

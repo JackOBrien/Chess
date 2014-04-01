@@ -22,6 +22,14 @@ public class ChessTile extends JButton {
 	/** Default serial UID */
 	private static final long serialVersionUID = 1L;
 	
+	public static final int NORMAL = 0;
+	
+	public static final int SELECTED = 1;
+	
+	public static final int HIGHLIGHTED = 2;
+	
+	private int state;
+	
 	/** MouseListener that will bevel buttons when interacted with. */
 	private BevelOnHover mouseListener;
 
@@ -37,6 +45,8 @@ public class ChessTile extends JButton {
 	
 	public ChessTile(int pSize) {
 		size = pSize;
+		
+		state = NORMAL;
 		
 		// Filler colors.
 		defaultBG = Color.GRAY;
@@ -65,12 +75,22 @@ public class ChessTile extends JButton {
 		return isLight;
 	}
 	
+	public boolean isState(int state) {
+		return this.state == state;
+	}
+	
+	public void setState(int state) {
+		this.state = state;
+	}
+	
 	public void resetColor() {
 		if (!specialHighlight) {
 			setBackground(defaultBG);
 		} else {
 			setBackground(highlight);
 		}
+		
+		state = NORMAL;
 	}
 	
 	public void isSpecialHighlight(boolean b) {
