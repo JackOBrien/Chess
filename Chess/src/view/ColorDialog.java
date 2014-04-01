@@ -3,14 +3,11 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +25,9 @@ import view.colors.ColorController;
  * @version Mar 31, 2014
  *******************************************************************/
 public class ColorDialog extends JDialog {
+
+	/**  */
+	private static final long serialVersionUID = 1L;
 
 	private ActionListener listener;
 	
