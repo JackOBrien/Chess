@@ -120,4 +120,16 @@ public interface IChessUI {
 	 ***************************************************************/
 	void move(Move m, String type, boolean white);
 
+	/****************************************************************
+	 * Adds the actionListener to handle the game resetting.
+	 * 
+	 * @param rh ActionListener which handles game resets.
+	 ***************************************************************/
+	void setResetHandler(ActionListener rh);
+
+	/****************************************************************
+	 * Sets the entire game back to its beginning state.
+	 ***************************************************************/
+	void resetGame();
+
 }

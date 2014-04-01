@@ -52,7 +52,6 @@ public class ColorDialog extends JDialog {
 
 		pack();
 		setModal(true);
-		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	

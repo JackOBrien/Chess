@@ -5,8 +5,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import view.IChessUI;
+import javax.swing.JOptionPane;
+
 import model.Bishop;
+import model.ChessModel;
 import model.IChessModel;
 import model.IChessPiece;
 import model.Knight;
@@ -15,6 +17,7 @@ import model.Pawn;
 import model.Player;
 import model.Queen;
 import model.Rook;
+import view.IChessUI;
 
 /********************************************************************
  * CIS 350 - 01
@@ -55,11 +58,19 @@ public class Presenter {
 		model = pModel;
 		view = pView;
 		
+		setUp();
+	}
+	
+	/****************************************************************
+	 * Sets up and resets the presenter.
+	 ***************************************************************/
+	private void setUp() {
 		isPieceSelected = false;
 		selectedPiece = "";
 		
 		convertBoardIntoButtons();
 		view.setMoveHandler(moveHandler);
+		view.setResetHandler(resetHandler);
 		view.setFocusHandler(focusHandler);
 		view.setPromotionHandler(promotionHandler);
 	}
@@ -201,6 +212,30 @@ public class Presenter {
 		}
 	};
 	
+	/** Handles resetting the game. */
+	private ActionListener resetHandler = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String source = e.getActionCommand();
+			
+			if (source.equals("menuReset")) {
+				String message = "Are you sure you want to reset?";
+				String title = "Reset?";
+				
+				int answer = JOptionPane.showConfirmDialog(null, message, title, 
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null);
+				
+				if (answer == JOptionPane.YES_OPTION) {
+					reset();
+				}
+			} else {
+				reset();
+			}
+		}
+	};
+	
 	private FocusListener focusHandler = new FocusListener() {
 		
 		@Override
@@ -333,6 +368,15 @@ public class Presenter {
 			}
 			view.gameInCheck(model.getPlayerInCheck().isWhite());
 		}
+	}
+	
+	/****************************************************************
+	 * Resets the entire game.
+	 ***************************************************************/
+	protected final void reset() {
+		view.resetGame();
+		model = new ChessModel();
+		setUp();
 	}
 	
 }

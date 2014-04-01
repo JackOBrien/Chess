@@ -75,6 +75,9 @@ public class ChessGUI implements IChessUI {
 	/** Image of a painter's palette */
 	private ImageIcon paint = ImageLoader.loadIcon(path + "palette.png");
 	
+	/** Image of a reset icon */
+	private ImageIcon reset = ImageLoader.loadIcon(path + "reset.png");
+	
 	/** The size of the images and buttons on the board. Default 60. */
 	private static final int IMG_SIZE = 60;
 	
@@ -108,6 +111,9 @@ public class ChessGUI implements IChessUI {
 	/** JFrames menu bar */
 	private JMenuBar menuBar;
 	
+	/** Menu item to reset the game. */
+	private JMenuItem resetItem;
+	
 	/** The frame containing the entire game. */
 	private JFrame topWindow;
 	
@@ -135,7 +141,10 @@ public class ChessGUI implements IChessUI {
 	/** JLayer to blur the board. */
 	private JLayer<JComponent> jLayer;
 	
-	/** ActionListiner for the promotion options. */
+	/** ActionListener for resetting the game. */
+	private ActionListener resetListener;
+	
+	/** ActionListener for the promotion options. */
 	private ActionListener promotionListener;
 	
 	private Font dynFont;
@@ -144,22 +153,26 @@ public class ChessGUI implements IChessUI {
 	
 	private boolean started;
 	
+	private boolean highlightValid;
+	
+	private int numRows;
+	
+	private int numCols;
+	
 	/****************************************************************
 	 * The graphical user interface for Chess made up of JButtons. 
 	 * 
-	 * @param numRows the number of rows on the board.
-	 * @param numCols the number of columns on the board.
+	 * @param rows the number of rows on the board.
+	 * @param cols the number of columns on the board.
 	 ***************************************************************/
-	public ChessGUI(final int numRows, final int numCols) {
-		topWindow = new JFrame();
+	public ChessGUI(final int rows, final int cols) {
 		
 		// Doesn't allow the color to change when pressed
 		UIManager.put("Button.select", Color.TRANSLUCENT);
 		
-		board = new ChessTile[numRows][numCols];
-		
-		buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(numRows, numCols));
+		// Record size of the board
+		numRows = rows;
+		numCols = cols;
 		
 		// Starting board color
 		setBoardColors(ColorController.RED);
@@ -171,7 +184,18 @@ public class ChessGUI implements IChessUI {
 				
 		layerUI = new BlurLayerUI();
 		
+		resetGame();
+	}
+	
+	@Override
+	public void resetGame() {	
+		if (topWindow != null) {
+			topWindow.dispose();
+		}
+		topWindow = new JFrame();
+
 		started = false;
+		highlightValid = true;
 		
 		setupBlankBoard();
 		setupCapturedPanel();
@@ -184,6 +208,11 @@ public class ChessGUI implements IChessUI {
 	 * Sets up the board for the start of a game.
 	 ***************************************************************/
 	private void setupBlankBoard() {
+		
+board = new ChessTile[numRows][numCols];
+		
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 		
 		// First square is light.
 		boolean lightSquare = true;
@@ -265,6 +294,10 @@ public class ChessGUI implements IChessUI {
 		exitItem.addActionListener(menuListener);
 		exitItem.setActionCommand("Exit");
 		
+		resetItem = new JMenuItem("Reset Game");
+		resetItem.setIcon(ImageLoader.resizeImage(reset, iconSize));
+		resetItem.setActionCommand("menuReset");
+		
 		JMenuItem colorItem = new JMenuItem("Change Colors");
 		colorItem.setIcon(ImageLoader.resizeImage(paint, iconSize));
 		colorItem.addActionListener(menuListener);
@@ -281,6 +314,7 @@ public class ChessGUI implements IChessUI {
 		menuBar.setBorderPainted(false);
 		
 		fileMenu.add(exitItem);
+		fileMenu.add(resetItem);
 		fileMenu.add(colorItem);
 		fileMenu.add(validItem);
 		
@@ -403,6 +437,8 @@ public class ChessGUI implements IChessUI {
 	
 	@Override
 	public final void setHighlighted(final int row, final int col) {
+		if (!highlightValid) { return; }
+		
 		board[row][col].setBackground(highlighted);
 		board[row][col].setState(ChessTile.HIGHLIGHTED);
 	}
@@ -452,6 +488,12 @@ public class ChessGUI implements IChessUI {
 				board[r][c].addActionListener(mh);
 			}
 		}
+	}
+	
+	@Override
+	public void setResetHandler(ActionListener rh) {
+		resetItem.addActionListener(rh);
+		resetListener = rh;
 	}
 	
 	@Override
@@ -529,7 +571,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public final void gameOver(final boolean white) {
+	public final void gameOver(final boolean white) {		
 		String message = "Checkmate! ";
 		ImageIcon icon = ChessIcon.W_KING.getIcon();
 		final int extraSize = 10;
@@ -547,7 +589,8 @@ public class ChessGUI implements IChessUI {
 		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
 		
 		JButton playAgain = new JButton("Play Again");
-		playAgain.setEnabled(false);
+		playAgain.addActionListener(resetListener);
+		playAgain.setActionCommand("gameOver");
 		JButton quit = new JButton("Quit");
 		quit.addActionListener(menuListener);
 		quit.setActionCommand("Exit");
@@ -592,7 +635,18 @@ public class ChessGUI implements IChessUI {
 			if (source.equals("Color")) {
 				ColorDialog dialog  = new ColorDialog(
 						colorPalette, colorChanger);
-				dialog.setLocationRelativeTo(buttonPanel);
+				dialog.setLocationRelativeTo(topWindow);
+				dialog.setVisible(true);
+			}
+			
+			if (source.equals("Valid")) {
+				JCheckBoxMenuItem b = (JCheckBoxMenuItem) e.getSource();
+				
+				if (b.isSelected()) {
+					highlightValid = true;
+				} else {
+					highlightValid = false;
+				}
 			}
 		}
 	};
