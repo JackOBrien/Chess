@@ -139,14 +139,14 @@ public class Presenter {
 				 * wrong player. */
 				if (model.currentPlayer() != piece.player()) { return; }
 				
-				// Cycle Timers
-				view.startTimer(model.currentPlayer().isWhite());
-				
 				/* Recolors the selected piece. */
 				view.setSelected(row, col);
 				selectedPiece = e.getActionCommand();
 				isPieceSelected = true;
 				highlightValidMoves(row, col);
+				
+				// Cycle Timers
+				view.startTimer(model.currentPlayer().isWhite());
 				
 				return;
 				

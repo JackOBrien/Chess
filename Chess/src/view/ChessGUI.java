@@ -23,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -68,6 +69,9 @@ public class ChessGUI implements IChessUI {
 	
 	/** Image of a small exit sign. */
 	private ImageIcon exit = ImageLoader.loadIcon(path + "exit.png");
+	
+	/** Image of a painter's palette */
+	private ImageIcon paint = ImageLoader.loadIcon(path + "palette.png");
 	
 	/** The size of the images and buttons on the board. Default 60. */
 	private static final int IMG_SIZE = 60;
@@ -134,6 +138,10 @@ public class ChessGUI implements IChessUI {
 	
 	private Font dynFont;
 	
+	private int colorPalette;
+	
+	private boolean started;
+	
 	/****************************************************************
 	 * The graphical user interface for Chess made up of JButtons. 
 	 * 
@@ -152,7 +160,7 @@ public class ChessGUI implements IChessUI {
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
 		
 		// Starting board color
-		setBoardColors(ColorController.GREEN);
+		setBoardColors(ColorController.RED);
 		
 		// Dynamic font size
 		final double multi = .25;
@@ -160,6 +168,8 @@ public class ChessGUI implements IChessUI {
 		dynFont = new Font("Calibri", Font.BOLD, fontSize);
 				
 		layerUI = new BlurLayerUI();
+		
+		started = false;
 		
 		setupBlankBoard();
 		setupCapturedPanel();
@@ -190,12 +200,15 @@ public class ChessGUI implements IChessUI {
 				// Chooses the proper background color (light or dark)
 				// depending on the boolean value.
 				Color bg = dark;
+				boolean isLight = false;
 				
 				if (lightSquare) {
 					bg = light;
+					isLight = true;
 				}
 				
 				button.setDefaultBackground(bg);
+				button.setIsLight(isLight);
 //				button.setSpecialBackground(accent); TODO
 				
 				board[r][c] = button;
@@ -250,12 +263,25 @@ public class ChessGUI implements IChessUI {
 		exitItem.addActionListener(menuListener);
 		exitItem.setActionCommand("Exit");
 		
+		JMenuItem colorItem = new JMenuItem("Change Colors");
+		colorItem.setIcon(ImageLoader.resizeImage(paint, iconSize));
+		colorItem.addActionListener(menuListener);
+		colorItem.setActionCommand("Color");
+		
+		JCheckBoxMenuItem validItem = new JCheckBoxMenuItem("Show Valid Moves");
+		validItem.addActionListener(menuListener);
+		validItem.setActionCommand("Valid");
+		validItem.setSelected(true);
+		
 		fileMenu.setForeground(Color.WHITE);
 		
 		menuBar.setLayout(new BorderLayout());
 		menuBar.setBorderPainted(false);
 		
 		fileMenu.add(exitItem);
+		fileMenu.add(colorItem);
+		fileMenu.add(validItem);
+		
 		menuBar.add(fileMenu, BorderLayout.LINE_START);
 		
 		topWindow.setJMenuBar(menuBar);
@@ -277,7 +303,7 @@ public class ChessGUI implements IChessUI {
 		bTimer = new Timer(delay, timeListener);
 		
 		JPanel labelPanel = new JPanel();
-		labelPanel.setBackground(accent);
+		labelPanel.setOpaque(false);
 		final float panelMultiplier = 4.166f;
 		final int panelWidth = (int) (panelMultiplier * IMG_SIZE);
 		labelPanel.setPreferredSize(new Dimension(panelWidth, 0));
@@ -306,6 +332,7 @@ public class ChessGUI implements IChessUI {
 	
 	private void setBoardColors(int color) {
 		ColorController palette = new ColorController(color);
+		colorPalette = color;
 
 		// Define default colors.
 		light = palette.getLight();
@@ -315,10 +342,34 @@ public class ChessGUI implements IChessUI {
 		promotion = palette.getPromotion();
 		accent = palette.getAccent();
 	}	
+	
+	private void updateBoardColor() {
+		
+		menuBar.setBackground(accent);
+		
+		
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				ChessTile tile = board[r][c];
+				
+				if (tile == null) { continue; }
+				
+				if (tile.isLight()) {
+					tile.setDefaultBackground(light);
+				} else {
+					tile.setDefaultBackground(dark);
+				}
+				
+				tile.validate();
+			}
+		}
+	}
 
 	@Override
 	public final void setSelected(final int row, final int col) {
 		board[row][col].setBackground(selected);
+		
+		started = true;
 	}
 	
 	/****************************************************************
@@ -467,6 +518,9 @@ public class ChessGUI implements IChessUI {
 	
 	@Override
 	public void startTimer(boolean white) {
+		
+		if (!started) { return; }
+		
 		if (white) {
 			wTimer.start();
 			bTimer.stop();
@@ -492,6 +546,45 @@ public class ChessGUI implements IChessUI {
 			if (source.equals("Exit")) {
 				System.exit(0);
 			}			
+			
+			if (source.equals("Color")) {
+				ColorDialog dialog  = new ColorDialog(
+						colorPalette, colorChanger);
+				dialog.setLocationRelativeTo(buttonPanel);
+			}
+		}
+	};
+	
+	private ActionListener colorChanger = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String source = e.getActionCommand();
+
+			int color;
+			
+			switch (source) {
+			case "Red":
+				color = ColorController.RED;
+				break;
+			case "Blue":
+				color = ColorController.BLUE;
+				break;
+			case "Green":
+				color = ColorController.GREEN;
+				break;
+			case "Gray":
+				color = ColorController.GRAY;
+				break;
+			case "Rainbow":
+				color = ColorController.RAINBOW;
+				break;
+			default:
+				return;
+			}
+			
+			setBoardColors(color);
+			updateBoardColor();
 		}
 	};
 	

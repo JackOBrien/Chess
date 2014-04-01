@@ -31,6 +31,8 @@ public class ChessTile extends JButton {
 	
 	private boolean specialHighlight;
 	
+	private boolean isLight;
+	
 	private Color highlight;
 	
 	public ChessTile(int pSize) {
@@ -53,6 +55,14 @@ public class ChessTile extends JButton {
 	
 	public void setSpecialBackground(Color c) {
 		highlight = c;
+	}
+	
+	public void setIsLight(boolean light) {
+		isLight = light;
+	}
+	
+	public boolean isLight() {
+		return isLight;
 	}
 	
 	public void resetColor() {
