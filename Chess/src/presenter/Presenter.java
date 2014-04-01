@@ -173,7 +173,7 @@ public class Presenter {
 				if (!model.isValidMove(move)) { return; }
 				
 				// Handles special moves
-				handleEnPassant(move);
+				boolean enPassant = handleEnPassant(move);
 				handleCastle(move);
 				
 				model.move(move);
@@ -181,9 +181,14 @@ public class Presenter {
 				// Cycle Timers
 				view.startTimer(model.currentPlayer().isWhite());
 				
-				view.changeImage(fromRow, fromColumn, "", true);
-				view.changeImage(row, col, piece.type(), 
-						piece.player().isWhite());
+				/* Allows for the "capture" sound effect to play when a piece
+				 * performs en passant. */
+				if (enPassant) {
+					view.move(move, "passant", piece.player().isWhite());
+				} else {
+					view.move(move, piece.type(), piece.player().isWhite());
+				}
+				
 				view.deselectAll();
 				
 				// Promotion must be handled after the move
@@ -251,15 +256,18 @@ public class Presenter {
 	 * 
 	 * @param move the move being attempted.
 	 ***************************************************************/
-	protected final void handleEnPassant(final Move move) {
+	protected final boolean handleEnPassant(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());
 		
-		if (piece == null || !piece.is("Pawn")) { return; }
+		if (piece == null || !piece.is("Pawn")) { return false; }
 				
 		if (move.toColumn() != move.fromColumn() 
 				&& model.pieceAt(move.toRow(), move.toColumn()) == null) {
-			view.changeImage(move.fromRow(), move.toColumn(), "", true);
+			view.changeImage(move.fromRow(), move.toColumn(), "passant", true);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	/****************************************************************

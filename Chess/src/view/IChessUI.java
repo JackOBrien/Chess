@@ -3,6 +3,8 @@ package view;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 
+import model.Move;
+
 /********************************************************************
  * CIS 350 - 01
  * Chess
@@ -108,5 +110,14 @@ public interface IChessUI {
 	 * @param fh focus listener to stop timers when lost.
 	 ***************************************************************/
 	void setFocusHandler(FocusListener fh);
+
+	/****************************************************************
+	 * Moves the piece visually on the UI board
+	 * 
+	 * @param m the move being performed.
+	 * @param type the type of the piece moving.
+	 * @param white tells if the piece is white.
+	 ***************************************************************/
+	void move(Move m, String type, boolean white);
 
 }

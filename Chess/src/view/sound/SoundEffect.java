@@ -15,16 +15,19 @@ import java.applet.AudioClip;
 public class SoundEffect {
 
 	/** Sound for when white pieces are moved */
-	public static final SoundEffect W_MOVE = new SoundEffect("whiteMoves.mp3");
+	public static final SoundEffect W_MOVE = new SoundEffect("whiteMoves.wav");
 	
 	/** Sound for when black pieces are moved */
-	public static final SoundEffect B_MOVE = new SoundEffect("blackMoves.mp3");
+	public static final SoundEffect B_MOVE = new SoundEffect("blackMoves.wav");
 	
 	/** Sound for when the game is in check */
-	public static final SoundEffect CHECK = new SoundEffect("check.mp3");
+	public static final SoundEffect CHECK = new SoundEffect("check.wav");
+	
+	/** Sound for when the game is over */
+	public static final SoundEffect GAME_OVER = new SoundEffect("gameOver.wav");
 	
 	/** Sound for when a piece is captured */
-	public static final SoundEffect CAPTURE = new SoundEffect("capture.mp3");
+	public static final SoundEffect CAPTURE = new SoundEffect("capture.wav");
 	
 	/** AudioClip of the selected sound */
 	private AudioClip clip;
@@ -60,5 +63,9 @@ public class SoundEffect {
 		} catch (Exception e ) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		SoundEffect.W_MOVE.play();
 	}
 }

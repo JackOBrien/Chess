@@ -39,7 +39,9 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.LayerUI;
 
+import model.Move;
 import view.colors.ColorController;
+import view.sound.SoundEffect;
 
 /********************************************************************
  * CIS 350 - 01
@@ -407,12 +409,40 @@ public class ChessGUI implements IChessUI {
 	
 	@Override
 	public final void changeImage(final int row, final int col, 
-			final String type, final boolean white) {
+			String type, final boolean white) {
+		
+		if (type.isEmpty()) {
+			board[row][col].setIcon(null);
+			return;
+		}
+		
 		ImageIcon img = ChessIcon.findIcon(type, white);
 		
 		img = ImageLoader.resizeImage(img, IMG_SIZE);
 		
 		board[row][col].setIcon(img);
+	}
+	
+	@Override
+	public final void move(Move m, String type, boolean white) {
+		
+		boolean attacking = board[m.toRow()][m.toColumn()].getIcon() != null;
+		
+		if (type.equals("passant")) {
+			type = "Pawn";
+			attacking  = true;
+		}
+		
+		if (attacking) {
+			SoundEffect.CAPTURE.play();
+		} else if (white) {
+			SoundEffect.W_MOVE.play();
+		} else {
+			SoundEffect.B_MOVE.play();
+		}
+		
+		changeImage(m.toRow(), m.toColumn(), type, white);
+		changeImage(m.fromRow(), m.fromColumn(), "", white);
 	}
 	
 	@Override
@@ -484,6 +514,8 @@ public class ChessGUI implements IChessUI {
 		ImageIcon icon = ChessIcon.W_KING.getIcon();
 		final int extraSize = 10;
 		
+		SoundEffect.CHECK.play();
+		
 		if (!white) {
 			message = "Black ";
 			icon = ChessIcon.B_KING.getIcon();
@@ -501,6 +533,8 @@ public class ChessGUI implements IChessUI {
 		String message = "Checkmate! ";
 		ImageIcon icon = ChessIcon.W_KING.getIcon();
 		final int extraSize = 10;
+		
+		SoundEffect.GAME_OVER.play();
 		
 		if (!white) {
 			message += "Black ";
