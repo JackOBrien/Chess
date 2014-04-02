@@ -52,15 +52,6 @@ import view.sound.SoundEffect;
  * @author John O'Brien
  * @version Mar 10, 2014
  *******************************************************************/
-/********************************************************************
- * CIS 350 - 01
- * Chess
- *
- * 
- *
- * @author John O'Brien
- * @version Mar 27, 2014
- *******************************************************************/
 public class ChessGUI implements IChessUI {
 
 	/** Name of the folder containing the images of GUI icons. */
