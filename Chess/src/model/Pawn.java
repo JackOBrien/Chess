@@ -62,7 +62,7 @@ public class Pawn extends ChessPiece {
 		
 		/* Checks for for en Passant move */
 		if (canEnPassant(move, board)) { return true; }
-				
+
 		int fR = move.fromRow(), fC = move.fromColumn();
 		int tR = move.toRow(), tC = move.toColumn();
 		
@@ -112,13 +112,14 @@ public class Pawn extends ChessPiece {
 	private boolean isMovingForward(final Move m, final IChessBoard board) {
 		int fR = m.fromRow(), fC = m.fromColumn();
 		int tR = m.toRow(), tC = m.toColumn();
-
+		
 		/* Ensures the pawn does not attack forward */
 		if (board.pieceAt(tR, tC) != null) { return false; }
 
 		/* Move is valid if the pawn only moves forward one */
 		if (tR == fR + direction) { 
 			lastMove = m;
+			movedTwice = false;
 			return true; 
 		}
 
