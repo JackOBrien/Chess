@@ -63,14 +63,17 @@ public class ChessGUI implements IChessUI {
 	/** Image of a small exit sign. */
 	private ImageIcon exit = ImageLoader.loadIcon(path + "exit.png");
 	
-	/** Image of a painter's palette */
+	/** Image of a painter's palette. */
 	private ImageIcon paint = ImageLoader.loadIcon(path + "palette.png");
 	
-	/** Image of a reset icon */
+	/** Image of a reset icon. */
 	private ImageIcon reset = ImageLoader.loadIcon(path + "reset.png");
 	
 	/** The size of the images and buttons on the board. Default 60. */
-	private static final int IMG_SIZE = 60;
+	private int imageSize;
+	
+	/** The quality of the images as a percentage */
+	private double imageQuality;
 	
 	/** The color for the light spaces on the board. */
 	private Color light;
@@ -105,6 +108,9 @@ public class ChessGUI implements IChessUI {
 	/** Menu item to reset the game. */
 	private JMenuItem resetItem;
 	
+	/** Menu item to change the size of the game. */
+	private JMenuItem sizeItem;
+	
 	/** The frame containing the entire game. */
 	private JFrame topWindow;
 	
@@ -138,16 +144,22 @@ public class ChessGUI implements IChessUI {
 	/** ActionListener for the promotion options. */
 	private ActionListener promotionListener;
 	
+	/** Font that changes size with the board. */
 	private Font dynFont;
 	
+	/** The board's current color palette. */
 	private int colorPalette;
 	
+	/** Tells if the game has started or not. */
 	private boolean started;
 	
+	/** Tells if the board should highlight valid moves or not. */
 	private boolean highlightValid;
 	
+	/** NUmber of rows on the board. */
 	private int numRows;
 	
+	/** NUmber of columns on the board. */
 	private int numCols;
 	
 	/****************************************************************
@@ -165,12 +177,15 @@ public class ChessGUI implements IChessUI {
 		numRows = rows;
 		numCols = cols;
 		
+		imageSize = 60;
+		imageQuality = 1;
+		
 		// Starting board color
 		setBoardColors(ColorController.RED);
 		
 		// Dynamic font size
 		final double multi = .25;
-		final int fontSize = (int) (IMG_SIZE * multi);
+		final int fontSize = (int) (imageSize * multi);
 		dynFont = new Font("Calibri", Font.BOLD, fontSize);
 				
 		layerUI = new BlurLayerUI();
@@ -200,7 +215,7 @@ public class ChessGUI implements IChessUI {
 	 ***************************************************************/
 	private void setupBlankBoard() {
 		
-board = new ChessTile[numRows][numCols];
+		board = new ChessTile[numRows][numCols];
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
@@ -212,7 +227,7 @@ board = new ChessTile[numRows][numCols];
 			for (int c = 0; c < board[0].length; c++) {
 				
 				// Creates the chess tile with default style
-				ChessTile button = new ChessTile(IMG_SIZE);
+				ChessTile button = new ChessTile(imageSize);
 				
 				// Adds an actionCommand for the button with the
 				// coordinates of its location on the board: r,c.
@@ -231,7 +246,6 @@ board = new ChessTile[numRows][numCols];
 				
 				button.setDefaultBackground(bg);
 				button.setIsLight(isLight);
-//				button.setSpecialBackground(accent); TODO
 				
 				board[r][c] = button;
 				buttonPanel.add(button);
@@ -258,7 +272,8 @@ board = new ChessTile[numRows][numCols];
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
 		ImageIcon icon = ChessIcon.W_KING.getIcon();
-		al.add(ImageLoader.resizeImage(icon, kingLogoSize).getImage());
+		al.add(ImageLoader.resizeImage(icon, kingLogoSize,
+				imageQuality).getImage());
 				
 		topWindow.setTitle("CIS 350: Chess Game");
 		topWindow.setIconImages(al);
@@ -281,18 +296,25 @@ board = new ChessTile[numRows][numCols];
 		final int iconSize = 20;
 		
 		JMenuItem exitItem = new JMenuItem("Exit");
-		exitItem.setIcon(ImageLoader.resizeImage(exit, iconSize));
+		exitItem.setIcon(ImageLoader.resizeImage(exit, iconSize, imageQuality));
 		exitItem.addActionListener(menuListener);
 		exitItem.setActionCommand("Exit");
 		
 		resetItem = new JMenuItem("Reset Game");
-		resetItem.setIcon(ImageLoader.resizeImage(reset, iconSize));
+		resetItem.setIcon(ImageLoader.resizeImage(reset, 
+				iconSize, imageQuality));
 		resetItem.setActionCommand("menuReset");
 		
 		JMenuItem colorItem = new JMenuItem("Change Colors");
-		colorItem.setIcon(ImageLoader.resizeImage(paint, iconSize));
+		colorItem.setIcon(ImageLoader.resizeImage(paint, 
+				iconSize, imageQuality));
 		colorItem.addActionListener(menuListener);
 		colorItem.setActionCommand("Color");
+		
+		sizeItem = new JMenuItem("Change Size");
+		sizeItem.setIcon(ImageLoader.resizeImage(ChessIcon.W_KING.getIcon(), 
+				iconSize, imageQuality));
+		sizeItem.setActionCommand("Size");
 		
 		JCheckBoxMenuItem validItem = new JCheckBoxMenuItem("Show Valid Moves");
 		validItem.addActionListener(menuListener);
@@ -307,6 +329,7 @@ board = new ChessTile[numRows][numCols];
 		fileMenu.add(exitItem);
 		fileMenu.add(resetItem);
 		fileMenu.add(colorItem);
+		fileMenu.add(sizeItem);
 		fileMenu.add(validItem);
 		
 		menuBar.add(fileMenu, BorderLayout.LINE_START);
@@ -320,8 +343,6 @@ board = new ChessTile[numRows][numCols];
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 		capturedPanel.setBorder(border);
 		capturedPanel.setBackground(promotion);
-		
-//		topWindow.add(capturedPanel, BorderLayout.CENTER); TODO
 	}
 	
 	private void setupTimers() {
@@ -332,7 +353,7 @@ board = new ChessTile[numRows][numCols];
 		JPanel labelPanel = new JPanel();
 		labelPanel.setOpaque(false);
 		final float panelMultiplier = 4.166f;
-		final int panelWidth = (int) (panelMultiplier * IMG_SIZE);
+		final int panelWidth = (int) (panelMultiplier * imageSize);
 		labelPanel.setPreferredSize(new Dimension(panelWidth, 0));
 		
 		wClock = new Clock();
@@ -426,12 +447,28 @@ board = new ChessTile[numRows][numCols];
 		}
 	}
 	
+	private final void highlightAll(boolean highlight) {
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				if (board[r][c].isState(ChessTile.HIGHLIGHTED)) {
+					
+					if (!highlight) {
+						setDeselected(r, c);
+					} else {
+						setHighlighted(r, c);
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public final void setHighlighted(final int row, final int col) {
-		if (!highlightValid) { return; }
-		
-		board[row][col].setBackground(highlighted);
 		board[row][col].setState(ChessTile.HIGHLIGHTED);
+		
+		if (highlightValid) { 
+			board[row][col].setBackground(highlighted);
+		}
 	}
 	
 	@Override
@@ -445,7 +482,7 @@ board = new ChessTile[numRows][numCols];
 		
 		ImageIcon img = ChessIcon.findIcon(type, white);
 		
-		img = ImageLoader.resizeImage(img, IMG_SIZE);
+		img = ImageLoader.resizeImage(img, imageSize, imageQuality);
 		
 		board[row][col].setIcon(img);
 	}
@@ -484,6 +521,7 @@ board = new ChessTile[numRows][numCols];
 	@Override
 	public void setResetHandler(ActionListener rh) {
 		resetItem.addActionListener(rh);
+		sizeItem.addActionListener(rh);
 		resetListener = rh;
 	}
 	
@@ -501,7 +539,7 @@ board = new ChessTile[numRows][numCols];
 	public final void pawnPromotion(final int row, final int col, 
 			final boolean white) {
 		final double sizeModifier = .667;
-		final int size = (int) (IMG_SIZE * sizeModifier);
+		final int size = (int) (imageSize * sizeModifier);
 		
 		PromotionDialog dialog = new PromotionDialog(white, size, 
 				promotion, accent);
@@ -514,10 +552,10 @@ board = new ChessTile[numRows][numCols];
 		ImageIcon queenIcon = ChessIcon.findIcon("Queen", white);
 		
 		// Re-size all found images
-		rookIcon = ImageLoader.resizeImage(rookIcon, size);
-		knightIcon = ImageLoader.resizeImage(knightIcon, size);
-		bishopIcon = ImageLoader.resizeImage(bishopIcon, size);
-		queenIcon = ImageLoader.resizeImage(queenIcon, size);
+		rookIcon = ImageLoader.resizeImage(rookIcon, size, imageQuality);
+		knightIcon = ImageLoader.resizeImage(knightIcon, size, imageQuality);
+		bishopIcon = ImageLoader.resizeImage(bishopIcon, size, imageQuality);
+		queenIcon = ImageLoader.resizeImage(queenIcon, size, imageQuality);
 		
 		// Set all relevant images for the dialog 
 		dialog.setRookImage(rookIcon);
@@ -534,11 +572,22 @@ board = new ChessTile[numRows][numCols];
 		dialog.setLocationRelativeTo(board[row][col]);
 		int x = (int) dialog.getLocation().getX();
 		int y = (int) dialog.getLocation().getY();
-		y += (IMG_SIZE + offset) * direction;
+		y += (imageSize + offset) * direction;
 		dialog.setLocation(x, y);
 		
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.setVisible(true);
+	}
+	
+	@Override
+	public void changeBoardSize() {
+		
+		new ResizeDialog(imageSize, imageQuality);
+		
+		imageSize = ResizeDialog.getBoardSize();
+		imageQuality = ResizeDialog.getBoardQuality();
+		
+		
 	}
 	
 	@Override
@@ -555,7 +604,8 @@ board = new ChessTile[numRows][numCols];
 		}
 		message += "is in check!";
 		String title = "Check";
-		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
+		icon = ImageLoader.resizeImage(icon, imageSize + extraSize,
+				imageQuality);
 		
 		JOptionPane.showMessageDialog(buttonPanel, message, title, 
 				JOptionPane.INFORMATION_MESSAGE, icon);
@@ -577,7 +627,8 @@ board = new ChessTile[numRows][numCols];
 		}
 		message += "won the game!";
 		String title = "Game Over";
-		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
+		icon = ImageLoader.resizeImage(icon, imageSize + extraSize, 
+				imageQuality);
 		
 		JButton playAgain = new JButton("Play Again");
 		playAgain.addActionListener(resetListener);
@@ -638,6 +689,8 @@ board = new ChessTile[numRows][numCols];
 				} else {
 					highlightValid = false;
 				}
+				
+				highlightAll(highlightValid);
 			}
 		}
 	};

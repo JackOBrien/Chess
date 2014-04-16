@@ -50,10 +50,7 @@ public class Clock {
 	 * @param t time value to be added in 1/10 seconds.
 	 ****************************************************************/
 	public void add(int t) {
-		if (t < 0){
-			throw new IllegalArgumentException("Can't add a negitive");
-		}	
-		
+
 		while (t > 0){	
 
 			//Add to tenth value if in range

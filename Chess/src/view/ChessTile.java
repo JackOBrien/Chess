@@ -12,7 +12,7 @@ import javax.swing.border.Border;
  * CIS 350 - 01
  * Chess
  *
- * 
+ * The buttons that make up the game board.
  *
  * @author John O'Brien
  * @version Mar 26, 2014
@@ -93,9 +93,9 @@ public class ChessTile extends JButton {
 		state = NORMAL;
 	}
 	
-	public void isSpecialHighlight(boolean b) {
-		specialHighlight = b;
-	}
+//	public void isSpecialHighlight(boolean b) {
+//		specialHighlight = b;
+//	}
 	
 	private void setUpButton() {
 		setPreferredSize(new Dimension(size, size));

@@ -19,7 +19,7 @@ import view.colors.ColorController;
  * CIS 350 - 01
  * Chess
  *
- * 
+ * Dialog to choose colors for the board.
  *
  * @author John O'Brien
  * @version Mar 31, 2014

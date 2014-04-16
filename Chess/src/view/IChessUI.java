@@ -112,7 +112,7 @@ public interface IChessUI {
 	void setFocusHandler(FocusListener fh);
 
 	/****************************************************************
-	 * Moves the piece visually on the UI board
+	 * Moves the piece visually on the UI board.
 	 * 
 	 * @param m the move being performed.
 	 * @param type the type of the piece moving.
@@ -131,5 +131,7 @@ public interface IChessUI {
 	 * Sets the entire game back to its beginning state.
 	 ***************************************************************/
 	void resetGame();
+
+	void changeBoardSize();
 
 }

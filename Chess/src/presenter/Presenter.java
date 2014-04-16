@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import model.Bishop;
@@ -219,11 +220,26 @@ public class Presenter {
 		public void actionPerformed(ActionEvent e) {
 			String source = e.getActionCommand();
 			
+			if (source.equals("Size")) {
+				String message = "This will reset the board. Continue?";
+				String title = "Reset?";
+				
+				int answer = JOptionPane.showConfirmDialog(null, message, title,
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null);
+				
+				if (answer == JOptionPane.YES_OPTION) {
+					view.changeBoardSize();
+					reset();
+				}
+				return;
+			}
+			
 			if (source.equals("menuReset")) {
 				String message = "Are you sure you want to reset?";
 				String title = "Reset?";
 				
-				int answer = JOptionPane.showConfirmDialog(null, message, title, 
+				int answer = JOptionPane.showConfirmDialog(null, message, title,
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
 						null);
 				

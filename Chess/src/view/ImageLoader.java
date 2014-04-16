@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
  * CIS 350 - 01
  * Chess
  *
- * Utility class to load and return ImageIcons
+ * Utility class to load and return ImageIcons.
  *
  * @author John O'Brien
  * @version Mar 26, 2014
@@ -17,7 +17,7 @@ public class ImageLoader {
 
 	/** The amount of extra space between the edge of the button 
 	 * and the edge of the image. Default 5. */
-	private final static int BORDER = 5;
+	private static final int BORDER = 5;
 	
 	private ImageLoader() { }
 	
@@ -56,5 +56,11 @@ public class ImageLoader {
 		Image resized = img.getScaledInstance(size, size, 
 				Image.SCALE_AREA_AVERAGING);
 		return new ImageIcon(resized);
+	}
+	
+	public static ImageIcon resizeImage(final ImageIcon icon, final int pSize,
+			final double quality) {
+		ImageIcon out = resizeImage(icon, (int) (pSize * quality));
+		return resizeImage(out, pSize);
 	}
 }
