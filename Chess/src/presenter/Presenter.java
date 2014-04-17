@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import model.Bishop;
@@ -252,6 +251,7 @@ public class Presenter {
 		}
 	};
 	
+	/** Stops and starts the timers based off of the focus. */
 	private FocusListener focusHandler = new FocusListener() {
 		
 		@Override
@@ -306,6 +306,7 @@ public class Presenter {
 	 * that was attacked from the board.
 	 * 
 	 * @param move the move being attempted.
+	 * @return true if the piece was and did en passant.
 	 ***************************************************************/
 	protected final boolean handleEnPassant(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());

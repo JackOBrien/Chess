@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -177,7 +178,7 @@ public class ChessGUI implements IChessUI {
 		numRows = rows;
 		numCols = cols;
 		
-		imageSize = 60;
+		imageSize = ResizeDialog.STD_SIZE;
 		imageQuality = 1;
 		
 		// Starting board color
@@ -194,11 +195,20 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void resetGame() {	
+	public void resetGame() {
+		
+		boolean needsLocation = false;
+		Point p = null;
 		if (topWindow != null) {
+			p = topWindow.getLocationOnScreen();
 			topWindow.dispose();
+			needsLocation = true;
 		}
 		topWindow = new JFrame();
+		
+		if (needsLocation) {
+			topWindow.setLocation(p);
+		}
 
 		started = false;
 		highlightValid = true;
@@ -337,14 +347,23 @@ public class ChessGUI implements IChessUI {
 		topWindow.setJMenuBar(menuBar);
 	}
 	
+	/****************************************************************
+	 * Sets up the panel which displays pieces that have been captured.
+	 * 
+	 * THIS FEATURE IS NOT IMPLEMENTED IN RELEASE 3.
+	 ***************************************************************/
 	private void setupCapturedPanel() {
 		capturedPanel = new JPanel();
-		capturedPanel.setLayout(new GridLayout(10, 0));
+		final int ten = 10;
+		capturedPanel.setLayout(new GridLayout(ten, 0));
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 		capturedPanel.setBorder(border);
 		capturedPanel.setBackground(promotion);
 	}
 	
+	/****************************************************************
+	 * Sets up the game timers for both players.
+	 ***************************************************************/
 	private void setupTimers() {
 		final int delay = 100; // 1/10th second
 		wTimer = new Timer(delay, timeListener);
@@ -370,7 +389,8 @@ public class ChessGUI implements IChessUI {
 		
 		// Filler space
 		final int divisor = 6;
-		final int fillerSize = (panelWidth / divisor) - 12;
+		final int twelve = 12;
+		final int fillerSize = (panelWidth / divisor) - twelve;
 		labelPanel.add(Box.createRigidArea(new Dimension(fillerSize, 0))); 
 		
 		labelPanel.add(blackTime);
@@ -378,6 +398,11 @@ public class ChessGUI implements IChessUI {
 		menuBar.add(labelPanel, BorderLayout.LINE_END);
 	}
 	
+	/****************************************************************
+	 * Sets the colors of the board based on the given color paltte.
+	 * 
+	 * @param color the color palette to be used.
+	 ***************************************************************/
 	private void setBoardColors(int color) {
 		ColorController palette = new ColorController(color);
 		colorPalette = color;
@@ -391,6 +416,9 @@ public class ChessGUI implements IChessUI {
 		accent = palette.getAccent();
 	}	
 	
+	/****************************************************************
+	 * Updates the colors of the board.
+	 ***************************************************************/
 	private void updateBoardColor() {
 		
 		menuBar.setBackground(accent);
@@ -447,7 +475,13 @@ public class ChessGUI implements IChessUI {
 		}
 	}
 	
-	private final void highlightAll(boolean highlight) {
+	/****************************************************************
+	 * Toggles the highlight of all tiles.
+	 * 
+	 * @param highlight if true, tiles are highlighted. If false, 
+	 * highlighted tiles have their color reset.
+	 ***************************************************************/
+	private void highlightAll(final boolean highlight) {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board[0].length; c++) {
 				if (board[r][c].isState(ChessTile.HIGHLIGHTED)) {
@@ -695,6 +729,7 @@ public class ChessGUI implements IChessUI {
 		}
 	};
 	
+	/** Handles the changing of colors */
 	private ActionListener colorChanger = new ActionListener() {
 		
 		@Override
@@ -728,6 +763,9 @@ public class ChessGUI implements IChessUI {
 		}
 	};
 	
+	/****************************************************************
+	 * Helper to blur the board.
+	 ***************************************************************/
 	private void blurBoard() {
 		jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
 		
@@ -736,6 +774,9 @@ public class ChessGUI implements IChessUI {
 		topWindow.validate();
 	}
 	
+	/****************************************************************
+	 * Helper to unblur the board.
+	 ***************************************************************/
 	private void unBlurBoard() {
 		Dimension d = topWindow.getSize();
 		
@@ -763,6 +804,7 @@ public class ChessGUI implements IChessUI {
 		}
 	};
 	
+	/** Increments the proper timer and displays the new time.  */
 	private ActionListener timeListener = new ActionListener() {
 		
 		@Override
@@ -806,7 +848,9 @@ class BlurLayerUI extends LayerUI<JComponent> {
 	 * Constructor for the LayerUI.
 	 ***************************************************************/
 	public BlurLayerUI() {
-		float amount = 0.4f / 11.0f;
+		final float pointFour = 0.4f;
+		final float eleven = 11.0f;
+		float amount = pointFour / eleven;
 		float[] blurKernel = {
 				amount, amount, amount,
 				amount, amount, amount,

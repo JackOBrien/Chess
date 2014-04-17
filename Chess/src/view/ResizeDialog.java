@@ -6,8 +6,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -26,45 +24,70 @@ import javax.swing.JRadioButton;
  *******************************************************************/
 public class ResizeDialog extends JDialog {
 
-	private static int size;
-	
-	private static double quality;
-	
+	/** Default serial UID. */
+	private static final long serialVersionUID = 1L;
+
+	/** Size of a small board's pieces. */
 	public static final int SMALL = 30;
 	
+	/** Size of a standard board's pieces. */
 	public static final int STD_SIZE = 60;
 	
+	/** Size of a large board's pieces. */
 	public static final int LARGE = 80;
 	
-	public static final double LOW = .3;
+	/** Low quality multiplier. */
+	public static final double LOW = .25;
 	
+	/** Medium quality multiplier. */
 	public static final double MEDIUM = .7;
 	
+	/** High quality multiplier. */
 	public static final double HIGH = 1;
 	
+	/** Button to select small game size. */
 	private JRadioButton small;
 	
+	/** Button to select standard game size. */
 	private JRadioButton stdSize;
 	
+	/** Button to select large game size. */
 	private JRadioButton large;
 	
+	/** Button to select low quality. */
 	private JRadioButton low;
 	
+	/** Button to select medium quality. */
 	private JRadioButton medium;
 	
+	/** Button to select high quality. */
 	private JRadioButton high;
 	
-	ButtonGroup sizeGroup;
+	/** Buttons to select the game's size. */
+	private ButtonGroup sizeGroup;
 	
-	ButtonGroup qualityGroup;
+	/** Buttons to select the game's quality. */
+	private ButtonGroup qualityGroup;
 	
+	/** The current size of the board.  */
+	private static int size = STD_SIZE;
+	
+	/** The current quality of the board. */
+	private static double quality = HIGH;
+	
+	/****************************************************************
+	 * Constructor for ResizeDialog. Sets the current size and quality.
+	 * 
+	 * @param s current size.
+	 * @param q current quality.
+	 ***************************************************************/
 	public ResizeDialog(int s, double q) {
 		setLayout(new BorderLayout());
 		
 		setupButtons();
 		
-		setSizeSelected(s);
-		setQualitySelected(q);
+		setSizeSelected();
+		setQualitySelected();
 		
 		final int four = 4;
 		final int fontSize = 16;
@@ -105,6 +128,9 @@ public class ResizeDialog extends JDialog {
 		setVisible(true);
 	}
 
+	/****************************************************************
+	 * Helper to set up the radio buttons.
+	 ***************************************************************/
 	private void setupButtons() {
 		sizeGroup = new ButtonGroup();
 		small = new JRadioButton("Small");
@@ -135,9 +161,12 @@ public class ResizeDialog extends JDialog {
 		qualityGroup.add(high);
 	}
 	
-	private void setSizeSelected(int s) {
+	/****************************************************************
+	 * Helper to set which size button should be selected.
+	 ***************************************************************/
+	private void setSizeSelected() {
 		
-		switch (s) {
+		switch (size) {
 		case SMALL:
 			small.setSelected(true);
 			stdSize.setSelected(false);
@@ -158,30 +187,38 @@ public class ResizeDialog extends JDialog {
 	
 
 	/****************************************************************
-	 * @param q
+	 * Helper to set which quality button should be selected.
 	 ***************************************************************/
-	private void setQualitySelected(final double q) {
+	private void setQualitySelected() {
 		low.setSelected(false);
 		medium.setSelected(false);
 		high.setSelected(false);
 		
-		if (q == LOW) {
+		if (quality == LOW) {
 			low.setSelected(true);
-		} else if (q == MEDIUM) {
+		} else if (quality == MEDIUM) {
 			medium.setSelected(true);
 		} else {
 			high.setSelected(true);
 		}
 	}
 	
+	/****************************************************************
+	 * @return the size of the board.
+	 ***************************************************************/
 	public static final int getBoardSize() {
 		return size;
 	}
 	
+	/****************************************************************
+	 * @return the quality of the board.
+	 ***************************************************************/
 	public static final double getBoardQuality() {
 		return quality;
 	}
 	
+	/** Sets the proper size and quality. Exits the dialog when
+	 * the user presses the "OK" button. */
 	private ActionListener listener = new ActionListener() {
 		
 		@Override

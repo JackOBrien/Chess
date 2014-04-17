@@ -132,6 +132,10 @@ public interface IChessUI {
 	 ***************************************************************/
 	void resetGame();
 
+	/****************************************************************
+	 * Prompts the player for new size and quality of the board, 
+	 * and then records the response.
+	 ***************************************************************/
 	void changeBoardSize();
 
 }
