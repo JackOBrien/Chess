@@ -14,22 +14,22 @@ import java.applet.AudioClip;
  *******************************************************************/
 public class SoundEffect {
 
-	/** Sound for when white pieces are moved */
+	/** Sound for when white pieces are moved. */
 	public static final SoundEffect W_MOVE = new SoundEffect("whiteMoves.wav");
 	
-	/** Sound for when black pieces are moved */
+	/** Sound for when black pieces are moved. */
 	public static final SoundEffect B_MOVE = new SoundEffect("blackMoves.wav");
 	
-	/** Sound for when the game is in check */
+	/** Sound for when the game is in check. */
 	public static final SoundEffect CHECK = new SoundEffect("check.wav");
 	
-	/** Sound for when the game is over */
+	/** Sound for when the game is over. */
 	public static final SoundEffect GAME_OVER = new SoundEffect("gameOver.wav");
 	
-	/** Sound for when a piece is captured */
+	/** Sound for when a piece is captured. */
 	public static final SoundEffect CAPTURE = new SoundEffect("capture.wav");
 	
-	/** AudioClip of the selected sound */
+	/** AudioClip of the selected sound. */
 	private AudioClip clip;
 	
 	/********************************************************
@@ -50,7 +50,7 @@ public class SoundEffect {
 	/********************************************************
 	 * Plays the selected audio.
 	 *******************************************************/
-	public final void play(){
+	public final void play() {
 		try {
 			
 			Thread th = new Thread() {
@@ -60,7 +60,7 @@ public class SoundEffect {
 			};
 			
 			th.start();
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

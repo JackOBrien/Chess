@@ -59,7 +59,7 @@ public class ChessTile extends JButton {
 	 * 
 	 * @param pSize the size of the tile.
 	 ***************************************************************/
-	public ChessTile(int pSize) {
+	public ChessTile(final int pSize) {
 		size = pSize;
 		
 		state = NORMAL;
@@ -79,7 +79,7 @@ public class ChessTile extends JButton {
 	 * 
 	 * @param bg the default background of the tile.
 	 ***************************************************************/
-	public final void setDefaultBackground(Color bg) {
+	public final void setDefaultBackground(final Color bg) {
 		defaultBG = bg;
 		setBackground(bg);
 	}
@@ -89,7 +89,7 @@ public class ChessTile extends JButton {
 	 * 
 	 * @param c the special background of the tile.
 	 ***************************************************************/
-	public void setSpecialBackground(Color c) {
+	public final void setSpecialBackground(final Color c) {
 		highlight = c;
 	}
 	
@@ -99,7 +99,7 @@ public class ChessTile extends JButton {
 	 * 
 	 * @param light tells if the tile is light or not.
 	 ***************************************************************/
-	public void setIsLight(boolean light) {
+	public final void setIsLight(final boolean light) {
 		isLight = light;
 	}
 	
@@ -107,7 +107,7 @@ public class ChessTile extends JButton {
 	/****************************************************************
 	 * @return if this tile is light or not.
 	 ***************************************************************/
-	public boolean isLight() {
+	public final boolean isLight() {
 		return isLight;
 	}
 	
@@ -117,7 +117,7 @@ public class ChessTile extends JButton {
 	 * @param pState the given state.
 	 * @return true if current state matches given state.
 	 ***************************************************************/
-	public boolean isState(int pState) {
+	public final boolean isState(final int pState) {
 		return state == pState;
 	}
 	
@@ -126,14 +126,14 @@ public class ChessTile extends JButton {
 	 * 
 	 * @param pState the current state of the tile.
 	 ***************************************************************/
-	public void setState(int pState) {
+	public final void setState(final int pState) {
 		state = pState;
 	}
 	
 	/****************************************************************
 	 * Resets the tile to it's default background color.
 	 ***************************************************************/
-	public void resetColor() {
+	public final void resetColor() {
 		if (!specialHighlight) {
 			setBackground(defaultBG);
 		} else {

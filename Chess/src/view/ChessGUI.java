@@ -73,7 +73,7 @@ public class ChessGUI implements IChessUI {
 	/** The size of the images and buttons on the board. Default 60. */
 	private int imageSize;
 	
-	/** The quality of the images as a percentage */
+	/** The quality of the images as a percentage. */
 	private double imageQuality;
 	
 	/** The color for the light spaces on the board. */
@@ -103,7 +103,7 @@ public class ChessGUI implements IChessUI {
 	/** The panel that contains captured pieces. */
 	private JPanel capturedPanel;
 	
-	/** JFrames menu bar */
+	/** JFrames menu bar. */
 	private JMenuBar menuBar;
 	
 	/** Menu item to reset the game. */
@@ -195,7 +195,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void resetGame() {
+	public final void resetGame() {
 		
 		boolean needsLocation = false;
 		Point p = null;
@@ -403,7 +403,7 @@ public class ChessGUI implements IChessUI {
 	 * 
 	 * @param color the color palette to be used.
 	 ***************************************************************/
-	private void setBoardColors(int color) {
+	private void setBoardColors(final int color) {
 		ColorController palette = new ColorController(color);
 		colorPalette = color;
 
@@ -507,7 +507,7 @@ public class ChessGUI implements IChessUI {
 	
 	@Override
 	public final void changeImage(final int row, final int col, 
-			String type, final boolean white) {
+			final String type, final boolean white) {
 		
 		if (type.isEmpty()) {
 			board[row][col].setIcon(null);
@@ -522,7 +522,8 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public final void move(Move m, String type, boolean white) {
+	public final void move(final Move m, String type
+			, final boolean white) {
 		
 		boolean attacking = board[m.toRow()][m.toColumn()].getIcon() != null;
 		
@@ -553,7 +554,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void setResetHandler(ActionListener rh) {
+	public final void setResetHandler(final ActionListener rh) {
 		resetItem.addActionListener(rh);
 		sizeItem.addActionListener(rh);
 		resetListener = rh;
@@ -614,7 +615,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void changeBoardSize() {
+	public final void changeBoardSize() {
 		
 		new ResizeDialog(imageSize, imageQuality);
 		
@@ -678,7 +679,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void startTimer(boolean white) {
+	public final void startTimer(final boolean white) {
 		
 		if (!started) { return; }
 		
@@ -692,7 +693,7 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void stopTimers() {
+	public final void stopTimers() {
 		wTimer.stop();
 		bTimer.stop();
 	}
@@ -729,11 +730,11 @@ public class ChessGUI implements IChessUI {
 		}
 	};
 	
-	/** Handles the changing of colors */
+	/** Handles the changing of colors. */
 	private ActionListener colorChanger = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			String source = e.getActionCommand();
 
 			int color;
@@ -808,7 +809,7 @@ public class ChessGUI implements IChessUI {
 	private ActionListener timeListener = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			if (e.getSource() == wTimer) {
 				wClock.count();
 				whiteTime.setText("White:  " + wClock.toString());

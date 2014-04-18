@@ -3,7 +3,7 @@ package view;
 import javax.swing.ImageIcon;
 
 /********************************************************************
- * CIS 350 - 01
+ * CIS 350 - 01.
  * Chess
  *
  *
@@ -73,7 +73,8 @@ public enum ChessIcon {
 	 * @param type name of the piece.
 	 * @param white tells if the piece is white.
 	 ***************************************************************/
-	private ChessIcon(String name, String type, boolean white) {
+	private ChessIcon(final String name, final String type
+			, final boolean white) {
 		
 		filename = name;
 		pieceType = type;
@@ -96,7 +97,7 @@ public enum ChessIcon {
 	 * @param white tells if the piece is white.
 	 * @return the image of the described game piece.
 	 ***************************************************************/
-	public static ImageIcon findIcon(String type, boolean white) {
+	public static ImageIcon findIcon(final String type, final boolean white) {
 		
 		/* Loop through all values searching for a match */
 		for (ChessIcon i : ChessIcon.values()) {

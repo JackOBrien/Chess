@@ -58,7 +58,7 @@ public class ColorController {
 	 * 
 	 * @param color the initial color palette.
 	 ***************************************************************/
-	public ColorController(int color) {
+	public ColorController(final int color) {
 		switchPalette(color);
 	}
 	
@@ -68,7 +68,7 @@ public class ColorController {
 	 * 
 	 * @param color the color palette to switch to.
 	 ***************************************************************/
-	public void switchPalette(int color) {
+	public final void switchPalette(final int color) {
 		
 		switch (color) {
 		case BLUE:
@@ -128,7 +128,7 @@ public class ColorController {
 	 * 
 	 * @return the color for the dark squares on the board.
 	 ***************************************************************/
-	public Color getDark() {
+	public final Color getDark() {
 		return dark;
 	}
 	
@@ -137,7 +137,7 @@ public class ColorController {
 	 * 
 	 * @return the color for the selected squares on the board.
 	 ***************************************************************/
-	public Color getSelected() {
+	public final Color getSelected() {
 		return selected;
 	}
 	
@@ -146,7 +146,7 @@ public class ColorController {
 	 * 
 	 * @return the color for the highlighted squares on the board.
 	 ***************************************************************/
-	public Color getHighlighted() {
+	public final Color getHighlighted() {
 		return highlighted;
 	}
 	
@@ -155,7 +155,7 @@ public class ColorController {
 	 * 
 	 * @return the color for the background of promotion options.
 	 ***************************************************************/
-	public Color getPromotion() {
+	public final Color getPromotion() {
 		return promotion;
 	}
 	
@@ -164,7 +164,7 @@ public class ColorController {
 	 * 
 	 * @return the color for the board's accent.
 	 ***************************************************************/
-	public Color getAccent() {
+	public final Color getAccent() {
 		return accent;
 	}
 }

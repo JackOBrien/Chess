@@ -216,7 +216,7 @@ public class Presenter {
 	private ActionListener resetHandler = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			String source = e.getActionCommand();
 			
 			if (source.equals("Size")) {
@@ -255,12 +255,12 @@ public class Presenter {
 	private FocusListener focusHandler = new FocusListener() {
 		
 		@Override
-		public void focusLost(FocusEvent e) {
+		public void focusLost(final FocusEvent e) {
 			view.stopTimers();
 		}
 		
 		@Override
-		public void focusGained(FocusEvent e) {
+		public void focusGained(final FocusEvent e) {
 			view.startTimer(model.currentPlayer().isWhite());
 		}
 	};

@@ -44,7 +44,7 @@ public class ColorDialog extends JDialog {
 	 * @param color the current selected color palette.
 	 * @param al the ActionListener to handle the selection of colors.
 	 ***************************************************************/
-	public ColorDialog(int color, ActionListener al) {
+	public ColorDialog(final int color, final ActionListener al) {
 		
 		palette = color;
 		listener = al;
@@ -76,8 +76,8 @@ public class ColorDialog extends JDialog {
 	 * @param dark tells what the dark color for the palette is.
 	 * @return the created JPanel.
 	 ***************************************************************/
-	private JPanel createPanel(String name, boolean selected, 
-			Color light, Color dark) {
+	private JPanel createPanel(final String name, final boolean selected, 
+			final Color light, final Color dark) {
 
 		JRadioButton button = new JRadioButton();
 		button.setSelected(selected);
@@ -116,7 +116,7 @@ public class ColorDialog extends JDialog {
 	 * @param name name of the color.
 	 * @return the created JPanel.
 	 ***************************************************************/
-	private JPanel createPanel(String name) {
+	private JPanel createPanel(final String name) {
 		
 		int color;
 		boolean selected = false;
@@ -160,7 +160,7 @@ public class ColorDialog extends JDialog {
 	 * @param c background color of the label.
 	 * @return the created JLabel.
 	 ***************************************************************/
-	private JLabel createColorLabel(Color c) {
+	private JLabel createColorLabel(final Color c) {
 		JLabel label = new JLabel();
 		label.setOpaque(true);
 		label.setBackground(c);

@@ -81,7 +81,7 @@ public class ResizeDialog extends JDialog {
 	 * @param s current size.
 	 * @param q current quality.
 	 ***************************************************************/
-	public ResizeDialog(int s, double q) {
+	public ResizeDialog(final int s, final double q) {
 		setLayout(new BorderLayout());
 		
 		setupButtons();
@@ -222,7 +222,7 @@ public class ResizeDialog extends JDialog {
 	private ActionListener listener = new ActionListener() {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			String source = e.getActionCommand();
 			
 			if (source.equals("Ok")) {
