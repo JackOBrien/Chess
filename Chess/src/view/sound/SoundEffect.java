@@ -7,7 +7,7 @@ import java.applet.AudioClip;
  * CIS 350 - 01
  * Chess
  *
- * 
+ * Holds the game's sound effects.
  *
  * @author John O'Brien
  * @version Apr 1, 2014
@@ -50,7 +50,7 @@ public class SoundEffect {
 	/********************************************************
 	 * Plays the selected audio.
 	 *******************************************************/
-	public void play(){
+	public final void play(){
 		try {
 			
 			Thread th = new Thread() {
@@ -63,9 +63,5 @@ public class SoundEffect {
 		} catch (Exception e ) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) {
-		SoundEffect.W_MOVE.play();
 	}
 }

@@ -219,11 +219,26 @@ public class Presenter {
 		public void actionPerformed(ActionEvent e) {
 			String source = e.getActionCommand();
 			
+			if (source.equals("Size")) {
+				String message = "This will reset the board. Continue?";
+				String title = "Reset?";
+				
+				int answer = JOptionPane.showConfirmDialog(null, message, title,
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null);
+				
+				if (answer == JOptionPane.YES_OPTION) {
+					view.changeBoardSize();
+					reset();
+				}
+				return;
+			}
+			
 			if (source.equals("menuReset")) {
 				String message = "Are you sure you want to reset?";
 				String title = "Reset?";
 				
-				int answer = JOptionPane.showConfirmDialog(null, message, title, 
+				int answer = JOptionPane.showConfirmDialog(null, message, title,
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
 						null);
 				
@@ -236,6 +251,7 @@ public class Presenter {
 		}
 	};
 	
+	/** Stops and starts the timers based off of the focus. */
 	private FocusListener focusHandler = new FocusListener() {
 		
 		@Override
@@ -290,6 +306,7 @@ public class Presenter {
 	 * that was attacked from the board.
 	 * 
 	 * @param move the move being attempted.
+	 * @return true if the piece was and did en passant.
 	 ***************************************************************/
 	protected final boolean handleEnPassant(final Move move) {
 		IChessPiece piece = model.pieceAt(move.fromRow(), move.fromColumn());

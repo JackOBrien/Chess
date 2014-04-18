@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -52,15 +53,6 @@ import view.sound.SoundEffect;
  * @author John O'Brien
  * @version Mar 10, 2014
  *******************************************************************/
-/********************************************************************
- * CIS 350 - 01
- * Chess
- *
- * 
- *
- * @author John O'Brien
- * @version Mar 27, 2014
- *******************************************************************/
 public class ChessGUI implements IChessUI {
 
 	/** Name of the folder containing the images of GUI icons. */
@@ -72,14 +64,17 @@ public class ChessGUI implements IChessUI {
 	/** Image of a small exit sign. */
 	private ImageIcon exit = ImageLoader.loadIcon(path + "exit.png");
 	
-	/** Image of a painter's palette */
+	/** Image of a painter's palette. */
 	private ImageIcon paint = ImageLoader.loadIcon(path + "palette.png");
 	
-	/** Image of a reset icon */
+	/** Image of a reset icon. */
 	private ImageIcon reset = ImageLoader.loadIcon(path + "reset.png");
 	
 	/** The size of the images and buttons on the board. Default 60. */
-	private static final int IMG_SIZE = 60;
+	private int imageSize;
+	
+	/** The quality of the images as a percentage */
+	private double imageQuality;
 	
 	/** The color for the light spaces on the board. */
 	private Color light;
@@ -114,6 +109,9 @@ public class ChessGUI implements IChessUI {
 	/** Menu item to reset the game. */
 	private JMenuItem resetItem;
 	
+	/** Menu item to change the size of the game. */
+	private JMenuItem sizeItem;
+	
 	/** The frame containing the entire game. */
 	private JFrame topWindow;
 	
@@ -147,16 +145,22 @@ public class ChessGUI implements IChessUI {
 	/** ActionListener for the promotion options. */
 	private ActionListener promotionListener;
 	
+	/** Font that changes size with the board. */
 	private Font dynFont;
 	
+	/** The board's current color palette. */
 	private int colorPalette;
 	
+	/** Tells if the game has started or not. */
 	private boolean started;
 	
+	/** Tells if the board should highlight valid moves or not. */
 	private boolean highlightValid;
 	
+	/** NUmber of rows on the board. */
 	private int numRows;
 	
+	/** NUmber of columns on the board. */
 	private int numCols;
 	
 	/****************************************************************
@@ -174,12 +178,15 @@ public class ChessGUI implements IChessUI {
 		numRows = rows;
 		numCols = cols;
 		
+		imageSize = ResizeDialog.STD_SIZE;
+		imageQuality = 1;
+		
 		// Starting board color
 		setBoardColors(ColorController.RED);
 		
 		// Dynamic font size
 		final double multi = .25;
-		final int fontSize = (int) (IMG_SIZE * multi);
+		final int fontSize = (int) (imageSize * multi);
 		dynFont = new Font("Calibri", Font.BOLD, fontSize);
 				
 		layerUI = new BlurLayerUI();
@@ -188,11 +195,20 @@ public class ChessGUI implements IChessUI {
 	}
 	
 	@Override
-	public void resetGame() {	
+	public void resetGame() {
+		
+		boolean needsLocation = false;
+		Point p = null;
 		if (topWindow != null) {
+			p = topWindow.getLocationOnScreen();
 			topWindow.dispose();
+			needsLocation = true;
 		}
 		topWindow = new JFrame();
+		
+		if (needsLocation) {
+			topWindow.setLocation(p);
+		}
 
 		started = false;
 		highlightValid = true;
@@ -209,7 +225,7 @@ public class ChessGUI implements IChessUI {
 	 ***************************************************************/
 	private void setupBlankBoard() {
 		
-board = new ChessTile[numRows][numCols];
+		board = new ChessTile[numRows][numCols];
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(numRows, numCols));
@@ -221,7 +237,7 @@ board = new ChessTile[numRows][numCols];
 			for (int c = 0; c < board[0].length; c++) {
 				
 				// Creates the chess tile with default style
-				ChessTile button = new ChessTile(IMG_SIZE);
+				ChessTile button = new ChessTile(imageSize);
 				
 				// Adds an actionCommand for the button with the
 				// coordinates of its location on the board: r,c.
@@ -240,7 +256,6 @@ board = new ChessTile[numRows][numCols];
 				
 				button.setDefaultBackground(bg);
 				button.setIsLight(isLight);
-//				button.setSpecialBackground(accent); TODO
 				
 				board[r][c] = button;
 				buttonPanel.add(button);
@@ -267,7 +282,8 @@ board = new ChessTile[numRows][numCols];
 		List<Image> al = new ArrayList<Image>();
 		al.add(gvsu.getImage());
 		ImageIcon icon = ChessIcon.W_KING.getIcon();
-		al.add(ImageLoader.resizeImage(icon, kingLogoSize).getImage());
+		al.add(ImageLoader.resizeImage(icon, kingLogoSize,
+				imageQuality).getImage());
 				
 		topWindow.setTitle("CIS 350: Chess Game");
 		topWindow.setIconImages(al);
@@ -290,18 +306,25 @@ board = new ChessTile[numRows][numCols];
 		final int iconSize = 20;
 		
 		JMenuItem exitItem = new JMenuItem("Exit");
-		exitItem.setIcon(ImageLoader.resizeImage(exit, iconSize));
+		exitItem.setIcon(ImageLoader.resizeImage(exit, iconSize, imageQuality));
 		exitItem.addActionListener(menuListener);
 		exitItem.setActionCommand("Exit");
 		
 		resetItem = new JMenuItem("Reset Game");
-		resetItem.setIcon(ImageLoader.resizeImage(reset, iconSize));
+		resetItem.setIcon(ImageLoader.resizeImage(reset, 
+				iconSize, imageQuality));
 		resetItem.setActionCommand("menuReset");
 		
 		JMenuItem colorItem = new JMenuItem("Change Colors");
-		colorItem.setIcon(ImageLoader.resizeImage(paint, iconSize));
+		colorItem.setIcon(ImageLoader.resizeImage(paint, 
+				iconSize, imageQuality));
 		colorItem.addActionListener(menuListener);
 		colorItem.setActionCommand("Color");
+		
+		sizeItem = new JMenuItem("Change Size");
+		sizeItem.setIcon(ImageLoader.resizeImage(ChessIcon.W_KING.getIcon(), 
+				iconSize, imageQuality));
+		sizeItem.setActionCommand("Size");
 		
 		JCheckBoxMenuItem validItem = new JCheckBoxMenuItem("Show Valid Moves");
 		validItem.addActionListener(menuListener);
@@ -316,6 +339,7 @@ board = new ChessTile[numRows][numCols];
 		fileMenu.add(exitItem);
 		fileMenu.add(resetItem);
 		fileMenu.add(colorItem);
+		fileMenu.add(sizeItem);
 		fileMenu.add(validItem);
 		
 		menuBar.add(fileMenu, BorderLayout.LINE_START);
@@ -323,16 +347,23 @@ board = new ChessTile[numRows][numCols];
 		topWindow.setJMenuBar(menuBar);
 	}
 	
+	/****************************************************************
+	 * Sets up the panel which displays pieces that have been captured.
+	 * 
+	 * THIS FEATURE IS NOT IMPLEMENTED IN RELEASE 3.
+	 ***************************************************************/
 	private void setupCapturedPanel() {
 		capturedPanel = new JPanel();
-		capturedPanel.setLayout(new GridLayout(10, 0));
+		final int ten = 10;
+		capturedPanel.setLayout(new GridLayout(ten, 0));
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 		capturedPanel.setBorder(border);
 		capturedPanel.setBackground(promotion);
-		
-//		topWindow.add(capturedPanel, BorderLayout.CENTER); TODO
 	}
 	
+	/****************************************************************
+	 * Sets up the game timers for both players.
+	 ***************************************************************/
 	private void setupTimers() {
 		final int delay = 100; // 1/10th second
 		wTimer = new Timer(delay, timeListener);
@@ -341,7 +372,7 @@ board = new ChessTile[numRows][numCols];
 		JPanel labelPanel = new JPanel();
 		labelPanel.setOpaque(false);
 		final float panelMultiplier = 4.166f;
-		final int panelWidth = (int) (panelMultiplier * IMG_SIZE);
+		final int panelWidth = (int) (panelMultiplier * imageSize);
 		labelPanel.setPreferredSize(new Dimension(panelWidth, 0));
 		
 		wClock = new Clock();
@@ -358,7 +389,8 @@ board = new ChessTile[numRows][numCols];
 		
 		// Filler space
 		final int divisor = 6;
-		final int fillerSize = (panelWidth / divisor) - 12;
+		final int twelve = 12;
+		final int fillerSize = (panelWidth / divisor) - twelve;
 		labelPanel.add(Box.createRigidArea(new Dimension(fillerSize, 0))); 
 		
 		labelPanel.add(blackTime);
@@ -366,6 +398,11 @@ board = new ChessTile[numRows][numCols];
 		menuBar.add(labelPanel, BorderLayout.LINE_END);
 	}
 	
+	/****************************************************************
+	 * Sets the colors of the board based on the given color paltte.
+	 * 
+	 * @param color the color palette to be used.
+	 ***************************************************************/
 	private void setBoardColors(int color) {
 		ColorController palette = new ColorController(color);
 		colorPalette = color;
@@ -379,6 +416,9 @@ board = new ChessTile[numRows][numCols];
 		accent = palette.getAccent();
 	}	
 	
+	/****************************************************************
+	 * Updates the colors of the board.
+	 ***************************************************************/
 	private void updateBoardColor() {
 		
 		menuBar.setBackground(accent);
@@ -435,12 +475,34 @@ board = new ChessTile[numRows][numCols];
 		}
 	}
 	
+	/****************************************************************
+	 * Toggles the highlight of all tiles.
+	 * 
+	 * @param highlight if true, tiles are highlighted. If false, 
+	 * highlighted tiles have their color reset.
+	 ***************************************************************/
+	private void highlightAll(final boolean highlight) {
+		for (int r = 0; r < board.length; r++) {
+			for (int c = 0; c < board[0].length; c++) {
+				if (board[r][c].isState(ChessTile.HIGHLIGHTED)) {
+					
+					if (!highlight) {
+						setDeselected(r, c);
+					} else {
+						setHighlighted(r, c);
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public final void setHighlighted(final int row, final int col) {
-		if (!highlightValid) { return; }
-		
-		board[row][col].setBackground(highlighted);
 		board[row][col].setState(ChessTile.HIGHLIGHTED);
+		
+		if (highlightValid) { 
+			board[row][col].setBackground(highlighted);
+		}
 	}
 	
 	@Override
@@ -454,7 +516,7 @@ board = new ChessTile[numRows][numCols];
 		
 		ImageIcon img = ChessIcon.findIcon(type, white);
 		
-		img = ImageLoader.resizeImage(img, IMG_SIZE);
+		img = ImageLoader.resizeImage(img, imageSize, imageQuality);
 		
 		board[row][col].setIcon(img);
 	}
@@ -493,6 +555,7 @@ board = new ChessTile[numRows][numCols];
 	@Override
 	public void setResetHandler(ActionListener rh) {
 		resetItem.addActionListener(rh);
+		sizeItem.addActionListener(rh);
 		resetListener = rh;
 	}
 	
@@ -510,7 +573,7 @@ board = new ChessTile[numRows][numCols];
 	public final void pawnPromotion(final int row, final int col, 
 			final boolean white) {
 		final double sizeModifier = .667;
-		final int size = (int) (IMG_SIZE * sizeModifier);
+		final int size = (int) (imageSize * sizeModifier);
 		
 		PromotionDialog dialog = new PromotionDialog(white, size, 
 				promotion, accent);
@@ -523,10 +586,10 @@ board = new ChessTile[numRows][numCols];
 		ImageIcon queenIcon = ChessIcon.findIcon("Queen", white);
 		
 		// Re-size all found images
-		rookIcon = ImageLoader.resizeImage(rookIcon, size);
-		knightIcon = ImageLoader.resizeImage(knightIcon, size);
-		bishopIcon = ImageLoader.resizeImage(bishopIcon, size);
-		queenIcon = ImageLoader.resizeImage(queenIcon, size);
+		rookIcon = ImageLoader.resizeImage(rookIcon, size, imageQuality);
+		knightIcon = ImageLoader.resizeImage(knightIcon, size, imageQuality);
+		bishopIcon = ImageLoader.resizeImage(bishopIcon, size, imageQuality);
+		queenIcon = ImageLoader.resizeImage(queenIcon, size, imageQuality);
 		
 		// Set all relevant images for the dialog 
 		dialog.setRookImage(rookIcon);
@@ -543,11 +606,22 @@ board = new ChessTile[numRows][numCols];
 		dialog.setLocationRelativeTo(board[row][col]);
 		int x = (int) dialog.getLocation().getX();
 		int y = (int) dialog.getLocation().getY();
-		y += (IMG_SIZE + offset) * direction;
+		y += (imageSize + offset) * direction;
 		dialog.setLocation(x, y);
 		
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.setVisible(true);
+	}
+	
+	@Override
+	public void changeBoardSize() {
+		
+		new ResizeDialog(imageSize, imageQuality);
+		
+		imageSize = ResizeDialog.getBoardSize();
+		imageQuality = ResizeDialog.getBoardQuality();
+		
+		
 	}
 	
 	@Override
@@ -564,7 +638,8 @@ board = new ChessTile[numRows][numCols];
 		}
 		message += "is in check!";
 		String title = "Check";
-		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
+		icon = ImageLoader.resizeImage(icon, imageSize + extraSize,
+				imageQuality);
 		
 		JOptionPane.showMessageDialog(buttonPanel, message, title, 
 				JOptionPane.INFORMATION_MESSAGE, icon);
@@ -586,7 +661,8 @@ board = new ChessTile[numRows][numCols];
 		}
 		message += "won the game!";
 		String title = "Game Over";
-		icon = ImageLoader.resizeImage(icon, IMG_SIZE + extraSize);
+		icon = ImageLoader.resizeImage(icon, imageSize + extraSize, 
+				imageQuality);
 		
 		JButton playAgain = new JButton("Play Again");
 		playAgain.addActionListener(resetListener);
@@ -647,10 +723,13 @@ board = new ChessTile[numRows][numCols];
 				} else {
 					highlightValid = false;
 				}
+				
+				highlightAll(highlightValid);
 			}
 		}
 	};
 	
+	/** Handles the changing of colors */
 	private ActionListener colorChanger = new ActionListener() {
 		
 		@Override
@@ -684,6 +763,9 @@ board = new ChessTile[numRows][numCols];
 		}
 	};
 	
+	/****************************************************************
+	 * Helper to blur the board.
+	 ***************************************************************/
 	private void blurBoard() {
 		jLayer = new JLayer<JComponent>(buttonPanel, layerUI);
 		
@@ -692,6 +774,9 @@ board = new ChessTile[numRows][numCols];
 		topWindow.validate();
 	}
 	
+	/****************************************************************
+	 * Helper to unblur the board.
+	 ***************************************************************/
 	private void unBlurBoard() {
 		Dimension d = topWindow.getSize();
 		
@@ -719,6 +804,7 @@ board = new ChessTile[numRows][numCols];
 		}
 	};
 	
+	/** Increments the proper timer and displays the new time.  */
 	private ActionListener timeListener = new ActionListener() {
 		
 		@Override
@@ -762,7 +848,9 @@ class BlurLayerUI extends LayerUI<JComponent> {
 	 * Constructor for the LayerUI.
 	 ***************************************************************/
 	public BlurLayerUI() {
-		float amount = 0.4f / 11.0f;
+		final float pointFour = 0.4f;
+		final float eleven = 11.0f;
+		float amount = pointFour / eleven;
 		float[] blurKernel = {
 				amount, amount, amount,
 				amount, amount, amount,

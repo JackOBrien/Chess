@@ -19,28 +19,39 @@ import view.colors.ColorController;
  * CIS 350 - 01
  * Chess
  *
- * 
+ * Dialog to choose colors for the board.
  *
  * @author John O'Brien
  * @version Mar 31, 2014
  *******************************************************************/
 public class ColorDialog extends JDialog {
 
-	/**  */
+	/** Default serial version UID. */
 	private static final long serialVersionUID = 1L;
 
+	/** ActionListener to handle the selection of colors. */
 	private ActionListener listener;
 	
+	/** The group of radio buttons which control color selection. */
 	private ButtonGroup group;
 	
+	/** The current selected color palette. */
 	private int palette;
 	
+	/****************************************************************
+	 * Constructor of the ColorDialog.
+	 * 
+	 * @param color the current selected color palette.
+	 * @param al the ActionListener to handle the selection of colors.
+	 ***************************************************************/
 	public ColorDialog(int color, ActionListener al) {
 		
 		palette = color;
 		listener = al;
 		
-		setLayout(new GridLayout(5, 1, 0, 2));
+		final int numColors = 5;
+		
+		setLayout(new GridLayout(numColors, 1, 0, 2));
 		setTitle("Choose a Theme");
 		
 		group = new ButtonGroup();
@@ -55,6 +66,16 @@ public class ColorDialog extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
+	/****************************************************************
+	 * Creates the JPanel to hold the radio button and color sample
+	 * for the given color.
+	 * 
+	 * @param name name of the color.
+	 * @param selected tells if the radio button should be selected.
+	 * @param light tells what the light color from the palette is.
+	 * @param dark tells what the dark color for the palette is.
+	 * @return the created JPanel.
+	 ***************************************************************/
 	private JPanel createPanel(String name, boolean selected, 
 			Color light, Color dark) {
 
@@ -65,17 +86,22 @@ public class ColorDialog extends JDialog {
 		button.addActionListener(listener);		
 		group.add(button);
 		
+		final int width = 80;
+		
 		JLabel lightLabel = createColorLabel(light);
 		JLabel darkLabel = createColorLabel(dark);
 		JPanel colorPanel = new JPanel();
-		colorPanel.setPreferredSize(new Dimension(80, 0));
+		colorPanel.setPreferredSize(new Dimension(width, 0));
 		colorPanel.setLayout(new GridLayout(1, 2, 0, 0));
 		colorPanel.add(lightLabel);
 		colorPanel.add(darkLabel);
 		
+		final int w = 180;
+		final int h = 25;
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(180, 25));
+		panel.setPreferredSize(new Dimension(w, h));
 		
 		panel.add(button, BorderLayout.LINE_START);
 		panel.add(colorPanel, BorderLayout.LINE_END);
@@ -83,6 +109,13 @@ public class ColorDialog extends JDialog {
 		return panel;
 	}
 	
+	/****************************************************************
+	 * Creates the JPanel to hold the radio button and color sample
+	 * for the given color.
+	 * 
+	 * @param name name of the color.
+	 * @return the created JPanel.
+	 ***************************************************************/
 	private JPanel createPanel(String name) {
 		
 		int color;
@@ -120,6 +153,13 @@ public class ColorDialog extends JDialog {
 		return createPanel(name, selected, light, dark);
 	}
 	
+	/****************************************************************
+	 * Creates a JLabel with the specified color and applies the
+	 * default look.
+	 * 
+	 * @param c background color of the label.
+	 * @return the created JLabel.
+	 ***************************************************************/
 	private JLabel createColorLabel(Color c) {
 		JLabel label = new JLabel();
 		label.setOpaque(true);

@@ -6,7 +6,7 @@ import java.awt.Color;
  * CIS 350 - 01
  * Chess
  *
- * 
+ * Allows for easy switching between color palettes. 
  *
  * @author John O'Brien
  * @version Mar 26, 2014
@@ -31,24 +31,43 @@ public class ColorController {
 	/** An accent color used for the menu bar and promotion dialog. */
 	private Color accent;
 	
+	/** Red color palette. */
 	public static final int RED = 1;
 	
+	/** Blue color palette. */
 	public static final int BLUE = 2;
 	
+	/** Rainbow color palette. */
 	public static final int RAINBOW = 3;
 	
+	/** Gray color palette. */
 	public static final int GRAY = 4;
 	
+	/** Green color palette. */
 	public static final int GREEN = 5;
 	
+	/****************************************************************
+	 * Default constructor for ColorController. Sets the default color to red.
+	 ***************************************************************/
 	public ColorController() {
 		switchPalette(RED);
 	}
 	
+	/****************************************************************
+	 * Constructor that allows for setting of the initial color palette.
+	 * 
+	 * @param color the initial color palette.
+	 ***************************************************************/
 	public ColorController(int color) {
 		switchPalette(color);
 	}
 	
+	/****************************************************************
+	 * Switches the current color palette the the one given as 
+	 * a parameter.
+	 * 
+	 * @param color the color palette to switch to.
+	 ***************************************************************/
 	public void switchPalette(int color) {
 		
 		switch (color) {
@@ -95,26 +114,56 @@ public class ColorController {
 		}
 	}
 	
-	public Color getLight() {
+	/****************************************************************
+	 * Returns the color for the light squares on the board.
+	 * 
+	 * @return the color for the light squares on the board.
+	 ***************************************************************/
+	public final Color getLight() {
 		return light;
 	}
 	
+	/****************************************************************
+	 * Returns the color for the dark squares on the board.
+	 * 
+	 * @return the color for the dark squares on the board.
+	 ***************************************************************/
 	public Color getDark() {
 		return dark;
 	}
 	
+	/****************************************************************
+	 * Returns the color for the selected squares on the board.
+	 * 
+	 * @return the color for the selected squares on the board.
+	 ***************************************************************/
 	public Color getSelected() {
 		return selected;
 	}
 	
+	/****************************************************************
+	 * Returns the color for the highlighted squares on the board.
+	 * 
+	 * @return the color for the highlighted squares on the board.
+	 ***************************************************************/
 	public Color getHighlighted() {
 		return highlighted;
 	}
 	
+	/****************************************************************
+	 * Returns the color for the background of promotion options.
+	 * 
+	 * @return the color for the background of promotion options.
+	 ***************************************************************/
 	public Color getPromotion() {
 		return promotion;
 	}
 	
+	/****************************************************************
+	 * Returns the color for the board's accent.
+	 * 
+	 * @return the color for the board's accent.
+	 ***************************************************************/
 	public Color getAccent() {
 		return accent;
 	}
